@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>INsight Dashboard</title>
+</head>
+<body style="font-family: Arial; padding:20px; background:#0b172b; color:white;">
+
+<h1>📊 INsight Dashboard</h1>
+
+<h2>Service Requests</h2>
+<div id="services"></div>
+
+<h2>Training Registrations</h2>
+<div id="training"></div>
+
+<h2>Course Enrollments</h2>
+<div id="courses"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+const client = supabase.createClient(
+  "https://xtlvhdtmocshycbunoki.supabase.co",
+  "sb_publishable_mY1y5Sju44l-M4prPHvajQ_n_UznjaD"
+);
+
+// load service requests
+async function loadServices() {
+  const { data } = await client.from("service_requests").select("*");
+  document.getElementById("services").innerHTML =
+    data.map(d => `<p>${d.name} - ${d.service}</p>`).join("");
+}
+
+// load training
+async function loadTraining() {
+  const { data } = await client.from("training_registrations").select("*");
+  document.getElementById("training").innerHTML =
+    data.map(d => `<p>${d.name} - ${d.training}</p>`).join("");
+}
+
+// load courses
+async function loadCourses() {
+  const { data } = await client.from("course_enrollments").select("*");
+  document.getElementById("courses").innerHTML =
+    data.map(d => `<p>${d.name} - ${d.course}</p>`).join("");
+}
+
+loadServices();
+loadTraining();
+loadCourses();
+</script>
+
+</body>
+</html>
