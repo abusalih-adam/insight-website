@@ -1061,7 +1061,7 @@
  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
-const supabase = supabase.createClient(
+const client = supabase.createClient(
   "https://xtlvhdtmocshycbunoki.supabase.co",
   "sb_publishable_mY1y5Sju44l-M4prPHvajQ_n_UznjaD"
 );
@@ -1109,7 +1109,7 @@ document.getElementById("serviceForm").addEventListener("submit", async (e) => {
   const service = document.querySelector('[name="service"]').value;
   const details = document.querySelector('[name="message"]').value;
 
-  const { error } = await supabase
+  const { error } = await client
     .from("service_requests")
     .insert([{ name, organization, service, details }]);
 
