@@ -1058,80 +1058,68 @@
     </div>
   </div>
 
-  <script>
-    const portalModal = document.getElementById('portalModal');
-    const formTabs = document.querySelectorAll('.tab');
-    const formPanels = document.querySelectorAll('.form-panel');
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
-    const serviceForm = document.getElementById('serviceForm');
-    const trainingForm = document.getElementById('trainingForm');
-    const courseForm = document.getElementById('courseForm');
+<script>
+const supabase = supabase.createClient(
+  "https://xtlvhdtmocshycbunoki.supabase.co",
+  "sb_publishable_mY1y5Sju44l-M4prPHvajQ_n_UznjaD"
+);
 
-    const serviceStatus = document.getElementById('serviceStatus');
-    const trainingStatus = document.getElementById('trainingStatus');
-    const courseStatus = document.getElementById('courseStatus');
+// keep UI behavior
+const portalModal = document.getElementById('portalModal');
+const formTabs = document.querySelectorAll('.tab');
+const formPanels = document.querySelectorAll('.form-panel');
 
-    function openModal(mode = 'login') {
-      portalModal.classList.add('open');
-      document.getElementById('portalTitle').textContent =
-        mode === 'training' ? 'Training Registration' : mode === 'course' ? 'Course Enrollment' : 'INsight Portal';
-    }
+function openModal(mode = 'login') {
+  portalModal.classList.add('open');
+  document.getElementById('portalTitle').textContent =
+    mode === 'training' ? 'Training Registration' : mode === 'course' ? 'Course Enrollment' : 'INsight Portal';
+}
 
-    function closeModal() {
-      portalModal.classList.remove('open');
-    }
+function closeModal() {
+  portalModal.classList.remove('open');
+}
 
-    function loginDemo() {
-      alert('Demo login only. The UI is ready for real authentication integration.');
-      closeModal();
-    }
+function loginDemo() {
+  alert('Demo login only.');
+  closeModal();
+}
 
-    function showStatus(el, message) {
-      el.textContent = message;
-    }
+formTabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    const target = tab.dataset.form;
 
-    formTabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.form;
+    formTabs.forEach((t) => t.classList.remove('active'));
+    tab.classList.add('active');
 
-        formTabs.forEach((t) => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        formPanels.forEach((panel) => {
-          panel.classList.remove('active');
-          if (panel.id === `${target}Form`) panel.classList.add('active');
-        });
-      });
+    formPanels.forEach((panel) => {
+      panel.classList.remove('active');
+      if (panel.id === `${target}Form`) panel.classList.add('active');
     });
+  });
+});
 
-    serviceForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      // Next step: replace this demo handler with Supabase insert into service_requests.
-      showStatus(serviceStatus, 'Demo request captured successfully. Next step: connect this form to Supabase.');
-      serviceForm.reset();
-    });
+// ✅ REAL DATABASE CONNECTION
+document.getElementById("serviceForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    trainingForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      // Next step: replace this demo handler with Supabase insert into training_registrations.
-      showStatus(trainingStatus, 'Training registration captured successfully. Next step: store it in the database.');
-      trainingForm.reset();
-    });
+  const name = document.querySelector('[name="name"]').value;
+  const organization = document.querySelector('[name="organization"]').value;
+  const service = document.querySelector('[name="service"]').value;
+  const details = document.querySelector('[name="message"]').value;
 
-    courseForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      // Next step: replace this demo handler with Supabase insert into course_enrollments.
-      showStatus(courseStatus, 'Course enrollment captured successfully. Next step: connect it to Supabase.');
-      courseForm.reset();
-    });
+  const { error } = await supabase
+    .from("service_requests")
+    .insert([{ name, organization, service, details }]);
 
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
-    });
-
-    portalModal.addEventListener('click', (e) => {
-      if (e.target === portalModal) closeModal();
-    });
-  </script>
+  if (error) {
+    alert("❌ Error sending request");
+    console.log(error);
+  } else {
+    alert("✅ Request sent successfully");
+  }
+});
+</script>
 </body>
 </html>
