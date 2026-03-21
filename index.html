@@ -1120,6 +1120,45 @@ document.getElementById("serviceForm").addEventListener("submit", async (e) => {
     alert("✅ Request sent successfully");
   }
 });
+  // 🔥 TRAINING FORM
+document.getElementById("trainingForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.querySelector('#trainingForm [name="name"]').value;
+  const email = document.querySelector('#trainingForm [name="email"]').value;
+  const training = document.querySelector('#trainingForm [name="topic"]').value;
+
+  const { error } = await client
+    .from("training_registrations")
+    .insert([{ name, email, training }]);
+
+  if (error) {
+    alert("❌ Error sending training");
+    console.log(error);
+  } else {
+    alert("✅ Training registered");
+  }
+});
+
+// 🔥 COURSE FORM
+document.getElementById("courseForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.querySelector('#courseForm [name="name"]').value;
+  const email = document.querySelector('#courseForm [name="email"]').value;
+  const course = document.querySelector('#courseForm [name="program"]').value;
+
+  const { error } = await client
+    .from("course_enrollments")
+    .insert([{ name, email, course }]);
+
+  if (error) {
+    alert("❌ Error sending course");
+    console.log(error);
+  } else {
+    alert("✅ Course enrolled");
+  }
+});
 </script>
 </body>
 </html>
