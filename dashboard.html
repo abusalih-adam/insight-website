@@ -3,7 +3,7 @@
 <head>
   <title>INsight Dashboard</title>
 
-  <!-- Chart.js -->
+  <!-- Chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -13,17 +13,30 @@
       background: #0b172b;
       color: white;
     }
+
     h1 { margin-bottom: 20px; }
+
     button {
       padding: 10px 16px;
-      margin-bottom: 20px;
+      margin: 10px 10px 20px 0;
       cursor: pointer;
+      border-radius: 8px;
+      border: none;
     }
+
     .card {
       background: rgba(255,255,255,0.08);
       padding: 12px;
       margin: 8px 0;
       border-radius: 10px;
+      line-height: 1.6;
+    }
+
+    canvas {
+      margin-top: 20px;
+      background: white;
+      border-radius: 10px;
+      padding: 10px;
     }
   </style>
 </head>
@@ -32,7 +45,7 @@
 
 <h1>📊 INsight Dashboard</h1>
 
-<button onclick="exportServices()">📥 Export Service Requests</button>
+<button onclick="exportAll()">📥 Export ALL Data</button>
 
 <h2>Service Requests</h2>
 <div id="services"></div>
@@ -43,14 +56,15 @@
 <h2>Course Enrollments</h2>
 <div id="courses"></div>
 
-<h2>📊 Analytics</h2>
+<h2>📈 Analytics</h2>
 <canvas id="myChart"></canvas>
 
 <!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
-/* 🔐 LOGIN PROTECTION */
+
+/* 🔐 SIMPLE LOGIN */
 const password = prompt("Enter dashboard password:");
 if (password !== "admin123") {
   alert("Access denied");
@@ -64,11 +78,20 @@ const client = supabase.createClient(
 );
 
 /* 📊 LOAD DATA */
+
 async function loadServices() {
   const { data } = await client.from("service_requests").select("*");
 
   document.getElementById("services").innerHTML =
-    data.map(d => `<div class="card">${d.name} - ${d.service}</div>`).join("");
+    data.map(d => `
+      <div class="card">
+        <strong>${d.name}</strong><br>
+        Org: ${d.organization}<br>
+        Service: ${d.service}<br>
+        Details: ${d.details}<br>
+        Date: ${new Date(d.created_at).toLocaleString()}
+      </div>
+    `).join("");
 
   return data;
 }
@@ -77,23 +100,58 @@ async function loadTraining() {
   const { data } = await client.from("training_registrations").select("*");
 
   document.getElementById("training").innerHTML =
-    data.map(d => `<div class="card">${d.name} - ${d.training}</div>`).join("");
+    data.map(d => `
+      <div class="card">
+        <strong>${d.name}</strong><br>
+        Email: ${d.email}<br>
+        Training: ${d.training}<br>
+        Date: ${new Date(d.created_at).toLocaleString()}
+      </div>
+    `).join("");
 }
 
 async function loadCourses() {
   const { data } = await client.from("course_enrollments").select("*");
 
   document.getElementById("courses").innerHTML =
-    data.map(d => `<div class="card">${d.name} - ${d.course}</div>`).join("");
+    data.map(d => `
+      <div class="card">
+        <strong>${d.name}</strong><br>
+        Email: ${d.email}<br>
+        Course: ${d.course}<br>
+        Date: ${new Date(d.created_at).toLocaleString()}
+      </div>
+    `).join("");
 }
 
-/* 📥 EXPORT CSV */
-function exportServices() {
-  client.from("service_requests").select("*").then(({ data }) => {
-    let csv = "Name,Organization,Service,Details\n";
+/* 📥 EXPORT ALL DATA */
 
-    data.forEach(row => {
-      csv += `${row.name},${row.organization},${row.service},${row.details}\n`;
+function exportAll() {
+  Promise.all([
+    client.from("service_requests").select("*"),
+    client.from("training_registrations").select("*"),
+    client.from("course_enrollments").select("*")
+  ]).then(([services, training, courses]) => {
+
+    let csv = "=== SERVICE REQUESTS ===\n";
+    csv += "Name,Organization,Service,Details,Date\n";
+
+    services.data.forEach(r => {
+      csv += `${r.name},${r.organization},${r.service},${r.details},${r.created_at}\n`;
+    });
+
+    csv += "\n=== TRAINING REGISTRATIONS ===\n";
+    csv += "Name,Email,Training,Date\n";
+
+    training.data.forEach(r => {
+      csv += `${r.name},${r.email},${r.training},${r.created_at}\n`;
+    });
+
+    csv += "\n=== COURSE ENROLLMENTS ===\n";
+    csv += "Name,Email,Course,Date\n";
+
+    courses.data.forEach(r => {
+      csv += `${r.name},${r.email},${r.course},${r.created_at}\n`;
     });
 
     const blob = new Blob([csv], { type: "text/csv" });
@@ -101,12 +159,13 @@ function exportServices() {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "service_requests.csv";
+    a.download = "INsight_All_Data.csv";
     a.click();
   });
 }
 
 /* 📈 CHART */
+
 async function loadChart() {
   const data = await loadServices();
 
@@ -128,6 +187,7 @@ async function loadChart() {
 }
 
 /* 🚀 INIT */
+
 loadServices();
 loadTraining();
 loadCourses();
