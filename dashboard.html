@@ -660,9 +660,8 @@
   // Edit this list for your users and roles.
   // admin/manager can enter the dashboard; viewer is blocked.
   const USER_ROLES = {
-    "abusalih.adam@outlook.com": "admin123"
-     "manager@example.com": "manager",
-     "viewer@example.com": "viewer"
+    "abusalih.adam@outlook.com": "admin"
+
   };
 
   const ALLOWED_ROLES = ["admin", "manager"];
@@ -1088,7 +1087,7 @@
         .maybeSingle();
 
       if (profile?.role) role = profile.role;
-      if (profile?.full_name) fullName = profile.full_name;
+      if (profile?.full_n) fullName = profile.full_name;
     } catch (e) {
       // profiles table may not exist yet; that's okay.
     }
@@ -1106,7 +1105,7 @@
 
     state.user = user;
     state.role = access.role;
-    state.fullName = access.fullName;
+    state.full = access.fullName;
 
     showApp();
     await refreshUI();
