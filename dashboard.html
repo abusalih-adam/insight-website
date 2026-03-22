@@ -41,7 +41,7 @@
     }
 
     a { color: inherit; text-decoration: none; }
-    button, input { font: inherit; }
+    button, input, select, textarea { font: inherit; }
 
     .hidden { display:none !important; }
 
@@ -70,6 +70,7 @@
       gap:12px;
       margin-bottom: 18px;
     }
+
     .brand-mark {
       width:52px;
       height:52px;
@@ -81,10 +82,6 @@
       font-weight:900;
       font-size: 20px;
       box-shadow: var(--shadow);
-    }
-    .brand h1, .brand h2 {
-      margin:0;
-      line-height:1.05;
     }
 
     .muted { color: var(--muted); }
@@ -102,7 +99,7 @@
       color: var(--muted);
     }
 
-    .input {
+    .input, .select, .textarea {
       width:100%;
       border:1px solid var(--line);
       background: rgba(255,255,255,.05);
@@ -111,7 +108,10 @@
       padding: 14px 16px;
       outline:none;
     }
-    .input:focus {
+
+    .textarea { min-height: 120px; resize: vertical; }
+
+    .input:focus, .select:focus, .textarea:focus {
       border-color: rgba(110,168,254,.8);
       box-shadow: 0 0 0 3px rgba(110,168,254,.15);
     }
@@ -149,7 +149,7 @@
     }
 
     .app {
-      width: min(1480px, calc(100% - 28px));
+      width: min(1520px, calc(100% - 18px));
       margin: 0 auto;
       padding: 18px 0 28px;
     }
@@ -159,7 +159,7 @@
       top: 0;
       z-index: 10;
       backdrop-filter: blur(16px);
-      background: rgba(7,17,31,.70);
+      background: rgba(7,17,31,.72);
       border: 1px solid var(--line);
       border-radius: 18px;
       padding: 14px 16px;
@@ -192,6 +192,7 @@
       display:flex;
       gap:8px;
       flex-wrap: wrap;
+      align-items:center;
     }
 
     .badge {
@@ -295,6 +296,7 @@
       background: rgba(255,255,255,.05);
       border:1px solid var(--line);
       color: var(--text);
+      line-height: 1.6;
     }
 
     .controls {
@@ -305,9 +307,7 @@
       align-items:end;
     }
 
-    .controls .field {
-      margin-top: 0;
-    }
+    .controls .field { margin-top: 0; }
 
     .section-head {
       display:flex;
@@ -334,7 +334,7 @@
     .charts {
       margin-top: 18px;
       display:grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 16px;
     }
 
@@ -367,6 +367,7 @@
       gap: 12px;
       flex-wrap: wrap;
       margin-bottom: 10px;
+      align-items:flex-start;
     }
 
     .record-title {
@@ -430,31 +431,132 @@
       background: rgba(255,255,255,.03);
     }
 
+    .grid-two {
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .subgrid {
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .progress {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      overflow: hidden;
+      margin: 10px 0 8px;
+    }
+    .progress > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    .meal-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+    }
+
+    .meal-card .meta {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .meal-card .title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .upload-row, .profile-row {
+      display:grid;
+      grid-template-columns: 1.2fr .7fr auto auto;
+      gap: 10px;
+      align-items:end;
+    }
+
+    .upload-list, .profile-list {
+      display:grid;
+      gap: 10px;
+    }
+
+    .file-item, .profile-item {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.05);
+      border:1px solid var(--line);
+    }
+
+    .file-item a {
+      color: var(--accent2);
+      word-break: break-word;
+    }
+
+    .profile-item .row {
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .profile-item .name {
+      font-weight: 800;
+    }
+
+    .mini-input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      outline:none;
+    }
+
+    .sidebar-note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
     @media (max-width: 1280px) {
       .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .controls { grid-template-columns: 1fr 1fr 1fr 1fr; }
-      .hero, .charts { grid-template-columns: 1fr; }
+      .hero, .charts, .grid-two { grid-template-columns: 1fr; }
+      .upload-row, .profile-row { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 720px) {
-      .app { width: min(100% - 16px, 100%); }
+      .app { width: min(100% - 12px, 100%); }
       .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .controls { grid-template-columns: 1fr; }
+      .controls, .upload-row, .profile-row { grid-template-columns: 1fr; }
       .topbar { padding: 12px; }
       .chart-card { min-height: 320px; }
       .chart-card canvas { height: 240px !important; }
+      .subgrid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- LOGIN SCREEN -->
+  <!-- LOGIN -->
   <div id="loginScreen" class="login-wrap">
     <div class="login-card">
       <div class="brand">
         <div class="brand-mark">I</div>
         <div>
-          <h1>INsight</h1>
+          <h1 style="margin:0;">INsight</h1>
           <div class="muted tiny">Secure dashboard access</div>
         </div>
       </div>
@@ -484,7 +586,7 @@
       </form>
 
       <p class="muted tiny" style="margin:16px 0 0;">
-        Tip: create your dashboard user in Supabase Auth, then add their email in the role map inside the code.
+        Create the auth user in Supabase Auth, then add their email in the profiles table with role admin or manager.
       </p>
     </div>
   </div>
@@ -503,7 +605,7 @@
       <div class="badge-row">
         <div class="badge ok" id="roleBadge">Role: —</div>
         <div class="badge" id="statusBadge">Live data connected</div>
-        <button class="btn btn-primary" onclick="exportAll()">Export Excel (3 sheets)</button>
+        <button class="btn btn-primary" onclick="exportAll()">Export Excel</button>
         <button class="btn btn-ghost" onclick="reloadData()">Refresh</button>
         <button class="btn btn-danger" onclick="logout()">Logout</button>
       </div>
@@ -511,10 +613,10 @@
 
     <div class="hero">
       <div class="panel">
-        <h2>Executive view for service requests, training, and courses.</h2>
+        <h2>Executive MEAL dashboard for projects, requests, training, and files.</h2>
         <p class="lead">
-          This dashboard gives you counts, timestamps, alerts, search, date filters, charts, and Excel export for all three tables.
-          It is built to look polished, clean, and presentation-ready.
+          This is a clean, UN-style operations view with access control, indicators, time filters, search, charts,
+          user management, file uploads, and live Supabase data.
         </p>
 
         <div class="pill-row">
@@ -569,11 +671,14 @@
 
         <div class="field">
           <label for="viewMode">View</label>
-          <select class="input" id="viewMode">
+          <select class="select" id="viewMode">
             <option value="all">All tables</option>
             <option value="services">Service requests</option>
             <option value="training">Training registrations</option>
             <option value="courses">Course enrollments</option>
+            <option value="projects">MEAL projects</option>
+            <option value="files">Uploaded files</option>
+            <option value="profiles">Users / Roles</option>
           </select>
         </div>
 
@@ -587,7 +692,7 @@
         <div class="section-head" style="margin-top:0;">
           <div>
             <h3>Submissions by table</h3>
-            <p>Shows the distribution across the 3 sections</p>
+            <p>Distribution across main data streams</p>
           </div>
         </div>
         <canvas id="tableChart"></canvas>
@@ -597,10 +702,20 @@
         <div class="section-head" style="margin-top:0;">
           <div>
             <h3>Submissions over time</h3>
-            <p>Daily count of all submissions</p>
+            <p>Daily counts for the last 14 days</p>
           </div>
         </div>
         <canvas id="trendChart"></canvas>
+      </div>
+
+      <div class="panel chart-card">
+        <div class="section-head" style="margin-top:0;">
+          <div>
+            <h3>MEAL project status</h3>
+            <p>Active project distribution</p>
+          </div>
+        </div>
+        <canvas id="projectChart"></canvas>
       </div>
     </div>
 
@@ -648,6 +763,85 @@
       <div id="courses" class="data-grid"></div>
     </div>
 
+    <div class="panel section" id="projectsSection">
+      <div class="table-head">
+        <div class="left">
+          <h3 style="margin:0;">MEAL Projects</h3>
+          <div class="badge" id="projectCount">0 records</div>
+        </div>
+        <div class="table-count">Table: meal_projects</div>
+      </div>
+      <div id="projects" class="subgrid"></div>
+    </div>
+
+    <div class="grid-two section">
+      <div class="panel">
+        <div class="table-head">
+          <div class="left">
+            <h3 style="margin:0;">File Uploads</h3>
+            <div class="badge" id="fileCount">0 records</div>
+          </div>
+          <div class="table-count">Bucket: insight-files</div>
+        </div>
+
+        <form id="uploadForm">
+          <div class="upload-row">
+            <div class="field">
+              <label for="fileInput">Choose file</label>
+              <input class="input" id="fileInput" type="file" />
+            </div>
+            <div class="field">
+              <label for="fileCategory">Category</label>
+              <input class="input" id="fileCategory" type="text" placeholder="reports / images / docs" />
+            </div>
+            <button class="btn btn-primary" type="submit">Upload</button>
+            <button class="btn btn-ghost" type="button" onclick="reloadData()">Refresh</button>
+          </div>
+        </form>
+
+        <div id="files" class="upload-list" style="margin-top:14px;"></div>
+      </div>
+
+      <div class="panel" id="adminPanelWrap">
+        <div class="table-head">
+          <div class="left">
+            <h3 style="margin:0;">User Management</h3>
+            <div class="badge" id="profileCount">0 records</div>
+          </div>
+          <div class="table-count">Table: profiles</div>
+        </div>
+
+        <div class="sidebar-note">
+          This panel manages dashboard access using the profiles table. Create the auth user in Supabase Auth first,
+          then add the same email here with role admin or manager.
+        </div>
+
+        <form id="profileForm" style="margin-top:14px;">
+          <div class="profile-row">
+            <div class="field">
+              <label for="profileEmail">Email</label>
+              <input class="input" id="profileEmail" type="email" placeholder="user@domain.com" />
+            </div>
+            <div class="field">
+              <label for="profileName">Full name</label>
+              <input class="input" id="profileName" type="text" placeholder="User name" />
+            </div>
+            <div class="field">
+              <label for="profileRole">Role</label>
+              <select class="select" id="profileRole">
+                <option value="admin">admin</option>
+                <option value="manager">manager</option>
+                <option value="viewer">viewer</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Save user</button>
+          </div>
+        </form>
+
+        <div id="profiles" class="profile-list" style="margin-top:14px;"></div>
+      </div>
+    </div>
+
     <div class="footer">
       INsight dashboard • secure role-based access • live Supabase data • Excel export • charts • filters • alerts
     </div>
@@ -656,12 +850,11 @@
 <script>
   const SUPABASE_URL = "https://xtlvhdtmocshycbunoki.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_mY1y5Sju44l-M4prPHvajQ_n_UznjaD";
+  const STORAGE_BUCKET = "insight-files";
 
-  // Edit this list for your users and roles.
-  // admin/manager can enter the dashboard; viewer is blocked.
+  // Add or update role access here if you want a quick override.
   const USER_ROLES = {
     "abusalih.adam@outlook.com": "admin"
-
   };
 
   const ALLOWED_ROLES = ["admin", "manager"];
@@ -678,11 +871,15 @@
     viewMode: "all",
     services: [],
     training: [],
-    courses: []
+    courses: [],
+    projects: [],
+    files: [],
+    profiles: []
   };
 
   let tableChart = null;
   let trendChart = null;
+  let projectChart = null;
 
   const loginScreen = document.getElementById("loginScreen");
   const app = document.getElementById("app");
@@ -694,6 +891,10 @@
   const endDate = document.getElementById("endDate");
   const viewMode = document.getElementById("viewMode");
   const clearFiltersBtn = document.getElementById("clearFiltersBtn");
+
+  const profileForm = document.getElementById("profileForm");
+  const uploadForm = document.getElementById("uploadForm");
+  const adminPanelWrap = document.getElementById("adminPanelWrap");
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -740,7 +941,7 @@
   function matchesFilters(record) {
     const text = getRecordText(record);
     const searchHit = !state.search || text.includes(state.search.toLowerCase());
-    const dateHit = withinDateRange(record.created_at);
+    const dateHit = withinDateRange(record.created_at || record.uploaded_at || record.updated_at);
     return searchHit && dateHit;
   }
 
@@ -752,7 +953,6 @@
       created_at: r.created_at,
       service: r.service || "—",
       details: r.details || "—",
-      email: r.email || "",
       raw: r
     }));
 
@@ -776,12 +976,38 @@
       raw: r
     }));
 
-    return { services, training, courses, all: [...services, ...training, ...courses] };
-  }
+    const projects = state.projects.map(r => ({
+      table: "projects",
+      title: r.name || "Unnamed project",
+      subtitle: r.sector || "MEAL",
+      created_at: r.created_at,
+      status: r.status || "planned",
+      target: r.target ?? "",
+      progress: Number(r.progress ?? 0),
+      location: r.location || "—",
+      raw: r
+    }));
 
-  function filterByMode(records, mode) {
-    if (mode === "all") return records;
-    return records.filter(r => r.table === mode);
+    const files = state.files.map(r => ({
+      table: "files",
+      title: r.file_name || "Untitled file",
+      subtitle: r.category || "general",
+      created_at: r.uploaded_at || r.created_at,
+      file_url: r.file_url || "",
+      uploaded_by: r.uploaded_by || "—",
+      raw: r
+    }));
+
+    const profiles = state.profiles.map(r => ({
+      table: "profiles",
+      title: r.full_name || "Unnamed user",
+      subtitle: r.email || "",
+      created_at: r.updated_at || r.created_at,
+      role: r.role || "viewer",
+      raw: r
+    }));
+
+    return { services, training, courses, projects, files, profiles, all: [...services, ...training, ...courses, ...projects, ...files, ...profiles] };
   }
 
   function kpiCard(label, value, sub) {
@@ -817,6 +1043,9 @@
     if (state.services.length === 0) alerts.push("Service requests table is empty.");
     if (state.training.length === 0) alerts.push("Training registrations table is empty.");
     if (state.courses.length === 0) alerts.push("Course enrollments table is empty.");
+    if (state.projects.length === 0) alerts.push("MEAL projects table is empty.");
+    if (state.files.length === 0) alerts.push("No files uploaded yet.");
+    if (state.profiles.length === 0) alerts.push("No users have been added to profiles yet.");
 
     if (alerts.length === 0) alerts.push("Everything looks balanced right now.");
 
@@ -841,13 +1070,40 @@
         </div>
         <div class="record-note">${escapeHtml(record.details)}</div>
       `;
-    } else {
+    } else if (type === "courses") {
       body = `
         <div class="record-meta">
           Email: ${escapeHtml(record.subtitle)}<br>
-          Course: ${escapeHtml(record.course)}
+          Course: ${escapeHtml(record.details)}
         </div>
         <div class="record-note">${escapeHtml(record.details)}</div>
+      `;
+    } else if (type === "projects") {
+      const prog = Math.max(0, Math.min(100, Number(record.progress || 0)));
+      body = `
+        <div class="record-meta">
+          Sector: ${escapeHtml(record.subtitle)}<br>
+          Location: ${escapeHtml(record.location)}<br>
+          Target: ${escapeHtml(record.target)}
+        </div>
+        <div class="progress"><span style="width:${prog}%"></span></div>
+        <div class="record-note">Status: ${escapeHtml(record.status)}</div>
+      `;
+    } else if (type === "files") {
+      body = `
+        <div class="record-meta">
+          Category: ${escapeHtml(record.subtitle)}<br>
+          Uploaded by: ${escapeHtml(record.uploaded_by)}
+        </div>
+        <div class="record-note"><a href="${escapeHtml(record.file_url)}" target="_blank" rel="noopener">Open file</a></div>
+      `;
+    } else if (type === "profiles") {
+      body = `
+        <div class="record-meta">
+          Email: ${escapeHtml(record.subtitle)}<br>
+          Role: ${escapeHtml(record.role)}
+        </div>
+        <div class="record-note">User profile used for dashboard access.</div>
       `;
     }
 
@@ -858,7 +1114,7 @@
             <div class="record-title">${escapeHtml(record.title)}</div>
             <div class="record-meta">Submitted: ${escapeHtml(formatDateTime(record.created_at))}</div>
           </div>
-          <div class="badge">${type === "services" ? "Service" : type === "training" ? "Training" : "Course"}</div>
+          <div class="badge">${type === "services" ? "Service" : type === "training" ? "Training" : type === "courses" ? "Course" : type === "projects" ? "Project" : type === "files" ? "File" : "User"}</div>
         </div>
         ${body}
       </div>
@@ -885,11 +1141,109 @@
     return filtered;
   }
 
-  function renderOverview(allRecords, filteredRecords, filteredServices, filteredTraining, filteredCourses) {
+  function renderProjects(projects) {
+    const container = document.getElementById("projects");
+    const filtered = projects.filter(matchesFilters).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    if (state.viewMode !== "all" && state.viewMode !== "projects") {
+      container.innerHTML = `<div class="no-data">This section is hidden by the current view filter.</div>`;
+      return filtered;
+    }
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<div class="no-data">No project records found.</div>`;
+      return filtered;
+    }
+
+    container.innerHTML = filtered.map(p => {
+      const prog = Math.max(0, Math.min(100, Number(p.progress || 0)));
+      return `
+        <div class="meal-card">
+          <div class="row">
+            <div class="title">${escapeHtml(p.title)}</div>
+            <div class="badge">${escapeHtml(p.status)}</div>
+          </div>
+          <div class="meta">Sector: ${escapeHtml(p.subtitle)} • Location: ${escapeHtml(p.location)} • Updated: ${escapeHtml(formatDateTime(p.created_at))}</div>
+          <div class="progress"><span style="width:${prog}%"></span></div>
+          <div class="meta">Target: ${escapeHtml(p.target || "—")} • Progress: ${prog}%</div>
+        </div>
+      `;
+    }).join("");
+
+    return filtered;
+  }
+
+  function renderFiles(files) {
+    const container = document.getElementById("files");
+    const filtered = files.filter(matchesFilters).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    if (state.viewMode !== "all" && state.viewMode !== "files") {
+      container.innerHTML = `<div class="no-data">This section is hidden by the current view filter.</div>`;
+      return filtered;
+    }
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<div class="no-data">No uploaded files found.</div>`;
+      return filtered;
+    }
+
+    container.innerHTML = filtered.map(f => `
+      <div class="file-item">
+        <div class="record-top">
+          <div>
+            <div class="record-title">${escapeHtml(f.title)}</div>
+            <div class="record-meta">${escapeHtml(f.subtitle)} • ${escapeHtml(formatDateTime(f.created_at))}</div>
+          </div>
+          <div class="badge">File</div>
+        </div>
+        <div class="record-note">
+          Uploaded by: ${escapeHtml(f.uploaded_by)}<br>
+          <a href="${escapeHtml(f.file_url)}" target="_blank" rel="noopener">Open file link</a>
+        </div>
+      </div>
+    `).join("");
+
+    return filtered;
+  }
+
+  function renderProfiles(profiles) {
+    const container = document.getElementById("profiles");
+    const filtered = profiles.filter(matchesFilters).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    if (state.viewMode !== "all" && state.viewMode !== "profiles") {
+      container.innerHTML = `<div class="no-data">This section is hidden by the current view filter.</div>`;
+      return filtered;
+    }
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<div class="no-data">No profile records found.</div>`;
+      return filtered;
+    }
+
+    container.innerHTML = filtered.map(p => `
+      <div class="profile-item">
+        <div class="row">
+          <div>
+            <div class="name">${escapeHtml(p.title)}</div>
+            <div class="record-meta">${escapeHtml(p.subtitle)}</div>
+          </div>
+          <div class="badge">${escapeHtml(p.role)}</div>
+        </div>
+        <div class="record-meta">Updated: ${escapeHtml(formatDateTime(p.created_at))}</div>
+      </div>
+    `).join("");
+
+    return filtered;
+  }
+
+  function renderOverview(allRecords, filteredRecords, filteredServices, filteredTraining, filteredCourses, filteredProjects, filteredFiles, filteredProfiles) {
     const total = allRecords.length;
     const servicesCount = state.services.length;
     const trainingCount = state.training.length;
     const coursesCount = state.courses.length;
+    const projectsCount = state.projects.length;
+    const filesCount = state.files.length;
+    const profilesCount = state.profiles.length;
 
     const sevenDays = allRecords.filter(r => {
       const d = new Date(r.created_at);
@@ -903,13 +1257,22 @@
 
     const newestLabel = newest ? formatDateTime(new Date(newest)) : "—";
 
+    const activeProjects = state.projects.filter(p => String(p.status || "").toLowerCase() === "active").length;
+    const alertsHigh = filteredRecords.length === 0 && total > 0 ? 1 : 0;
+
     const kpis = [
-      ["Total submissions", total, "All tables combined"],
+      ["Total submissions", total, "All records combined"],
       ["Service requests", servicesCount, "service_requests"],
       ["Training registrations", trainingCount, "training_registrations"],
       ["Course enrollments", coursesCount, "course_enrollments"],
+      ["MEAL projects", projectsCount, "meal_projects"],
+      ["Uploaded files", filesCount, "insight-files"],
+      ["Active projects", activeProjects, "status = active"],
+      ["Users / Roles", profilesCount, "profiles table"],
       ["Last 7 days", sevenDays, "Recent activity"],
-      ["Newest record", newestLabel, "Latest submission time"]
+      ["Newest record", newestLabel, "Latest submission time"],
+      ["Filter alerts", alertsHigh ? "1" : "0", "Matching record issue"],
+      ["Access level", state.role || "—", "Current user role"]
     ];
 
     document.getElementById("kpiGrid").innerHTML = kpis.map(([a,b,c]) => kpiCard(a,b,c)).join("");
@@ -919,6 +1282,9 @@
     document.getElementById("serviceCount").textContent = `${filteredServices.length} record${filteredServices.length === 1 ? "" : "s"}`;
     document.getElementById("trainingCount").textContent = `${filteredTraining.length} record${filteredTraining.length === 1 ? "" : "s"}`;
     document.getElementById("courseCount").textContent = `${filteredCourses.length} record${filteredCourses.length === 1 ? "" : "s"}`;
+    document.getElementById("projectCount").textContent = `${filteredProjects.length} record${filteredProjects.length === 1 ? "" : "s"}`;
+    document.getElementById("fileCount").textContent = `${filteredFiles.length} record${filteredFiles.length === 1 ? "" : "s"}`;
+    document.getElementById("profileCount").textContent = `${filteredProfiles.length} record${filteredProfiles.length === 1 ? "" : "s"}`;
 
     const recent = filteredRecords
       .slice()
@@ -927,7 +1293,13 @@
 
     document.getElementById("recentActivity").innerHTML = recent.length
       ? recent.map(r => {
-          const typeLabel = r.table === "services" ? "Service Request" : r.table === "training" ? "Training" : "Course";
+          const typeLabel =
+            r.table === "services" ? "Service Request" :
+            r.table === "training" ? "Training" :
+            r.table === "courses" ? "Course" :
+            r.table === "projects" ? "Project" :
+            r.table === "files" ? "File" : "Profile";
+
           return `
             <div class="record">
               <div class="record-top">
@@ -937,7 +1309,7 @@
                 </div>
                 <div class="badge">${escapeHtml(typeLabel)}</div>
               </div>
-              <div class="record-note">${escapeHtml(r.details)}</div>
+              <div class="record-note">${escapeHtml(r.details || r.subtitle || "Opened from dashboard")}</div>
             </div>
           `;
         }).join("")
@@ -951,6 +1323,12 @@
       Courses: state.courses.length
     };
 
+    const projectStatusCounts = {};
+    state.projects.forEach(p => {
+      const key = String(p.status || "planned").toLowerCase();
+      projectStatusCounts[key] = (projectStatusCounts[key] || 0) + 1;
+    });
+
     const dayMap = {};
     const today = new Date();
     for (let i = 13; i >= 0; i--) {
@@ -961,7 +1339,9 @@
     }
 
     allRecords.forEach(r => {
-      const key = new Date(r.created_at).toISOString().slice(0,10);
+      const rawDate = r.created_at || r.uploaded_at || r.updated_at;
+      if (!rawDate) return;
+      const key = new Date(rawDate).toISOString().slice(0,10);
       if (key in dayMap) dayMap[key] += 1;
     });
 
@@ -970,6 +1350,7 @@
 
     if (tableChart) tableChart.destroy();
     if (trendChart) trendChart.destroy();
+    if (projectChart) projectChart.destroy();
 
     tableChart = new Chart(document.getElementById("tableChart"), {
       type: "doughnut",
@@ -1012,48 +1393,96 @@
         }
       }
     });
+
+    projectChart = new Chart(document.getElementById("projectChart"), {
+      type: "bar",
+      data: {
+        labels: Object.keys(projectStatusCounts),
+        datasets: [{
+          label: "Projects",
+          data: Object.values(projectStatusCounts),
+          backgroundColor: "#42d6c0"
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { labels: { color: "#eef5ff" } }
+        },
+        scales: {
+          x: { ticks: { color: "#a9b7cf" }, grid: { color: "rgba(255,255,255,.08)" } },
+          y: { ticks: { color: "#a9b7cf", precision: 0 }, grid: { color: "rgba(255,255,255,.08)" }, beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  async function safeSelect(table) {
+    try {
+      const { data, error } = await sb.from(table).select("*");
+      if (error) {
+        console.warn(`Table ${table} unavailable:`, error.message);
+        return [];
+      }
+      return data || [];
+    } catch (err) {
+      console.warn(`Table ${table} failed:`, err);
+      return [];
+    }
   }
 
   async function loadData() {
-    const [servicesRes, trainingRes, coursesRes] = await Promise.all([
-      sb.from("service_requests").select("*"),
-      sb.from("training_registrations").select("*"),
-      sb.from("course_enrollments").select("*")
+    const [services, training, courses, projects, files, profiles] = await Promise.all([
+      safeSelect("service_requests"),
+      safeSelect("training_registrations"),
+      safeSelect("course_enrollments"),
+      safeSelect("meal_projects"),
+      safeSelect("file_uploads"),
+      safeSelect("profiles")
     ]);
 
-    if (servicesRes.error) throw servicesRes.error;
-    if (trainingRes.error) throw trainingRes.error;
-    if (coursesRes.error) throw coursesRes.error;
-
-    state.services = servicesRes.data || [];
-    state.training = trainingRes.data || [];
-    state.courses = coursesRes.data || [];
+    state.services = services;
+    state.training = training;
+    state.courses = courses;
+    state.projects = projects;
+    state.files = files;
+    state.profiles = profiles;
   }
 
   async function refreshUI() {
     await loadData();
 
     const normalized = normalizeRecords();
-    const filteredServices = state.services
-      .map(r => ({ ...r, table: "services" }))
-      .filter(matchesFilters);
-    const filteredTraining = state.training
-      .map(r => ({ ...r, table: "training" }))
-      .filter(matchesFilters);
-    const filteredCourses = state.courses
-      .map(r => ({ ...r, table: "courses" }))
-      .filter(matchesFilters);
+
+    const filteredServices = normalized.services.filter(matchesFilters);
+    const filteredTraining = normalized.training.filter(matchesFilters);
+    const filteredCourses = normalized.courses.filter(matchesFilters);
+    const filteredProjects = normalized.projects.filter(matchesFilters);
+    const filteredFiles = normalized.files.filter(matchesFilters);
+    const filteredProfiles = normalized.profiles.filter(matchesFilters);
 
     const filteredAll = normalized.all
       .filter(matchesFilters)
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-    renderOverview(normalized.all, filteredAll, filteredServices, filteredTraining, filteredCourses);
+    renderOverview(
+      normalized.all,
+      filteredAll,
+      filteredServices,
+      filteredTraining,
+      filteredCourses,
+      filteredProjects,
+      filteredFiles,
+      filteredProfiles
+    );
+
     renderCharts(normalized.all);
 
     renderSection("services", normalized.services, "services");
     renderSection("training", normalized.training, "training");
     renderSection("courses", normalized.courses, "courses");
+    renderProjects(normalized.projects);
+    renderFiles(normalized.files);
+    renderProfiles(normalized.profiles);
 
     document.getElementById("userLine").textContent = `${state.fullName} • ${state.user.email}`;
     document.getElementById("roleBadge").textContent = `Role: ${state.role}`;
@@ -1074,22 +1503,20 @@
   async function resolveRole(user) {
     const email = (user.email || "").toLowerCase();
 
-    // Start with a code-based role map
     let role = USER_ROLES[email] || "viewer";
     let fullName = user.user_metadata?.full_name || user.email;
 
-    // Optional: if you later create a public.profiles table, this will use it automatically.
     try {
       const { data: profile } = await sb
         .from("profiles")
-        .select("full_name, role")
-        .eq("id", user.id)
+        .select("email, full_name, role")
+        .eq("email", email)
         .maybeSingle();
 
       if (profile?.role) role = profile.role;
-      if (profile?.full_n) fullName = profile.full_name;
+      if (profile?.full_name) fullName = profile.full_name;
     } catch (e) {
-      // profiles table may not exist yet; that's okay.
+      // profiles table may not exist yet
     }
 
     return { role, fullName };
@@ -1097,6 +1524,7 @@
 
   async function handleSession(user) {
     const access = await resolveRole(user);
+
     if (!ALLOWED_ROLES.includes(access.role)) {
       await sb.auth.signOut();
       showLogin("Access denied. Your account does not have dashboard permission.");
@@ -1105,7 +1533,7 @@
 
     state.user = user;
     state.role = access.role;
-    state.full = access.fullName;
+    state.fullName = access.fullName;
 
     showApp();
     await refreshUI();
@@ -1126,7 +1554,7 @@
     e.preventDefault();
     loginStatus.textContent = "Signing in…";
 
-    const email = document.getElementById("email").value.trim();
+    const email = document.getElementById("email").value.trim().toLowerCase();
     const password = document.getElementById("password").value;
 
     const { data, error } = await sb.auth.signInWithPassword({ email, password });
@@ -1177,42 +1605,134 @@
   });
 
   async function exportAll() {
-    const [servicesRes, trainingRes, coursesRes] = await Promise.all([
+    const [servicesRes, trainingRes, coursesRes, projectsRes, filesRes, profilesRes] = await Promise.all([
       sb.from("service_requests").select("*"),
       sb.from("training_registrations").select("*"),
-      sb.from("course_enrollments").select("*")
+      sb.from("course_enrollments").select("*"),
+      sb.from("meal_projects").select("*"),
+      sb.from("file_uploads").select("*"),
+      sb.from("profiles").select("*")
     ]);
 
     if (servicesRes.error) return alert("Failed to export service requests.");
     if (trainingRes.error) return alert("Failed to export training registrations.");
     if (coursesRes.error) return alert("Failed to export course enrollments.");
 
-    const servicesSheet = XLSX.utils.json_to_sheet(servicesRes.data || []);
-    const trainingSheet = XLSX.utils.json_to_sheet(trainingRes.data || []);
-    const coursesSheet = XLSX.utils.json_to_sheet(coursesRes.data || []);
+    const wb = XLSX.utils.book_new();
 
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, servicesSheet, "Service Requests");
-    XLSX.utils.book_append_sheet(workbook, trainingSheet, "Training");
-    XLSX.utils.book_append_sheet(workbook, coursesSheet, "Courses");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(servicesRes.data || []), "Service Requests");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(trainingRes.data || []), "Training");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(coursesRes.data || []), "Courses");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(projectsRes.data || []), "MEAL Projects");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(filesRes.data || []), "Files");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(profilesRes.data || []), "Profiles");
 
     const filename = `INsight_All_Data_${new Date().toISOString().slice(0,10)}.xlsx`;
-    XLSX.writeFile(workbook, filename);
+    XLSX.writeFile(wb, filename);
   }
 
   async function reloadData() {
     await refreshUI();
   }
 
-  // Make functions available to buttons
-  window.exportAll = exportAll;
-  window.logout = logout;
-  window.reloadData = reloadData;
+  async function uploadFile(file, category) {
+    const safeName = file.name.replace(/\s+/g, "_");
+    const path = `${category}/${Date.now()}_${safeName}`;
+
+    const { error: uploadError } = await sb.storage
+      .from(STORAGE_BUCKET)
+      .upload(path, file, { upsert: false, cacheControl: "3600" });
+
+    if (uploadError) throw uploadError;
+
+    const { data: publicData } = sb.storage.from(STORAGE_BUCKET).getPublicUrl(path);
+    const publicUrl = publicData.publicUrl;
+
+    try {
+      await sb.from("file_uploads").insert([{
+        file_name: file.name,
+        file_url: publicUrl,
+        category,
+        uploaded_by: state.user?.email || "unknown",
+        uploaded_at: new Date().toISOString()
+      }]);
+    } catch (e) {
+      console.warn("Could not insert file metadata:", e);
+    }
+
+    return publicUrl;
+  }
+
+  uploadForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById("fileInput");
+    const fileCategory = document.getElementById("fileCategory");
+    const file = fileInput.files[0];
+
+    if (!file) {
+      alert("Choose a file first.");
+      return;
+    }
+
+    const category = (fileCategory.value || "general").trim().toLowerCase().replace(/[^a-z0-9-_]/g, "");
+    try {
+      await uploadFile(file, category || "general");
+      alert("✅ File uploaded successfully");
+      fileInput.value = "";
+      fileCategory.value = "";
+      await refreshUI();
+    } catch (err) {
+      console.error(err);
+      alert("❌ File upload failed");
+    }
+  });
+
+  profileForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (state.role !== "admin") {
+      alert("Only admin can manage users.");
+      return;
+    }
+
+    const email = document.getElementById("profileEmail").value.trim().toLowerCase();
+    const full_name = document.getElementById("profileName").value.trim();
+    const role = document.getElementById("profileRole").value;
+
+    if (!email) {
+      alert("Email is required.");
+      return;
+    }
+
+    const payload = {
+      email,
+      full_name,
+      role,
+      updated_at: new Date().toISOString()
+    };
+
+    try {
+      const { error } = await sb.from("profiles").upsert([payload], { onConflict: "email" });
+      if (error) throw error;
+      alert("✅ User saved");
+      profileForm.reset();
+      await refreshUI();
+    } catch (err) {
+      console.error(err);
+      alert("❌ Could not save user");
+    }
+  });
+
+  function allowPublicViewIfNotAdmin() {
+    // Dashboard is already role-protected; this keeps the user management panel visible only for admin.
+    adminPanelWrap.classList.toggle("hidden", state.role !== "admin");
+  }
 
   sb.auth.onAuthStateChange(async (_event, session) => {
     if (session?.user) {
       if (!app.classList.contains("hidden")) {
         await handleSession(session.user);
+        allowPublicViewIfNotAdmin();
       }
     } else {
       state.user = null;
@@ -1222,10 +1742,16 @@
     }
   });
 
-  bootstrap().catch(err => {
+  bootstrap().then(() => {
+    allowPublicViewIfNotAdmin();
+  }).catch(err => {
     console.error(err);
     showLogin("Could not connect to the dashboard.");
   });
+
+  window.exportAll = exportAll;
+  window.logout = logout;
+  window.reloadData = reloadData;
 </script>
 </body>
 </html>
