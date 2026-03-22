@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="INsight provides data, research, training, and MEAL solutions for NGOs, UN agencies, and organizations." />
+  <meta name="description" content="Ruya is a data, learning, research, MEAL, and accountability ecosystem built for NGOs, teams, and professionals." />
   <meta name="theme-color" content="#07111f" />
-  <title>INsight | Data, Research, Training & MEAL Solutions</title>
+  <title>Ruya | Data • Learning • Impact</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
   <style>
     :root {
       --bg: #06101d;
@@ -39,11 +41,17 @@
         linear-gradient(180deg, var(--bg), var(--bg2));
       min-height: 100vh;
       line-height: 1.5;
+      overflow-x: hidden;
     }
 
     a { color: inherit; text-decoration: none; }
     img, video { max-width: 100%; display: block; }
     button, input, textarea, select { font: inherit; }
+
+    .container {
+      width: min(var(--container), calc(100% - 32px));
+      margin: 0 auto;
+    }
 
     .skip-link {
       position: absolute;
@@ -58,11 +66,6 @@
       color: #000;
       padding: 10px 14px;
       border-radius: 10px;
-    }
-
-    .container {
-      width: min(var(--container), calc(100% - 32px));
-      margin: 0 auto;
     }
 
     .nav {
@@ -92,8 +95,8 @@
     }
 
     .brand-mark {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 14px;
       display: grid;
       place-items: center;
@@ -125,7 +128,7 @@
       padding: 12px 18px;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+      transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -137,14 +140,14 @@
       outline: 2px solid var(--accent2);
       outline-offset: 2px;
     }
-    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #03101d; }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #03101d; box-shadow: 0 14px 35px rgba(66, 214, 192, 0.18); }
     .btn-ghost { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid var(--line); }
     .btn-dark { background: rgba(255,255,255,0.04); color: var(--text); border: 1px solid var(--line); }
 
     .hero {
-      padding: 72px 0 36px;
+      padding: 72px 0 28px;
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: 1.08fr 0.92fr;
       gap: 28px;
       align-items: center;
     }
@@ -160,6 +163,7 @@
       color: var(--muted);
       margin-bottom: 18px;
       font-size: 14px;
+      animation: fadeUp 0.8s ease both;
     }
 
     h1 {
@@ -167,6 +171,7 @@
       line-height: 0.98;
       margin: 0 0 18px;
       letter-spacing: -1.6px;
+      animation: fadeUp 0.95s ease both;
     }
 
     .gradient-text {
@@ -182,6 +187,7 @@
       color: var(--muted);
       max-width: 62ch;
       margin-bottom: 26px;
+      animation: fadeUp 1.05s ease both;
     }
 
     .hero-actions {
@@ -189,12 +195,14 @@
       gap: 12px;
       flex-wrap: wrap;
       margin-bottom: 28px;
+      animation: fadeUp 1.1s ease both;
     }
 
     .stats {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
+      animation: fadeUp 1.2s ease both;
     }
 
     .stat {
@@ -221,6 +229,7 @@
       padding: 22px;
       position: relative;
       overflow: hidden;
+      animation: floatIn 1s ease both;
     }
     .hero-card::after {
       content: "";
@@ -257,6 +266,12 @@
     .dashboard-card h3 {
       margin: 0 0 10px;
       font-size: 16px;
+    }
+    .dashboard-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
     }
 
     .progress {
@@ -302,7 +317,7 @@
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 16px;
     }
     .card {
@@ -310,7 +325,13 @@
       border-radius: 20px;
       background: rgba(255,255,255,0.06);
       border: 1px solid var(--line);
-      min-height: 190px;
+      min-height: 210px;
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(110,168,254,0.35);
+      background: rgba(255,255,255,0.08);
     }
     .icon {
       width: 46px;
@@ -325,26 +346,6 @@
     .card h3 { margin: 0 0 10px; font-size: 20px; }
     .card p, .card li { color: var(--muted); line-height: 1.75; }
     .card ul { margin: 0; padding-left: 18px; }
-
-    .timeline {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
-    }
-    .step {
-      padding: 20px;
-      border-radius: 20px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.05);
-    }
-    .step strong {
-      font-size: 28px;
-      display: inline-block;
-      margin-bottom: 8px;
-      color: var(--accent);
-    }
-    .step h3 { margin: 0 0 8px; }
-    .step p { margin: 0; color: var(--muted); line-height: 1.65; }
 
     .split {
       display: grid;
@@ -371,30 +372,25 @@
       font-size: 13px;
     }
 
-    .pricing {
+    .timeline {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 16px;
     }
-    .price-card {
-      padding: 22px;
+    .step {
+      padding: 20px;
       border-radius: 20px;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.06);
-      position: relative;
-      overflow: hidden;
+      background: rgba(255,255,255,0.05);
     }
-    .price-card.featured {
-      background: linear-gradient(180deg, rgba(66,214,192,0.14), rgba(255,255,255,0.06));
-      transform: translateY(-6px);
+    .step strong {
+      font-size: 28px;
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--accent);
     }
-    .price-card h3 { margin: 0 0 8px; }
-    .price {
-      font-size: 36px;
-      font-weight: 800;
-      margin: 16px 0 10px;
-    }
-    .price-card small { color: var(--muted); }
+    .step h3 { margin: 0 0 8px; }
+    .step p { margin: 0; color: var(--muted); line-height: 1.65; }
 
     .media-grid {
       display: grid;
@@ -430,7 +426,7 @@
 
     .contact {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1.1fr;
       gap: 16px;
       align-items: start;
     }
@@ -547,7 +543,7 @@
 
     .form-tabs {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 10px;
       margin-bottom: 16px;
     }
@@ -580,8 +576,44 @@
       line-height: 1.7;
     }
 
-    @media (max-width: 1080px) {
-      .cards, .timeline, .pricing, .media-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .roadmap {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .road {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .road strong {
+      display: block;
+      font-size: 28px;
+      color: var(--accent2);
+      margin-bottom: 8px;
+    }
+
+    .road h3 { margin: 0 0 8px; }
+    .road p { margin: 0; color: var(--muted); line-height: 1.65; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(18px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: 0.7s ease; }
+    .reveal.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 1100px) {
+      .cards, .roadmap { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .timeline, .media-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 980px) {
@@ -591,10 +623,10 @@
       .brand { min-width: unset; }
     }
 
-    @media (max-width: 640px) {
-      .cards, .timeline, .pricing, .stats, .dashboard-grid, .media-grid, .form-tabs { grid-template-columns: 1fr; }
+    @media (max-width: 760px) {
+      .cards, .roadmap, .stats, .dashboard-grid, .timeline, .media-grid, .form-tabs { grid-template-columns: 1fr; }
       .section-title h2 { font-size: 26px; }
-      .hero { padding-top: 40px; }
+      .hero { padding-top: 42px; }
       h1 { font-size: 42px; }
       .btn { width: 100%; }
       .hero-actions { flex-direction: column; }
@@ -607,26 +639,26 @@
 
   <header class="nav">
     <div class="container nav-inner">
-      <a class="brand" href="#home" aria-label="INsight home">
-        <div class="brand-mark">I</div>
+      <a class="brand" href="#home" aria-label="Ruya home">
+        <div class="brand-mark">R</div>
         <div>
-          <div>INsight</div>
-          <small style="color: var(--muted); font-weight: 500;">Data • Insight • Impact</small>
+          <div>Ruya</div>
+          <small style="color: var(--muted); font-weight: 500;">Data • Learning • Impact</small>
         </div>
       </a>
 
       <nav class="nav-links" aria-label="Main navigation">
+        <a href="#platforms">Platforms</a>
         <a href="#services">Services</a>
         <a href="#training">Training</a>
         <a href="#media">Media</a>
-        <a href="#dashboard">Dashboard</a>
-        <a href="#pricing">Pricing</a>
+        <a href="#roadmap">Roadmap</a>
         <a href="#contact">Contact</a>
       </nav>
 
       <div class="nav-actions">
         <button class="btn btn-ghost" type="button" onclick="openModal('login')">Login</button>
-        <a class="btn btn-primary" href="#contact">Request a Demo</a>
+        <a class="btn btn-primary" href="#contact">Request Access</a>
       </div>
     </div>
   </header>
@@ -634,63 +666,62 @@
   <main id="main" class="container">
     <section class="hero" id="home">
       <div>
-        <div class="eyebrow">🚀 Ready-made data teams for humanitarian and research work</div>
-        <h1>Build smarter data systems with <span class="gradient-text">INsight</span>.</h1>
+        <div class="eyebrow">🌍 One company. Multiple platforms. One mission.</div>
+        <h1>
+          Build a smarter future with
+          <span class="gradient-text">Ruya</span>.
+        </h1>
         <p class="lead">
-          INsight provides end-to-end data and research solutions: enumerator teams, surveys, analysis,
-          dashboards, MEAL systems, database setup, training, course delivery, and actionable reports for health,
-          nutrition, protection, education, and market monitoring.
+          Ruya is a data, learning, research, MEAL, and accountability ecosystem built for real-world impact.
+          We empower people through learning, support organizations through data services, and help teams grow
+          into practical, high-value work.
         </p>
 
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#services">Explore Services</a>
-          <a class="btn btn-dark" href="https://insight-website.vercel.app/dashboard.html?">See Dashboard</a>
+          <a class="btn btn-primary" href="#platforms">Explore Platforms</a>
+          <a class="btn btn-dark" href="#training">Join Learning</a>
           <button class="btn btn-ghost" type="button" onclick="openModal('login')">Access Portal</button>
         </div>
 
         <div class="stats">
           <div class="stat panel">
-            <strong>24/7</strong>
-            <span>Project-ready coordination</span>
+            <strong>5</strong>
+            <span>Connected platforms</span>
           </div>
           <div class="stat panel">
             <strong>360°</strong>
-            <span>Collection, analysis, reporting</span>
+            <span>Learning to execution</span>
           </div>
           <div class="stat panel">
-            <strong>5+</strong>
-            <span>Core sectors supported</span>
+            <strong>Real</strong>
+            <span>Skills, projects, impact</span>
           </div>
         </div>
       </div>
 
       <div class="panel hero-card" id="dashboard">
-        <div class="mini-label">Live-style operations dashboard</div>
-        <h2 style="margin:0 0 6px; font-size: 28px;">Project Summary</h2>
+        <div class="mini-label">Gateway dashboard</div>
+        <h2 style="margin:0 0 6px; font-size: 28px;">Ruya Ecosystem</h2>
         <p style="margin:0; color: var(--muted); line-height: 1.65;">
-          This dashboard section shows how INsight can present field progress, response coverage, and reporting status.
+          This is the first public page that introduces the full Ruya vision and directs people to the right platform.
         </p>
 
         <div class="dashboard-grid">
           <div class="dashboard-card">
-            <h3>Enumerator Coverage</h3>
-            <div class="progress"><span style="width: 84%"></span></div>
-            <div class="metric-row"><span>Active today</span><span>84%</span></div>
+            <h3>🎓 Academy</h3>
+            <p>Learn practical skills and grow into opportunities.</p>
           </div>
           <div class="dashboard-card">
-            <h3>Completed Forms</h3>
-            <div class="progress"><span style="width: 67%"></span></div>
-            <div class="metric-row"><span>In sync</span><span>67%</span></div>
+            <h3>📊 Data & AI</h3>
+            <p>Surveys, dashboards, analysis, and insights.</p>
           </div>
           <div class="dashboard-card">
-            <h3>Data Quality</h3>
-            <div class="progress"><span style="width: 91%"></span></div>
-            <div class="metric-row"><span>Validated</span><span>91%</span></div>
+            <h3>⚙️ Systems</h3>
+            <p>MEAL tools, indicators, workflows, databases.</p>
           </div>
           <div class="dashboard-card">
-            <h3>Reports Ready</h3>
-            <div class="progress"><span style="width: 73%"></span></div>
-            <div class="metric-row"><span>Published</span><span>73%</span></div>
+            <h3>🛡️ TPM</h3>
+            <p>Monitoring, verification, and accountability.</p>
           </div>
         </div>
 
@@ -698,90 +729,143 @@
           <span class="tag">Kobo / CommCare</span>
           <span class="tag">Looker / Power BI</span>
           <span class="tag">Excel / Sheets</span>
-          <span class="tag">PDF Reporting</span>
+          <span class="tag">PDF / Reporting</span>
         </div>
       </div>
     </section>
 
-    <section>
+    <section class="reveal">
       <div class="topbar">
-        <div class="pill">✨ Professional landing page</div>
-        <div class="pill">Ready for Vercel + Supabase</div>
-        <div class="pill">Media, training, courses, forms</div>
+        <div class="pill">✨ Modern dark interface</div>
+        <div class="pill">📡 Ready for Supabase</div>
+        <div class="pill">🚀 Built to scale into multiple platforms</div>
       </div>
     </section>
 
-    <section id="services">
+    <section id="platforms" class="reveal">
       <div class="section-title">
         <div>
-          <h2>Services</h2>
-          <p>Designed to support NGOs, UN agencies, research projects, and private organizations that need strong field data and management systems.</p>
+          <h2>Ruya Platforms</h2>
+          <p>Each platform has a clear role. Together they form one ecosystem that teaches, supports, and delivers value.</p>
         </div>
       </div>
+
       <div class="cards">
+        <article class="card">
+          <div class="icon">🎓</div>
+          <h3>Ruya Academy</h3>
+          <p>Learn data, MEAL, leadership, and real-world skills with practical training and pathways into work.</p>
+          <button class="btn btn-primary" onclick="goToPlatform('academy')">Enter Academy</button>
+        </article>
+
+        <article class="card">
+          <div class="icon">📊</div>
+          <h3>Ruya Data & AI</h3>
+          <p>Surveys, dashboards, analysis, and advanced analytics to turn data into decisions.</p>
+          <button class="btn btn-primary" onclick="goToPlatform('data')">Enter Platform</button>
+        </article>
+
+        <article class="card">
+          <div class="icon">⚙️</div>
+          <h3>Ruya Systems</h3>
+          <p>Build MEAL systems, indicators, workflows, and structured data pipelines for projects.</p>
+          <button class="btn btn-primary" onclick="goToPlatform('systems')">Enter Systems</button>
+        </article>
+
+        <article class="card">
+          <div class="icon">🔍</div>
+          <h3>Ruya Research</h3>
+          <p>Design studies, generate insights, and support strategic decisions for organizations.</p>
+          <button class="btn btn-primary" onclick="goToPlatform('research')">Enter Research</button>
+        </article>
+
+        <article class="card">
+          <div class="icon">🛡️</div>
+          <h3>Ruya TPM</h3>
+          <p>Third-party monitoring, verification, accountability, and compliance systems.</p>
+          <button class="btn btn-primary" onclick="goToPlatform('tpm')">Enter TPM</button>
+        </article>
+      </div>
+    </section>
+
+    <section id="services" class="reveal">
+      <div class="section-title">
+        <div>
+          <h2>What Ruya Does</h2>
+          <p>These are the core services that will support your company, your academy, and your future growth.</p>
+        </div>
+      </div>
+
+      <div class="cards" style="grid-template-columns: repeat(4, minmax(0, 1fr));">
         <article class="card">
           <div class="icon">📋</div>
           <h3>Data Collection</h3>
-          <p>Trained enumerators, survey implementation, field supervision, and quality control for fast and reliable data collection.</p>
+          <p>Enumerator teams, survey implementation, field supervision, and quality control.</p>
         </article>
         <article class="card">
-          <div class="icon">📊</div>
+          <div class="icon">📈</div>
           <h3>Analysis & Reporting</h3>
-          <p>Clean data, analyze results, write findings, and build clear reports and dashboards for decision-makers.</p>
+          <p>Clean data, analyze results, write findings, and build dashboards and reports.</p>
         </article>
         <article class="card">
-          <div class="icon">⚙️</div>
-          <h3>Data Systems Setup</h3>
-          <p>Design databases and workflows for Health, Nutrition, Protection, Education, and MEAL systems.</p>
+          <div class="icon">📚</div>
+          <h3>Capacity Building</h3>
+          <p>Train people in data, MEAL, leadership, Excel, dashboards, and digital tools.</p>
         </article>
         <article class="card">
-          <div class="icon">🎓</div>
-          <h3>Consulting & Training</h3>
-          <p>Support teams with SOPs, enumerator training, monitoring plans, and improved data processes.</p>
+          <div class="icon">🛠️</div>
+          <h3>Systems & Consulting</h3>
+          <p>Build databases, workflows, SOPs, and practical systems for organizations.</p>
         </article>
       </div>
     </section>
 
-    <section id="training">
+    <section id="training" class="reveal">
       <div class="section-title">
         <div>
           <h2>Training & Courses</h2>
-          <p>This section is built for capacity building, workshops, and course registration. You can change the topics any time, and later store the registrations in your database.</p>
+          <p>This is the entry point to Ruya Academy. It is built as a learning platform that grows into real opportunities.</p>
         </div>
       </div>
 
       <div class="split">
         <div class="panel list-box">
-          <h3 style="margin-top:0;">What you can offer</h3>
+          <h3 style="margin-top:0;">What you can teach</h3>
           <ul>
             <li>MEAL fundamentals</li>
             <li>Data collection tools (Kobo / CommCare)</li>
             <li>Excel and dashboard training</li>
             <li>Reporting and visualization</li>
             <li>Basic research and survey design</li>
-            <li>Capacity building for field teams</li>
+            <li>Leadership and management skills</li>
+            <li>Intro to AI for work and data</li>
           </ul>
+
           <div class="tag-row">
-            <span class="tag">Workshops</span>
-            <span class="tag">Courses</span>
+            <span class="tag">Online courses</span>
+            <span class="tag">Offline training</span>
             <span class="tag">Certificates</span>
-            <span class="tag">Field training</span>
+            <span class="tag">Practice-based</span>
           </div>
+
           <div class="note-box">
-            Later, this training section can connect to a table like <strong>training_registrations</strong> and show how many people enrolled, completed, or got certificates.
+            Ruya Academy is not just theory. It is practical learning that prepares people to do real work and grow into future roles.
           </div>
         </div>
 
         <div class="panel list-box">
-          <h3 style="margin-top:0;">Training process</h3>
+          <h3 style="margin-top:0;">Learning journey</h3>
           <ul>
-            <li>Announce the training topic</li>
-            <li>Collect registrations</li>
-            <li>Send confirmation to participants</li>
-            <li>Run the session</li>
-            <li>Track attendance and outcomes</li>
+            <li>Register online</li>
+            <li>Choose a course or track</li>
+            <li>Join the learning group</li>
+            <li>Complete activities and tasks</li>
+            <li>Request certificate after completion</li>
+            <li>Best learners may join Ruya projects</li>
           </ul>
-          <p class="hint">You can keep this as a visible website section or move it to a separate page later. The structure is already ready for that upgrade.</p>
+
+          <p class="hint">The website can later connect this journey to a login, progress, exams, and certificates.</p>
+
           <div style="display:flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;">
             <button class="btn btn-primary" type="button" onclick="openModal('training')">Register for Training</button>
             <button class="btn btn-ghost" type="button" onclick="openModal('course')">Join a Course</button>
@@ -790,11 +874,11 @@
       </div>
     </section>
 
-    <section id="media">
+    <section id="media" class="reveal">
       <div class="section-title">
         <div>
           <h2>Media Library</h2>
-          <p>This is where you can place images, banners, short videos, and project highlights. Right now it is ready for file paths, so you can swap in real media later without redesigning the site.</p>
+          <p>Place images, banners, and short videos here later without changing the website structure.</p>
         </div>
       </div>
 
@@ -808,7 +892,7 @@
             </div>
           </div>
           <h3>Training Photo</h3>
-          <p>Use for workshops, field teams, or course promotion images.</p>
+          <p>For workshops, field teams, and course promotion images.</p>
         </article>
 
         <article class="media-card">
@@ -820,7 +904,7 @@
             </div>
           </div>
           <h3>Intro Video</h3>
-          <p>Use for company intro, training highlights, or service explanation clips.</p>
+          <p>For company intro, training highlights, and service explanation clips.</p>
         </article>
 
         <article class="media-card">
@@ -832,89 +916,61 @@
             </div>
           </div>
           <h3>Project Gallery</h3>
-          <p>Use for survey activities, dashboards, reports, or success stories.</p>
+          <p>For surveys, dashboards, reports, or success stories.</p>
         </article>
       </div>
-
-      <div class="note-box" style="margin-top:16px;">
-        Example HTML later:<br />
-        <code>&lt;img src="assets/images/training-1.jpg" alt="Training session" /&gt;</code><br />
-        <code>&lt;video src="assets/videos/demo.mp4" controls&gt;&lt;/video&gt;</code>
-      </div>
     </section>
 
-    <section>
+    <section id="roadmap" class="reveal">
       <div class="section-title">
         <div>
-          <h2>How It Can Grow</h2>
-          <p>This is the part that makes the website future-proof. You can add pages, forms, uploads, dashboards, and database tables without losing the current design.</p>
+          <h2>Roadmap</h2>
+          <p>One platform now, more platforms later. This page is the entry point for the full Ruya ecosystem.</p>
         </div>
       </div>
-      <div class="timeline">
-        <div class="step">
+
+      <div class="roadmap">
+        <div class="road">
           <strong>01</strong>
           <h3>Public website</h3>
-          <p>Homepage, services, training, media, and contact information for visitors.</p>
+          <p>Brand, platforms, services, and contact for visitors.</p>
         </div>
-        <div class="step">
+        <div class="road">
           <strong>02</strong>
           <h3>Forms</h3>
-          <p>Service requests, training registration, and course applications collect data.</p>
+          <p>Registrations, requests, and submissions stored in Supabase.</p>
         </div>
-        <div class="step">
+        <div class="road">
           <strong>03</strong>
           <h3>Database</h3>
-          <p>Supabase stores requests, participants, course enrollments, and uploaded records.</p>
+          <p>Track requests, learners, trainings, and later certificates.</p>
         </div>
-        <div class="step">
+        <div class="road">
           <strong>04</strong>
           <h3>Dashboard</h3>
-          <p>Track training targets, request status, participants, and annual progress.</p>
+          <p>See totals, progress, and platform activity in private pages.</p>
+        </div>
+        <div class="road">
+          <strong>05</strong>
+          <h3>Portal</h3>
+          <p>One login for Academy, Data, Systems, Research, and TPM.</p>
         </div>
       </div>
     </section>
 
-    <section id="pricing">
+    <section id="contact" class="reveal">
       <div class="section-title">
         <div>
-          <h2>Starter Packages</h2>
-          <p>Example packages you can show to clients now. You can edit the prices later to match your market.</p>
+          <h2>Contact & Requests</h2>
+          <p>Use these forms to gather leads for the company, training, and future academy enrollment.</p>
         </div>
       </div>
-      <div class="pricing">
-        <div class="price-card">
-          <h3>Survey Start</h3>
-          <small>Small field study</small>
-          <div class="price">$300+</div>
-          <p>Questionnaire setup, small team, collection support, and simple reporting.</p>
-        </div>
-        <div class="price-card featured">
-          <h3>Research Pro</h3>
-          <small>Best for NGOs</small>
-          <div class="price">$1,000+</div>
-          <p>Full study design, enumerator management, cleaning, analysis, and dashboard.</p>
-        </div>
-        <div class="price-card">
-          <h3>Data System</h3>
-          <small>MEAL and databases</small>
-          <div class="price">Custom</div>
-          <p>Database setup, workflow design, staff training, and ongoing technical support.</p>
-        </div>
-      </div>
-    </section>
 
-    <section id="contact">
-      <div class="section-title">
-        <div>
-          <h2>Contact & Demo Request</h2>
-          <p>Use this form to present the company professionally and receive service requests.</p>
-        </div>
-      </div>
       <div class="contact">
         <div class="panel contact-box">
           <div class="contact-item">
             <strong>Email</strong>
-            info@insight.com
+            info@ruya.com
           </div>
           <div class="contact-item">
             <strong>Phone</strong>
@@ -922,11 +978,11 @@
           </div>
           <div class="contact-item">
             <strong>Focus Areas</strong>
-            Health, Nutrition, Protection, Education, MEAL, Training, and Research
+            Learning, data, research, MEAL, TPM, accountability, and systems
           </div>
           <div class="contact-item" style="border-bottom: none;">
             <strong>Website</strong>
-            insight.com
+            ruya.com
           </div>
         </div>
 
@@ -935,9 +991,10 @@
             <button class="tab active" type="button" data-form="service">Service Request</button>
             <button class="tab" type="button" data-form="training">Training Registration</button>
             <button class="tab" type="button" data-form="course">Course Enrollment</button>
+            <button class="tab" type="button" data-form="certificate">Certificate Request</button>
           </div>
 
-          <form id="serviceForm" class="form-panel active" data-table="service_requests">
+          <form id="serviceForm" class="form-panel active">
             <label for="service-name">Your name</label>
             <input id="service-name" name="name" type="text" placeholder="Enter your name" required />
 
@@ -963,7 +1020,7 @@
             <div class="status" id="serviceStatus" aria-live="polite"></div>
           </form>
 
-          <form id="trainingForm" class="form-panel" data-table="training_registrations">
+          <form id="trainingForm" class="form-panel">
             <label for="training-name">Your name</label>
             <input id="training-name" name="name" type="text" placeholder="Enter your name" required />
 
@@ -989,7 +1046,7 @@
             <div class="status" id="trainingStatus" aria-live="polite"></div>
           </form>
 
-          <form id="courseForm" class="form-panel" data-table="course_enrollments">
+          <form id="courseForm" class="form-panel">
             <label for="course-name">Your name</label>
             <input id="course-name" name="name" type="text" placeholder="Enter your name" required />
 
@@ -1015,8 +1072,34 @@
             <div class="status" id="courseStatus" aria-live="polite"></div>
           </form>
 
+          <form id="certificateForm" class="form-panel">
+            <label for="cert-name">Your name</label>
+            <input id="cert-name" name="name" type="text" placeholder="Enter your name" required />
+
+            <label for="cert-email">Email</label>
+            <input id="cert-email" name="email" type="email" placeholder="name@example.com" required />
+
+            <label for="cert-course">Completed course</label>
+            <select id="cert-course" name="course" required>
+              <option>Basic Data Analysis</option>
+              <option>MEAL Reporting</option>
+              <option>Kobo Form Design</option>
+              <option>Dashboard Building</option>
+              <option>Project Monitoring</option>
+            </select>
+
+            <label for="cert-proof">Why should you get the certificate?</label>
+            <textarea id="cert-proof" name="proof" placeholder="Short explanation..." required></textarea>
+
+            <div style="display:flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;">
+              <button class="btn btn-primary" type="submit">Request Certificate</button>
+              <button class="btn btn-ghost" type="button" onclick="openModal('login')">Open Login</button>
+            </div>
+            <div class="status" id="certificateStatus" aria-live="polite"></div>
+          </form>
+
           <div class="note-box">
-            Future upgrade: connect each form to its own database table, then show the totals inside a private admin dashboard.
+            Future upgrade: each form can connect to a real table in Supabase, then feed a private dashboard for admins and learners.
           </div>
         </div>
       </div>
@@ -1025,8 +1108,8 @@
 
   <footer class="footer">
     <div class="container footer-inner">
-      <div>© 2026 INsight. Built for data, research, training, and MEAL excellence.</div>
-      <div>Ready for next step: real login, database connection, and publishing.</div>
+      <div>© 2026 Ruya. Built for learning, data, research, systems, and impact.</div>
+      <div>Ready for the next step: academy pages, portal login, and private dashboards.</div>
     </div>
   </footer>
 
@@ -1034,8 +1117,8 @@
     <div class="modal-card">
       <div class="modal-head">
         <div>
-          <h2 id="portalTitle" style="margin:0;">INsight Portal</h2>
-          <p style="margin:6px 0 0; color: var(--muted);">Frontend demo for login and future private access.</p>
+          <h2 id="portalTitle" style="margin:0;">Ruya Portal</h2>
+          <p style="margin:6px 0 0; color: var(--muted);">Frontend demo for future private access.</p>
         </div>
         <button class="close" type="button" onclick="closeModal()" aria-label="Close">×</button>
       </div>
@@ -1052,113 +1135,171 @@
       </div>
 
       <p class="hint">
-        This HTML version is a polished showcase. The next step is connecting it to hosting, authentication,
-        and a real database.
+        This page is the gateway. Next we connect the portal to real authentication, the academy, and the database.
       </p>
     </div>
   </div>
 
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    // ------------------------------------------------------------
+    // 1) Supabase setup
+    // ------------------------------------------------------------
+    const SUPABASE_URL = "https://xtlvhdtmocshycbunoki.supabase.co";
+    const SUPABASE_ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-<script>
-const client = supabase.createClient(
-  "https://xtlvhdtmocshycbunoki.supabase.co",
-  "sb_publishable_mY1y5Sju44l-M4prPHvajQ_n_UznjaD"
-);
+    // ------------------------------------------------------------
+    // 2) UI helpers
+    // ------------------------------------------------------------
+    const portalModal = document.getElementById('portalModal');
+    const formTabs = document.querySelectorAll('.tab');
+    const formPanels = document.querySelectorAll('.form-panel');
 
-// keep UI behavior
-const portalModal = document.getElementById('portalModal');
-const formTabs = document.querySelectorAll('.tab');
-const formPanels = document.querySelectorAll('.form-panel');
+    function openModal(mode = 'login') {
+      portalModal.classList.add('open');
+      document.getElementById('portalTitle').textContent =
+        mode === 'training' ? 'Training Registration' :
+        mode === 'course' ? 'Course Enrollment' :
+        mode === 'login' ? 'Ruya Portal' : 'Ruya Portal';
+    }
 
-function openModal(mode = 'login') {
-  portalModal.classList.add('open');
-  document.getElementById('portalTitle').textContent =
-    mode === 'training' ? 'Training Registration' : mode === 'course' ? 'Course Enrollment' : 'INsight Portal';
-}
+    function closeModal() {
+      portalModal.classList.remove('open');
+    }
 
-function closeModal() {
-  portalModal.classList.remove('open');
-}
+    function loginDemo() {
+      alert('Portal ready. Connect real auth in the next step.');
+      closeModal();
+    }
 
-function loginDemo() {
-  alert('Demo login only.');
-  closeModal();
-}
-
-formTabs.forEach((tab) => {
-  tab.addEventListener('click', () => {
-    const target = tab.dataset.form;
-
-    formTabs.forEach((t) => t.classList.remove('active'));
-    tab.classList.add('active');
-
-    formPanels.forEach((panel) => {
-      panel.classList.remove('active');
-      if (panel.id === `${target}Form`) panel.classList.add('active');
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
     });
-  });
-});
 
-// ✅ REAL DATABASE CONNECTION
-document.getElementById("serviceForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+    portalModal.addEventListener('click', (e) => {
+      if (e.target === portalModal) closeModal();
+    });
 
-  const name = document.querySelector('[name="name"]').value;
-  const organization = document.querySelector('[name="organization"]').value;
-  const service = document.querySelector('[name="service"]').value;
-  const details = document.querySelector('[name="message"]').value;
+    // ------------------------------------------------------------
+    // 3) Tabs
+    // ------------------------------------------------------------
+    formTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.form;
 
-  const { error } = await client
-    .from("service_requests")
-    .insert([{ name, organization, service, details }]);
+        formTabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
 
-  if (error) {
-    alert("❌ Error sending request");
-    console.log(error);
-  } else {
-    alert("✅ Request sent successfully");
-  }
-});
-  // 🔥 TRAINING FORM
-document.getElementById("trainingForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+        formPanels.forEach((panel) => {
+          panel.classList.remove('active');
+          if (panel.id === `${target}Form`) panel.classList.add('active');
+        });
+      });
+    });
 
-  const name = document.querySelector('#trainingForm [name="name"]').value;
-  const email = document.querySelector('#trainingForm [name="email"]').value;
-  const training = document.querySelector('#trainingForm [name="topic"]').value;
+    // ------------------------------------------------------------
+    // 4) Navigation between Ruya platforms
+    // ------------------------------------------------------------
+    function goToPlatform(platform) {
+      const routes = {
+        academy: "/academy.html",
+        data: "/data.html",
+        systems: "/systems.html",
+        research: "/research.html",
+        tpm: "/tpm.html"
+      };
+      window.location.href = routes[platform];
+    }
 
-  const { error } = await client
-    .from("training_registrations")
-    .insert([{ name, email, training }]);
+    // ------------------------------------------------------------
+    // 5) Save form data to Supabase
+    // ------------------------------------------------------------
+    async function saveToSupabase(table, payload, statusElId, successMessage) {
+      const statusEl = document.getElementById(statusElId);
+      statusEl.textContent = "Sending...";
 
-  if (error) {
-    alert("❌ Error sending training");
-    console.log(error);
-  } else {
-    alert("✅ Training registered");
-  }
-});
+      const { error } = await client.from(table).insert([payload]);
 
-// 🔥 COURSE FORM
-document.getElementById("courseForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+      if (error) {
+        console.error(error);
+        statusEl.textContent = "Could not save now. Check Supabase table / key / policies.";
+        alert("❌ " + error.message);
+        return false;
+      }
 
-  const name = document.querySelector('#courseForm [name="name"]').value;
-  const email = document.querySelector('#courseForm [name="email"]').value;
-  const course = document.querySelector('#courseForm [name="program"]').value;
+      statusEl.textContent = successMessage;
+      alert("✅ " + successMessage);
+      return true;
+    }
 
-  const { error } = await client
-    .from("course_enrollments")
-    .insert([{ name, email, course }]);
+    document.getElementById("serviceForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById("service-name").value.trim(),
+        organization: document.getElementById("service-org").value.trim(),
+        service: document.getElementById("service-type").value,
+        message: document.getElementById("service-msg").value.trim(),
+        created_at: new Date().toISOString()
+      };
 
-  if (error) {
-    alert("❌ Error sending course");
-    console.log(error);
-  } else {
-    alert("✅ Course enrolled");
-  }
-});
-</script>
+      const ok = await saveToSupabase("service_requests", payload, "serviceStatus", "Service request sent successfully");
+      if (ok) e.target.reset();
+    });
+
+    document.getElementById("trainingForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById("training-name").value.trim(),
+        email: document.getElementById("training-email").value.trim(),
+        topic: document.getElementById("training-topic").value,
+        note: document.getElementById("training-note").value.trim(),
+        created_at: new Date().toISOString()
+      };
+
+      const ok = await saveToSupabase("training_registrations", payload, "trainingStatus", "Training registration saved");
+      if (ok) e.target.reset();
+    });
+
+    document.getElementById("courseForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById("course-name").value.trim(),
+        email: document.getElementById("course-email").value.trim(),
+        course: document.getElementById("course-program").value,
+        goal: document.getElementById("course-goal").value.trim(),
+        created_at: new Date().toISOString()
+      };
+
+      const ok = await saveToSupabase("course_enrollments", payload, "courseStatus", "Course enrollment saved");
+      if (ok) e.target.reset();
+    });
+
+    document.getElementById("certificateForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById("cert-name").value.trim(),
+        email: document.getElementById("cert-email").value.trim(),
+        course: document.getElementById("cert-course").value,
+        proof: document.getElementById("cert-proof").value.trim(),
+        created_at: new Date().toISOString()
+      };
+
+      const ok = await saveToSupabase("certificate_requests", payload, "certificateStatus", "Certificate request saved");
+      if (ok) e.target.reset();
+    });
+
+    // ------------------------------------------------------------
+    // 6) Reveal animations on scroll
+    // ------------------------------------------------------------
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach((el) => observer.observe(el));
+  </script>
 </body>
 </html>
