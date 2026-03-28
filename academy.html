@@ -15,8 +15,6 @@
     :root {
       --bg: #06101d;
       --bg2: #0b172b;
-      --card: rgba(255, 255, 255, 0.07);
-      --card-strong: rgba(255, 255, 255, 0.11);
       --text: #eef5ff;
       --muted: #afbdd3;
       --line: rgba(255, 255, 255, 0.12);
@@ -25,7 +23,6 @@
       --accent3: #f5b971;
       --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
       --radius: 22px;
-      --radius-sm: 14px;
       --container: 1180px;
     }
 
@@ -114,7 +111,7 @@
       white-space: nowrap;
     }
     .btn:hover { transform: translateY(-1px); }
-    .btn:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+    .btn:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible {
       outline: 2px solid var(--accent2);
       outline-offset: 2px;
     }
@@ -275,7 +272,7 @@
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 16px;
     }
     .card {
@@ -302,84 +299,7 @@
       margin-bottom: 14px;
     }
     .card h3 { margin: 0 0 10px; font-size: 20px; }
-    .card p, .card li { color: var(--muted); line-height: 1.75; }
-
-    .split {
-      display: grid;
-      grid-template-columns: 0.95fr 1.05fr;
-      gap: 16px;
-      align-items: stretch;
-    }
-
-    .list-box { padding: 22px; }
-    .list-box ul { margin: 0; padding-left: 18px; color: var(--muted); line-height: 1.8; }
-
-    .tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
-    }
-    .tag {
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid var(--line);
-      color: var(--text);
-      font-size: 13px;
-    }
-
-    .timeline {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
-    }
-    .step {
-      padding: 20px;
-      border-radius: 20px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.05);
-    }
-    .step strong {
-      font-size: 28px;
-      display: inline-block;
-      margin-bottom: 8px;
-      color: var(--accent);
-    }
-    .step h3 { margin: 0 0 8px; }
-    .step p { margin: 0; color: var(--muted); line-height: 1.65; }
-
-    .media-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .media-card {
-      padding: 16px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--line);
-      overflow: hidden;
-    }
-
-    .media-thumb {
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      border-radius: 16px;
-      overflow: hidden;
-      background: rgba(255,255,255,0.08);
-      border: 1px dashed rgba(255,255,255,0.2);
-      display: grid;
-      place-items: center;
-      color: var(--muted);
-      margin-bottom: 12px;
-      text-align: center;
-      padding: 16px;
-    }
-
-    .media-card h3 { margin: 0 0 6px; }
-    .media-card p { margin: 0; color: var(--muted); line-height: 1.7; }
+    .card p { color: var(--muted); line-height: 1.75; }
 
     .contact {
       display: grid;
@@ -387,7 +307,9 @@
       gap: 16px;
       align-items: start;
     }
-    .contact-box, .form-box { padding: 22px; }
+
+    .contact-box, .form-box, .student-box { padding: 22px; }
+
     .contact-item {
       padding: 14px 0;
       border-bottom: 1px solid var(--line);
@@ -401,6 +323,7 @@
       color: var(--muted);
       font-size: 14px;
     }
+
     input, textarea, select {
       width: 100%;
       padding: 14px 16px;
@@ -410,8 +333,21 @@
       color: var(--text);
       outline: none;
     }
-    textarea { min-height: 120px; resize: vertical; }
+
     input::placeholder, textarea::placeholder { color: #7f90aa; }
+    textarea { min-height: 120px; resize: vertical; }
+
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-color: #0b172b;
+      color: #eef5ff;
+    }
+    select option {
+      background: #0b172b;
+      color: #eef5ff;
+    }
 
     .footer {
       padding: 34px 0 50px;
@@ -438,7 +374,7 @@
     }
     .modal.open { display: grid; }
     .modal-card {
-      width: min(560px, 100%);
+      width: min(620px, 100%);
       border-radius: 24px;
       background: linear-gradient(180deg, rgba(14, 24, 43, 0.98), rgba(8, 17, 32, 0.98));
       border: 1px solid var(--line);
@@ -477,84 +413,54 @@
       font-size: 14px;
     }
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .student-dashboard {
+      display: none;
       margin-top: 16px;
-      flex-wrap: wrap;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
     }
+    .student-dashboard.active { display: block; }
 
-    .pill {
+    .badge {
       display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 12px;
+      padding: 7px 11px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--line);
-      color: var(--muted);
       font-size: 13px;
-    }
-
-    .form-tabs {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .tab {
-      border-radius: 999px;
-      padding: 10px 12px;
+      background: rgba(255,255,255,0.08);
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.05);
-      color: var(--text);
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .tab.active {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #03101d;
-    }
-
-    .form-panel { display: none; }
-    .form-panel.active { display: block; }
-
-    .note-box {
-      padding: 16px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.05);
       color: var(--muted);
-      margin-top: 14px;
-      line-height: 1.7;
-    }
-
-    .roadmap {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .road {
-      padding: 18px;
-      border-radius: 18px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.05);
-    }
-
-    .road strong {
-      display: block;
-      font-size: 28px;
-      color: var(--accent2);
+      margin-right: 8px;
       margin-bottom: 8px;
     }
 
-    .road h3 { margin: 0 0 8px; }
-    .road p { margin: 0; color: var(--muted); line-height: 1.65; }
+    .badge.good { color: #7df0c5; }
+    .badge.warn { color: #ffd27a; }
+    .badge.bad { color: #ff9b9b; }
+
+    .progress-wrap {
+      margin-top: 12px;
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      transition: width 0.35s ease;
+    }
+
+    .hidden { display: none !important; }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(14px); }
@@ -569,18 +475,17 @@
     .reveal.show { opacity: 1; transform: translateY(0); }
 
     @media (max-width: 1100px) {
-      .cards, .roadmap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .timeline, .media-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 980px) {
-      .hero, .split, .contact { grid-template-columns: 1fr; }
+      .hero, .contact { grid-template-columns: 1fr; }
       .nav-inner { flex-direction: column; align-items: flex-start; }
       .brand { min-width: unset; }
     }
 
     @media (max-width: 760px) {
-      .cards, .roadmap, .stats, .dashboard-grid, .timeline, .media-grid, .form-tabs { grid-template-columns: 1fr; }
+      .cards, .stats, .dashboard-grid, .form-grid { grid-template-columns: 1fr; }
       .section-title h2 { font-size: 26px; }
       .hero { padding-top: 42px; }
       h1 { font-size: 42px; }
@@ -603,16 +508,14 @@
 
       <nav class="nav-links" aria-label="Main navigation">
         <a href="#courses">Courses</a>
-        <a href="#tracks">Tracks</a>
-        <a href="#journey">Journey</a>
-        <a href="#benefits">Benefits</a>
-        <a href="#apply">Apply</a>
+        <a href="#join">Join</a>
         <a href="#contact">Contact</a>
+        <a href="#student" onclick="openStudentPortal(); return false;">Certificate</a>
       </nav>
 
       <div class="nav-actions">
         <a class="btn btn-ghost" href="index.html">Back to Ruya</a>
-        <button class="btn btn-primary" type="button" onclick="openModal('apply')">Apply Now</button>
+        <button class="btn btn-primary" type="button" onclick="openStudentPortal()">Student Login</button>
       </div>
     </div>
   </header>
@@ -632,9 +535,9 @@
         </p>
 
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#apply">Join a Course</a>
+          <a class="btn btn-primary" href="#join">Join a Course</a>
           <a class="btn btn-dark" href="#courses">See Courses</a>
-          <button class="btn btn-ghost" type="button" onclick="openModal('certificate')">Request Certificate</button>
+          <button class="btn btn-ghost" type="button" onclick="openStudentPortal()">Request Certificate</button>
         </div>
 
         <div class="stats">
@@ -643,8 +546,8 @@
             <span>Hands-on training</span>
           </div>
           <div class="stat panel">
-            <strong>Online + Offline</strong>
-            <span>Flexible learning</span>
+            <strong>Flexible</strong>
+            <span>Simple and direct flow</span>
           </div>
           <div class="stat panel">
             <strong>Career-ready</strong>
@@ -657,35 +560,35 @@
         <div class="mini-label">Academy overview</div>
         <h2 style="margin:0 0 6px; font-size: 28px;">What Ruya Academy does</h2>
         <p style="margin:0; color: var(--muted); line-height: 1.65;">
-          We teach useful skills, guide learners through practice, and help the best learners grow into real project opportunities.
+          We guide learners through course selection, registration, login, performance review, and certificate eligibility.
         </p>
 
         <div class="dashboard-grid">
           <div class="dashboard-card">
             <h3>📚 Learn</h3>
-            <p>Understand tools and concepts</p>
+            <p>Choose a course and begin.</p>
           </div>
           <div class="dashboard-card">
             <h3>🛠️ Practice</h3>
-            <p>Apply skills in exercises</p>
+            <p>Take tests and build skill.</p>
           </div>
           <div class="dashboard-card">
             <h3>✅ Validate</h3>
-            <p>Tests, tasks, and certificates</p>
+            <p>Track progress and readiness.</p>
           </div>
           <div class="dashboard-card">
-            <h3>💼 Work</h3>
-            <p>Join real Ruya opportunities</p>
+            <h3>💼 Grow</h3>
+            <p>Move toward opportunities.</p>
           </div>
         </div>
 
         <div style="margin-top: 16px; display:flex; gap: 12px; flex-wrap: wrap;">
-          <span class="tag">Data Collection</span>
-          <span class="tag">MEAL</span>
-          <span class="tag">Excel</span>
-          <span class="tag">Dashboards</span>
-          <span class="tag">Leadership</span>
-          <span class="tag">AI Basics</span>
+          <span class="badge">Data Collection</span>
+          <span class="badge">MEAL</span>
+          <span class="badge">Excel</span>
+          <span class="badge">Dashboards</span>
+          <span class="badge">Leadership</span>
+          <span class="badge">AI Basics</span>
         </div>
       </div>
     </section>
@@ -694,11 +597,11 @@
       <div class="section-title">
         <div>
           <h2>Courses</h2>
-          <p>Each course is practical, short, and focused on real skill-building. Students can register directly from the website.</p>
+          <p>Practical courses built for real skill-building. Students choose one course and enroll through one form.</p>
         </div>
       </div>
 
-      <div class="cards" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+      <div class="cards">
         <article class="card">
           <div class="icon">📋</div>
           <h3>Data Collection with Kobo</h3>
@@ -712,7 +615,7 @@
         <article class="card">
           <div class="icon">📈</div>
           <h3>Dashboards & Visualization</h3>
-          <p>Turn data into clear visuals with Power BI and Looker-style reporting.</p>
+          <p>Turn data into clear visuals with Power BI and reporting tools.</p>
         </article>
         <article class="card">
           <div class="icon">⚙️</div>
@@ -727,157 +630,16 @@
         <article class="card">
           <div class="icon">🤖</div>
           <h3>AI Basics for Work</h3>
-          <p>Learn how AI can help with writing, analysis, ideas, and productivity in the real world.</p>
+          <p>Learn how AI can help with writing, analysis, ideas, and productivity.</p>
         </article>
       </div>
     </section>
 
-    <section class="reveal" id="tracks">
+    <section class="reveal" id="join">
       <div class="section-title">
         <div>
-          <h2>Learning Tracks</h2>
-          <p>Students can follow a track depending on their goals. A track can include several courses and later lead to a certificate.</p>
-        </div>
-      </div>
-
-      <div class="timeline">
-        <div class="step">
-          <strong>01</strong>
-          <h3>Data Foundations</h3>
-          <p>Basic data entry, Excel, Kobo, and practical beginner skills.</p>
-        </div>
-        <div class="step">
-          <strong>02</strong>
-          <h3>MEAL Track</h3>
-          <p>Monitoring, evaluation, learning, indicators, and reporting.</p>
-        </div>
-        <div class="step">
-          <strong>03</strong>
-          <h3>Data Practice</h3>
-          <p>Dashboards, analysis, reporting, and working with real datasets.</p>
-        </div>
-        <div class="step">
-          <strong>04</strong>
-          <h3>Leadership Track</h3>
-          <p>Communication, teamwork, time management, and management skills.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="reveal" id="journey">
-      <div class="section-title">
-        <div>
-          <h2>Student Journey</h2>
-          <p>This is how a learner moves through Ruya Academy from registration to opportunity.</p>
-        </div>
-      </div>
-
-      <div class="cards" style="grid-template-columns: repeat(4, minmax(0, 1fr));">
-        <article class="card">
-          <div class="icon">1</div>
-          <h3>Register</h3>
-          <p>Choose a course and submit your details through the form.</p>
-        </article>
-        <article class="card">
-          <div class="icon">2</div>
-          <h3>Learn</h3>
-          <p>Join the course, attend sessions, and complete exercises.</p>
-        </article>
-        <article class="card">
-          <div class="icon">3</div>
-          <h3>Practice</h3>
-          <p>Do assignments, take tests, and build confidence with real work.</p>
-        </article>
-        <article class="card">
-          <div class="icon">4</div>
-          <h3>Grow</h3>
-          <p>Request a certificate and grow into future Ruya project opportunities.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="reveal" id="benefits">
-      <div class="section-title">
-        <div>
-          <h2>Why Ruya Academy is different</h2>
-          <p>We do not teach only theory. We create useful skills, strong habits, and a path toward real work.</p>
-        </div>
-      </div>
-
-      <div class="split">
-        <div class="panel list-box">
-          <h3 style="margin-top:0;">For learners</h3>
-          <ul>
-            <li>Practical courses</li>
-            <li>Flexible online and offline learning</li>
-            <li>Certificate requests after completion</li>
-            <li>Growth into real opportunities</li>
-            <li>Support for work-ready skills</li>
-          </ul>
-        </div>
-
-        <div class="panel list-box">
-          <h3 style="margin-top:0;">For Ruya</h3>
-          <ul>
-            <li>Build a strong talent pipeline</li>
-            <li>Train people who can later join projects</li>
-            <li>Grow a trusted learning community</li>
-            <li>Create future trainers and assistants</li>
-            <li>Support all Ruya platforms with skilled people</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="reveal" id="media">
-      <div class="section-title">
-        <div>
-          <h2>Media & Learning Materials</h2>
-          <p>Later you can upload lecture videos, banners, student photos, and downloadable resources here.</p>
-        </div>
-      </div>
-
-      <div class="media-grid">
-        <article class="media-card">
-          <div class="media-thumb">
-            <div>
-              <strong>Course video</strong><br />
-              Put files in <code>/assets/videos</code>
-            </div>
-          </div>
-          <h3>Intro Session</h3>
-          <p>Use for welcome videos and course introductions.</p>
-        </article>
-
-        <article class="media-card">
-          <div class="media-thumb">
-            <div>
-              <strong>Image banner</strong><br />
-              Put files in <code>/assets/images</code>
-            </div>
-          </div>
-          <h3>Workshop Banner</h3>
-          <p>Use for promotions and announcements.</p>
-        </article>
-
-        <article class="media-card">
-          <div class="media-thumb">
-            <div>
-              <strong>Certificate preview</strong><br />
-              Add PDF or image later
-            </div>
-          </div>
-          <h3>Certificate Sample</h3>
-          <p>Show learners what they can earn after completion.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="reveal" id="apply">
-      <div class="section-title">
-        <div>
-          <h2>Apply / Register</h2>
-          <p>This section can connect directly to Supabase later. For now it is ready as the public registration point.</p>
+          <h2>Join / Enroll</h2>
+          <p>One form only. This is where the student registers for the course they want.</p>
         </div>
       </div>
 
@@ -885,62 +647,29 @@
         <div class="panel contact-box">
           <div class="contact-item">
             <strong>How it works</strong>
-            Register → Join → Learn → Practice → Request certificate
+            Select course → submit → admin reviews → payment confirmation → student login
           </div>
           <div class="contact-item">
-            <strong>Certificates</strong>
-            Issued after completion of the required tasks and tests
+            <strong>After login</strong>
+            The student can see progress, status, and certificate eligibility
           </div>
           <div class="contact-item" style="border-bottom: none;">
-            <strong>Best learners</strong>
-            May be invited to join Ruya projects and real work opportunities
+            <strong>Certificate</strong>
+            Available only after login and performance review
           </div>
         </div>
 
         <div class="panel form-box">
-          <div class="form-tabs" role="tablist" aria-label="Application forms">
-            <button class="tab active" type="button" data-form="training">Training</button>
-            <button class="tab" type="button" data-form="course">Course</button>
-            <button class="tab" type="button" data-form="certificate">Certificate</button>
-            <button class="tab" type="button" data-form="contact">Contact</button>
-          </div>
+          <form id="enrollForm">
+            <label for="enroll-name">Full name</label>
+            <input id="enroll-name" name="name" type="text" placeholder="Enter your name" required />
 
-          <form id="trainingForm" class="form-panel active">
-            <label for="training-name">Full name</label>
-            <input id="training-name" name="name" type="text" placeholder="Enter your name" required />
+            <label for="enroll-email">Email</label>
+            <input id="enroll-email" name="email" type="email" placeholder="name@example.com" required />
 
-            <label for="training-email">Email</label>
-            <input id="training-email" name="email" type="email" placeholder="name@example.com" required />
-
-            <label for="training-topic">Training topic</label>
-            <select id="training-topic" name="topic" required>
-              <option>MEAL Fundamentals</option>
-              <option>Kobo / CommCare</option>
-              <option>Excel & Dashboards</option>
-              <option>Research Design</option>
-              <option>Leadership & Management</option>
-              <option>AI Basics</option>
-            </select>
-
-            <label for="training-note">Why do you want to join?</label>
-            <textarea id="training-note" name="note" placeholder="Tell us briefly..." required></textarea>
-
-            <div style="display:flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;">
-              <button class="btn btn-primary" type="submit">Register</button>
-              <button class="btn btn-ghost" type="button" onclick="openModal('training')">Open Popup</button>
-            </div>
-            <div class="status" id="trainingStatus" aria-live="polite"></div>
-          </form>
-
-          <form id="courseForm" class="form-panel">
-            <label for="course-name">Full name</label>
-            <input id="course-name" name="name" type="text" placeholder="Enter your name" required />
-
-            <label for="course-email">Email</label>
-            <input id="course-email" name="email" type="email" placeholder="name@example.com" required />
-
-            <label for="course-program">Course</label>
-            <select id="course-program" name="program" required>
+            <label for="enroll-course">Course</label>
+            <select id="enroll-course" name="course" required>
+              <option value="" selected disabled>Select a course</option>
               <option>Data Collection with Kobo</option>
               <option>Excel for Data Analysis</option>
               <option>Dashboards & Visualization</option>
@@ -949,44 +678,45 @@
               <option>AI Basics for Work</option>
             </select>
 
-            <label for="course-goal">Learning goal</label>
-            <textarea id="course-goal" name="goal" placeholder="What do you want to learn?" required></textarea>
+            <label for="enroll-note">Why do you want to join?</label>
+            <textarea id="enroll-note" name="note" placeholder="Tell us briefly..." required></textarea>
 
             <div style="display:flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;">
               <button class="btn btn-primary" type="submit">Enroll</button>
-              <button class="btn btn-ghost" type="button" onclick="openModal('course')">Open Popup</button>
+              <button class="btn btn-ghost" type="button" onclick="openStudentPortal()">Certificate Login</button>
             </div>
-            <div class="status" id="courseStatus" aria-live="polite"></div>
+            <div class="status" id="enrollStatus" aria-live="polite"></div>
           </form>
+        </div>
+      </div>
+    </section>
 
-          <form id="certificateForm" class="form-panel">
-            <label for="cert-name">Full name</label>
-            <input id="cert-name" name="name" type="text" placeholder="Enter your name" required />
+    <section class="reveal" id="contact">
+      <div class="section-title">
+        <div>
+          <h2>Contact</h2>
+          <p>Use this form only for messages, questions, and support.</p>
+        </div>
+      </div>
 
-            <label for="cert-email">Email</label>
-            <input id="cert-email" name="email" type="email" placeholder="name@example.com" required />
+      <div class="contact">
+        <div class="panel contact-box">
+          <div class="contact-item">
+            <strong>WhatsApp / Email</strong>
+            Students can contact the team for payment confirmation and support
+          </div>
+          <div class="contact-item">
+            <strong>Support</strong>
+            Questions about course enrollment, login, or certificates
+          </div>
+          <div class="contact-item" style="border-bottom: none;">
+            <strong>Response</strong>
+            The team can reply manually through your chosen channel
+          </div>
+        </div>
 
-            <label for="cert-course">Completed course</label>
-            <select id="cert-course" name="course" required>
-              <option>Data Collection with Kobo</option>
-              <option>Excel for Data Analysis</option>
-              <option>Dashboards & Visualization</option>
-              <option>MEAL Systems</option>
-              <option>Leadership & Management</option>
-              <option>AI Basics for Work</option>
-            </select>
-
-            <label for="cert-proof">Why should you get the certificate?</label>
-            <textarea id="cert-proof" name="proof" placeholder="Short explanation..." required></textarea>
-
-            <div style="display:flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;">
-              <button class="btn btn-primary" type="submit">Request Certificate</button>
-              <button class="btn btn-ghost" type="button" onclick="openModal('login')">Open Login</button>
-            </div>
-            <div class="status" id="certificateStatus" aria-live="polite"></div>
-          </form>
-
-          <form id="contactForm" class="form-panel">
+        <div class="panel form-box">
+          <form id="contactForm">
             <label for="contact-name">Your name</label>
             <input id="contact-name" name="name" type="text" placeholder="Enter your name" required />
 
@@ -998,47 +728,10 @@
 
             <div style="display:flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;">
               <button class="btn btn-primary" type="submit">Send Message</button>
-              <button class="btn btn-ghost" type="button" onclick="openModal('login')">Open Login</button>
+              <button class="btn btn-ghost" type="button" onclick="openStudentPortal()">Student Login</button>
             </div>
             <div class="status" id="contactStatus" aria-live="polite"></div>
           </form>
-        </div>
-      </div>
-    </section>
-
-    <section class="reveal">
-      <div class="section-title">
-        <div>
-          <h2>Growth Roadmap</h2>
-          <p>Ruya Academy starts as a learning platform, then grows into a stronger ecosystem with tracking and opportunity systems.</p>
-        </div>
-      </div>
-
-      <div class="roadmap">
-        <div class="road">
-          <strong>01</strong>
-          <h3>Public academy</h3>
-          <p>Website, courses, registration, and public trust.</p>
-        </div>
-        <div class="road">
-          <strong>02</strong>
-          <h3>Certificates</h3>
-          <p>Completion checks, validations, and certificate requests.</p>
-        </div>
-        <div class="road">
-          <strong>03</strong>
-          <h3>Login & tracking</h3>
-          <p>Student progress, tasks, tests, and private access.</p>
-        </div>
-        <div class="road">
-          <strong>04</strong>
-          <h3>Projects</h3>
-          <p>Top learners join real Ruya project opportunities.</p>
-        </div>
-        <div class="road">
-          <strong>05</strong>
-          <h3>Platform</h3>
-          <p>Full online learning ecosystem with growth potential.</p>
         </div>
       </div>
     </section>
@@ -1051,30 +744,76 @@
     </div>
   </footer>
 
-  <div class="modal" id="portalModal" role="dialog" aria-modal="true" aria-labelledby="portalTitle">
+  <div class="modal" id="studentModal" role="dialog" aria-modal="true" aria-labelledby="studentTitle">
     <div class="modal-card">
       <div class="modal-head">
         <div>
-          <h2 id="portalTitle" style="margin:0;">Ruya Portal</h2>
-          <p style="margin:6px 0 0; color: var(--muted);">Future login and private access.</p>
+          <h2 id="studentTitle" style="margin:0;">Student Access</h2>
+          <p style="margin:6px 0 0; color: var(--muted);">Sign in to continue to certificate and progress review.</p>
         </div>
-        <button class="close" type="button" onclick="closeModal()" aria-label="Close">×</button>
+        <button class="close" type="button" onclick="closeStudentPortal()" aria-label="Close">×</button>
       </div>
 
-      <label for="email">Email</label>
-      <input id="email" type="email" placeholder="name@organization.org" />
+      <div id="loginPanel">
+        <label for="login-identifier">Username or email</label>
+        <input id="login-identifier" type="text" placeholder="username or name@example.com" />
 
-      <label for="password">Password</label>
-      <input id="password" type="password" placeholder="••••••••" />
+        <label for="login-password">Password</label>
+        <input id="login-password" type="password" placeholder="••••••••" />
 
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
-        <button class="btn btn-primary" type="button" onclick="loginDemo()">Sign in</button>
-        <button class="btn btn-ghost" type="button" onclick="closeModal()">Cancel</button>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
+          <button class="btn btn-primary" type="button" onclick="signInStudent()">Sign in</button>
+          <button class="btn btn-ghost" type="button" onclick="closeStudentPortal()">Cancel</button>
+        </div>
+
+        <p class="hint">
+          This login uses the current student record from Supabase. Later we can replace it with full secure auth.
+        </p>
+
+        <div class="status" id="loginStatus" aria-live="polite"></div>
       </div>
 
-      <p class="hint">
-        This page is ready for future authentication, student tracking, and private academy access.
-      </p>
+      <div id="dashboardPanel" class="student-dashboard">
+        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center;">
+          <div>
+            <h3 id="studentName" style="margin:0 0 6px;">Student</h3>
+            <p id="studentEmail" style="margin:0; color: var(--muted);">student@email.com</p>
+          </div>
+          <button class="btn btn-ghost" type="button" onclick="signOutStudent()">Sign out</button>
+        </div>
+
+        <div style="margin-top:16px;">
+          <span id="badgePayment" class="badge">Payment: pending</span>
+          <span id="badgeLevel" class="badge">Level: not set</span>
+          <span id="badgeQualification" class="badge">Certificate: not checked</span>
+        </div>
+
+        <div style="margin-top: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,0.05);">
+          <strong style="display:block; margin-bottom:8px;">Selected course</strong>
+          <div id="studentCourse" style="color: var(--muted);">No course loaded yet.</div>
+
+          <div class="progress-wrap" aria-label="Performance progress">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+
+          <p id="performanceText" class="hint" style="margin-bottom:0;">
+            Performance will be shown here after tests and progress tracking are connected.
+          </p>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
+          <button id="requestCertBtn" class="btn btn-primary" type="button" onclick="requestCertificate()">Request Certificate</button>
+          <button class="btn btn-ghost" type="button" onclick="refreshStudentDashboard()">Refresh</button>
+        </div>
+
+        <div class="status" id="dashboardStatus" aria-live="polite"></div>
+
+        <p class="hint">
+          Certificate eligibility is currently based on the student record fields:
+          <strong>payment_status</strong> and <strong>level</strong>.
+          Later we can connect quiz averages and exam results here.
+        </p>
+      </div>
     </div>
   </div>
 
@@ -1082,130 +821,312 @@
   <script>
     const SUPABASE_URL = "https://xtlvhdtmocshycbunoki.supabase.co";
     const SUPABASE_ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const portalModal = document.getElementById('portalModal');
-    const formTabs = document.querySelectorAll('.tab');
-    const formPanels = document.querySelectorAll('.form-panel');
+    const hasValidSupabaseKey = SUPABASE_ANON_KEY && SUPABASE_ANON_KEY !== "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
+    const client = hasValidSupabaseKey ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-    function openModal(mode = 'login') {
-      portalModal.classList.add('open');
-      document.getElementById('portalTitle').textContent =
-        mode === 'training' ? 'Training Registration' :
-        mode === 'course' ? 'Course Enrollment' :
-        mode === 'certificate' ? 'Certificate Request' :
-        mode === 'apply' ? 'Application' :
-        'Ruya Portal';
+    const studentModal = document.getElementById('studentModal');
+    const loginPanel = document.getElementById('loginPanel');
+    const dashboardPanel = document.getElementById('dashboardPanel');
+
+    const currentStudent = {
+      user: null,
+      latestEnrollment: null
+    };
+
+    function openStudentPortal() {
+      studentModal.classList.add('open');
+      if (currentStudent.user) {
+        showDashboard();
+      } else {
+        showLogin();
+      }
+      document.getElementById('studentTitle').textContent = 'Student Access';
     }
 
-    function closeModal() {
-      portalModal.classList.remove('open');
+    function closeStudentPortal() {
+      studentModal.classList.remove('open');
     }
 
-    function loginDemo() {
-      alert('Portal ready. Connect real auth in the next step.');
-      closeModal();
+    function showLogin() {
+      loginPanel.classList.remove('hidden');
+      dashboardPanel.classList.remove('active');
+    }
+
+    function showDashboard() {
+      loginPanel.classList.add('hidden');
+      dashboardPanel.classList.add('active');
+    }
+
+    function signOutStudent() {
+      currentStudent.user = null;
+      currentStudent.latestEnrollment = null;
+      document.getElementById('login-identifier').value = '';
+      document.getElementById('login-password').value = '';
+      document.getElementById('loginStatus').textContent = '';
+      document.getElementById('dashboardStatus').textContent = 'Signed out.';
+      showLogin();
     }
 
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape') closeStudentPortal();
     });
 
-    portalModal.addEventListener('click', (e) => {
-      if (e.target === portalModal) closeModal();
+    studentModal.addEventListener('click', (e) => {
+      if (e.target === studentModal) closeStudentPortal();
     });
 
-    formTabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.form;
+    function normalizeLevel(level) {
+      return (level || '').toString().trim().toLowerCase();
+    }
 
-        formTabs.forEach((t) => t.classList.remove('active'));
-        tab.classList.add('active');
+    function calcEligibility(user) {
+      const level = normalizeLevel(user?.level);
+      const payment = normalizeLevel(user?.payment_status);
 
-        formPanels.forEach((panel) => {
-          panel.classList.remove('active');
-          if (panel.id === `${target}Form`) panel.classList.add('active');
-        });
-      });
-    });
+      const paymentOk = ['paid', 'confirmed', 'complete', 'completed'].includes(payment);
+      const performanceOk = ['intermediate', 'advanced'].includes(level);
 
-    function goToPlatform(platform) {
-      const routes = {
-        academy: "/academy.html",
-        data: "/data.html",
-        systems: "/systems.html",
-        research: "/research.html",
-        tpm: "/tpm.html"
+      return {
+        paymentOk,
+        performanceOk,
+        eligible: paymentOk && performanceOk
       };
-      window.location.href = routes[platform];
+    }
+
+    function setBadge(el, text, type) {
+      el.className = 'badge' + (type ? ` ${type}` : '');
+      el.textContent = text;
+    }
+
+    async function loadLatestEnrollment(email) {
+      if (!client) return null;
+
+      const { data, error } = await client
+        .from('enrollments')
+        .select('course, status, created_at')
+        .eq('email', email)
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (error) {
+        console.error(error);
+        return null;
+      }
+
+      return data?.[0] || null;
+    }
+
+    async function refreshStudentDashboard() {
+      const dashboardStatus = document.getElementById('dashboardStatus');
+      const student = currentStudent.user;
+
+      if (!student) {
+        dashboardStatus.textContent = 'Please sign in first.';
+        return;
+      }
+
+      dashboardStatus.textContent = 'Loading student data...';
+
+      currentStudent.latestEnrollment = await loadLatestEnrollment(student.email);
+
+      document.getElementById('studentName').textContent = student.name || 'Student';
+      document.getElementById('studentEmail').textContent = student.email || '';
+
+      const latestCourse = currentStudent.latestEnrollment?.course || 'No course found yet.';
+      document.getElementById('studentCourse').textContent = latestCourse;
+
+      const eligibility = calcEligibility(student);
+
+      setBadge(
+        document.getElementById('badgePayment'),
+        `Payment: ${student.payment_status || 'pending'}`,
+        eligibility.paymentOk ? 'good' : 'warn'
+      );
+
+      setBadge(
+        document.getElementById('badgeLevel'),
+        `Level: ${student.level || 'not set'}`,
+        eligibility.performanceOk ? 'good' : 'warn'
+      );
+
+      setBadge(
+        document.getElementById('badgeQualification'),
+        eligibility.eligible ? 'Certificate: qualified' : 'Certificate: not yet qualified',
+        eligibility.eligible ? 'good' : 'bad'
+      );
+
+      const scoreMap = {
+        beginner: 25,
+        intermediate: 65,
+        advanced: 90
+      };
+      const score = scoreMap[normalizeLevel(student.level)] || 10;
+
+      document.getElementById('progressBar').style.width = `${score}%`;
+
+      document.getElementById('performanceText').textContent = eligibility.eligible
+        ? 'You are qualified for certificate request.'
+        : 'Not qualified yet. Payment and stronger performance are required first.';
+
+      const requestBtn = document.getElementById('requestCertBtn');
+      requestBtn.disabled = !eligibility.eligible;
+      requestBtn.style.opacity = eligibility.eligible ? '1' : '0.5';
+      requestBtn.style.cursor = eligibility.eligible ? 'pointer' : 'not-allowed';
+
+      dashboardStatus.textContent = 'Student data loaded.';
+    }
+
+    async function signInStudent() {
+      const loginStatus = document.getElementById('loginStatus');
+      if (!client) {
+        loginStatus.textContent = 'Add your Supabase anon key first.';
+        return;
+      }
+
+      const identifier = document.getElementById('login-identifier').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+
+      if (!identifier || !password) {
+        loginStatus.textContent = 'Please enter your username/email and password.';
+        return;
+      }
+
+      loginStatus.textContent = 'Signing in...';
+
+      let foundUser = null;
+
+      const byEmail = await client
+        .from('users')
+        .select('id, name, email, password, role, payment_status, level')
+        .eq('email', identifier)
+        .limit(1);
+
+      if (!byEmail.error && byEmail.data && byEmail.data.length > 0) {
+        foundUser = byEmail.data[0];
+      } else {
+        const byName = await client
+          .from('users')
+          .select('id, name, email, password, role, payment_status, level')
+          .eq('name', identifier)
+          .limit(1);
+
+        if (!byName.error && byName.data && byName.data.length > 0) {
+          foundUser = byName.data[0];
+        }
+      }
+
+      if (!foundUser) {
+        loginStatus.textContent = 'No student account found.';
+        return;
+      }
+
+      if ((foundUser.password || '') !== password) {
+        loginStatus.textContent = 'Wrong password.';
+        return;
+      }
+
+      currentStudent.user = foundUser;
+      loginStatus.textContent = 'Signed in successfully.';
+      showDashboard();
+      await refreshStudentDashboard();
+    }
+
+    async function requestCertificate() {
+      const dashboardStatus = document.getElementById('dashboardStatus');
+      const student = currentStudent.user;
+
+      if (!student) {
+        openStudentPortal();
+        dashboardStatus.textContent = 'Please sign in first.';
+        return;
+      }
+
+      const eligibility = calcEligibility(student);
+      if (!eligibility.eligible) {
+        dashboardStatus.textContent = 'You are not qualified for certificate yet.';
+        return;
+      }
+
+      if (!client) {
+        dashboardStatus.textContent = 'Add your Supabase anon key first.';
+        return;
+      }
+
+      const payload = {
+        name: student.name || '',
+        email: student.email || '',
+        course: currentStudent.latestEnrollment?.course || 'Not specified',
+        proof: 'Certificate requested from student dashboard',
+        created_at: new Date().toISOString()
+      };
+
+      dashboardStatus.textContent = 'Sending certificate request...';
+
+      const { error } = await client.from('certificate_requests').insert([payload]);
+
+      if (error) {
+        console.error(error);
+        dashboardStatus.textContent = 'Could not send certificate request.';
+        alert('❌ ' + error.message);
+        return;
+      }
+
+      dashboardStatus.textContent = 'Certificate request submitted successfully.';
+      alert('✅ Certificate request submitted successfully.');
     }
 
     async function saveToSupabase(table, payload, statusElId, successMessage) {
       const statusEl = document.getElementById(statusElId);
-      statusEl.textContent = "Sending...";
+
+      if (!client) {
+        statusEl.textContent = 'Add your Supabase anon key first.';
+        return false;
+      }
+
+      statusEl.textContent = 'Sending...';
 
       const { error } = await client.from(table).insert([payload]);
 
       if (error) {
         console.error(error);
-        statusEl.textContent = "Could not save now. Check Supabase table / key / policies.";
-        alert("❌ " + error.message);
+        statusEl.textContent = 'Could not save now. Check Supabase table / key / policies.';
+        alert('❌ ' + error.message);
         return false;
       }
 
       statusEl.textContent = successMessage;
-      alert("✅ " + successMessage);
+      alert('✅ ' + successMessage);
       return true;
     }
 
-    document.getElementById("trainingForm").addEventListener("submit", async (e) => {
+    document.getElementById('enrollForm').addEventListener('submit', async (e) => {
       e.preventDefault();
- const payload = {
-  name: document.getElementById("course-name").value.trim(),
-  email: document.getElementById("course-email").value.trim(),
-  course: document.getElementById("course-program").value,
-  status: "registered",
-  created_at: new Date().toISOString()
-};
-const ok = await saveToSupabase("enrollments", payload, "courseStatus", "Enrollment submitted successfully");
+
+      const payload = {
+        name: document.getElementById('enroll-name').value.trim(),
+        email: document.getElementById('enroll-email').value.trim(),
+        course: document.getElementById('enroll-course').value,
+        note: document.getElementById('enroll-note').value.trim(),
+        status: 'registered',
+        created_at: new Date().toISOString()
+      };
+
+      const ok = await saveToSupabase('enrollments', payload, 'enrollStatus', 'Enrollment submitted successfully');
       if (ok) e.target.reset();
     });
 
-    document.getElementById("courseForm").addEventListener("submit", async (e) => {
+    document.getElementById('contactForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const payload = {
-        name: document.getElementById("course-name").value.trim(),
-        email: document.getElementById("course-email").value.trim(),
-        course: document.getElementById("course-program").value,
-        goal: document.getElementById("course-goal").value.trim(),
-        created_at: new Date().toISOString()
-      };
-      const ok = await saveToSupabase("course_enrollments", payload, "courseStatus", "Course enrollment saved");
-      if (ok) e.target.reset();
-    });
 
-    document.getElementById("certificateForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
       const payload = {
-        name: document.getElementById("cert-name").value.trim(),
-        email: document.getElementById("cert-email").value.trim(),
-        course: document.getElementById("cert-course").value,
-        proof: document.getElementById("cert-proof").value.trim(),
+        name: document.getElementById('contact-name').value.trim(),
+        email: document.getElementById('contact-email').value.trim(),
+        message: document.getElementById('contact-msg').value.trim(),
         created_at: new Date().toISOString()
       };
-      const ok = await saveToSupabase("certificate_requests", payload, "certificateStatus", "Certificate request saved");
-      if (ok) e.target.reset();
-    });
 
-    document.getElementById("contactForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const payload = {
-        name: document.getElementById("contact-name").value.trim(),
-        email: document.getElementById("contact-email").value.trim(),
-        message: document.getElementById("contact-msg").value.trim(),
-        created_at: new Date().toISOString()
-      };
-      const ok = await saveToSupabase("contact_messages", payload, "contactStatus", "Message sent successfully");
+      const ok = await saveToSupabase('contact_messages', payload, 'contactStatus', 'Message sent successfully');
       if (ok) e.target.reset();
     });
 
