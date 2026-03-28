@@ -1160,14 +1160,14 @@
 
     document.getElementById("trainingForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const payload = {
-        name: document.getElementById("training-name").value.trim(),
-        email: document.getElementById("training-email").value.trim(),
-        topic: document.getElementById("training-topic").value,
-        note: document.getElementById("training-note").value.trim(),
-        created_at: new Date().toISOString()
-      };
-      const ok = await saveToSupabase("training_registrations", payload, "trainingStatus", "Training registration saved");
+ const payload = {
+  name: document.getElementById("course-name").value.trim(),
+  email: document.getElementById("course-email").value.trim(),
+  course: document.getElementById("course-program").value,
+  status: "registered",
+  created_at: new Date().toISOString()
+};
+const ok = await saveToSupabase("enrollments", payload, "courseStatus", "Enrollment submitted successfully");
       if (ok) e.target.reset();
     });
 
