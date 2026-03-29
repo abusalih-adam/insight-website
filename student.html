@@ -1,1 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ruya Academy | Student Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    :root{
+      --bg:#06101d;
+      --bg2:#0b172b;
+      --panel:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.12);
+      --text:#eef5ff;
+      --muted:#aebdd3;
+      --accent:#42d6c0;
+      --accent2:#6ea8fe;
+      --good:#7df0c5;
+      --warn:#ffd27a;
+      --danger:#ff9b9b;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(66,214,192,.16), transparent 30%),
+        radial-gradient(circle at top right, rgba(110,168,254,.14), transparent 35%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      min-height:100vh;
+    }
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    .container{width:min(1200px, calc(100% - 32px)); margin:0 auto}
+    .topbar{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter:blur(16px);
+      background:rgba(7,17,31,.78);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar-inner{
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+      padding:16px 0; flex-wrap:wrap;
+    }
+    .brand{display:flex; align-items:center; gap:12px; font-weight:800}
+    .mark{
+      width:44px; height:44px; border-radius:14px;
+      display:grid; place-items:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#03101d; font-weight:900; box-shadow:var(--shadow)
+    }
+    .btn{
+      border:0; border-radius:999px; padding:12px 16px; font-weight:700;
+      cursor:pointer; transition:.2s ease; white-space:nowrap;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#03101d}
+    .btn-dark{background:rgba(255,255,255,.06); color:var(--text); border:1px solid var(--line)}
+    .btn-ghost{background:rgba(255,255,255,.04); color:var(--text); border:1px solid var(--line)}
+    .hero{
+      padding:24px 0 12px;
+      display:grid; grid-template-columns:1.15fr .85fr; gap:16px;
+    }
+    .panel{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .box{padding:22px}
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 12px; border-radius:999px;
+      border:1px solid var(--line); background:rgba(255,255,255,.05);
+      color:var(--muted); font-size:13px;
+    }
+    h1{margin:12px 0 10px; font-size:clamp(34px,5vw,54px); line-height:1; letter-spacing:-1.3px}
+    .lead{margin:0; color:var(--muted); line-height:1.75; max-width:70ch}
+    .grid{
+      margin-top:16px;
+      display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px;
+    }
+    .stat{
+      padding:16px; border-radius:18px;
+      background:rgba(255,255,255,.06); border:1px solid var(--line);
+    }
+    .stat strong{display:block; font-size:24px; margin-bottom:4px}
+    .stat span{color:var(--muted); font-size:13px}
+    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+    .chip{
+      display:inline-flex; padding:7px 11px; border-radius:999px;
+      border:1px solid var(--line); background:rgba(255,255,255,.05);
+      color:var(--muted); font-size:12px;
+    }
+    .chip.good{color:var(--good)}
+    .chip.warn{color:var(--warn)}
+    .chip.bad{color:var(--danger)}
+    .section{
+      margin-top:18px;
+      padding:18px;
+    }
+    .section-head{
+      display:flex; justify-content:space-between; align-items:end; gap:12px;
+      margin-bottom:14px; flex-wrap:wrap;
+    }
+    .section-head h2{margin:0; font-size:26px}
+    .section-head p{margin:0; color:var(--muted); line-height:1.7}
+    .course-list{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+    .course-card{
+      padding:16px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+    }
+    .course-card h3{margin:0 0 8px}
+    .course-card p{margin:0; color:var(--muted); line-height:1.7}
+    .progress-wrap{
+      margin-top:12px; width:100%; height:12px;
+      border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden;
+      border:1px solid var(--line);
+    }
+    .progress-bar{
+      height:100%; width:0%;
+      border-radius:inherit;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      transition:width .35s ease;
+    }
+    .info-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:14px;
+    }
+    .info-box{
+      padding:16px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+    }
+    .info-box strong{display:block; margin-bottom:6px}
+    .info-box p{margin:0; color:var(--muted); line-height:1.7}
+    .enrollments{
+      margin-top:14px;
+      display:grid;
+      gap:10px;
+    }
+    .enrollment-item{
+      padding:14px 16px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+    }
+    .enrollment-item strong{display:block; margin-bottom:4px}
+    .enrollment-item span{color:var(--muted); font-size:13px}
+    .footer{
+      margin:18px 0 34px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      border-top:1px solid var(--line);
+      padding-top:14px;
+    }
+    .status{margin-top:10px; color:var(--accent); min-height:20px}
+    .muted{color:var(--muted)}
+    .hidden{display:none !important}
 
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr}
+    }
+    @media (max-width: 760px){
+      .grid,.course-list,.info-grid{grid-template-columns:1fr}
+      .btn{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <div class="mark">R</div>
+        <div>
+          <div>Ruya Academy</div>
+          <small class="muted">Student Dashboard</small>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-ghost" id="backAdminBtn" onclick="backToAdmin()" style="display:none;">Back to Admin</button>
+        <button class="btn btn-dark" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="panel box">
+        <span class="eyebrow">🎓 Student dashboard</span>
+        <h1 id="studentName">Loading...</h1>
+        <p class="lead" id="studentLead">
+          Your profile, course progress, and certificate eligibility will appear here.
+        </p>
+
+        <div class="grid">
+          <div class="stat">
+            <strong id="statPayment">—</strong>
+            <span>Payment</span>
+          </div>
+          <div class="stat">
+            <strong id="statLevel">—</strong>
+            <span>Level</span>
+          </div>
+          <div class="stat">
+            <strong id="statStatus">—</strong>
+            <span>Enrollment status</span>
+          </div>
+          <div class="stat">
+            <strong id="statCertificate">—</strong>
+            <span>Certificate</span>
+          </div>
+        </div>
+
+        <div class="chips" id="statusChips"></div>
+
+        <div class="progress-wrap" aria-label="Progress">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+
+        <p class="muted" id="progressText" style="margin:10px 0 0;">
+          Progress is based on your current level and enrollment status. Quiz and exam scoring can be added later.
+        </p>
+      </div>
+
+      <div class="panel box">
+        <h2 style="margin:0 0 8px;">Current course</h2>
+        <p class="muted" id="currentCourse">Loading current course...</p>
+
+        <div class="info-grid">
+          <div class="info-box">
+            <strong>Username / Email</strong>
+            <p id="studentEmail">—</p>
+          </div>
+          <div class="info-box">
+            <strong>Role</strong>
+            <p id="studentRole">—</p>
+          </div>
+          <div class="info-box">
+            <strong>Joined</strong>
+            <p id="studentJoined">—</p>
+          </div>
+          <div class="info-box">
+            <strong>Latest activity</strong>
+            <p id="studentActivity">—</p>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
+          <button class="btn btn-primary" id="certBtn" onclick="requestCertificate()">Request Certificate</button>
+          <button class="btn btn-dark" onclick="refreshDashboard()">Refresh</button>
+        </div>
+
+        <div class="status" id="actionStatus" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <div class="section-head">
+        <div>
+          <h2>Course history</h2>
+          <p>All enrollments linked to this account appear here.</p>
+        </div>
+      </div>
+      <div class="course-list" id="courseList"></div>
+    </section>
+
+    <section class="panel section">
+      <div class="section-head">
+        <div>
+          <h2>Performance view</h2>
+          <p>This shows the current certificate readiness based on payment and level.</p>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <strong>Certificate readiness</strong>
+          <p id="readinessText">Loading...</p>
+        </div>
+        <div class="info-box">
+          <strong>What is checked now</strong>
+          <p>Payment status + level + enrollment status. Later you can connect quiz scores and exams.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <div>© 2026 Ruya Academy</div>
+      <div>Student view powered by Supabase</div>
+    </div>
+  </main>
+
+  <script>
+    const SUPABASE_URL = "https://xtlvhdtmocshycbunoki.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_mY1y5Sju44l-M4prPHvajQ_n_UznjaD";
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const session = JSON.parse(localStorage.getItem('ruya_user') || 'null');
+    const viewEmail = localStorage.getItem('ruya_view_email') || '';
+    const isAdminSession = session && String(session.role || '').toLowerCase() === 'admin';
+
+    if (!session) {
+      window.location.href = 'index.html';
+    }
+
+    const state = {
+      user: session,
+      targetEmail: viewEmail && isAdminSession ? viewEmail : session.email,
+      enrollments: []
+    };
+
+    if (viewEmail && isAdminSession) {
+      document.getElementById('backAdminBtn').style.display = 'inline-flex';
+    }
+
+    const escapeHtml = (str = "") =>
+      String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    const fmtDate = (value) => {
+      if (!value) return "";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return value;
+      return d.toLocaleString();
+    };
+
+    function logout() {
+      localStorage.removeItem('ruya_user');
+      localStorage.removeItem('ruya_view_email');
+      window.location.href = 'index.html';
+    }
+
+    function backToAdmin() {
+      localStorage.removeItem('ruya_view_email');
+      window.location.href = 'admin.html';
+    }
+
+    function levelScore(level) {
+      const map = { beginner: 25, intermediate: 65, advanced: 90 };
+      return map[String(level || '').toLowerCase()] || 10;
+    }
+
+    function statusScore(status) {
+      const map = { registered: 20, tested: 45, active: 75, completed: 100, rejected: 0 };
+      return map[String(status || '').toLowerCase()] ?? 20;
+    }
+
+    function eligible(user, latestEnrollment) {
+      const paymentOk = String(user?.payment_status || '').toLowerCase() === 'paid';
+      const levelOk = ['intermediate', 'advanced'].includes(String(user?.level || '').toLowerCase());
+      const completionOk = ['active', 'completed'].includes(String(latestEnrollment?.status || '').toLowerCase());
+      return paymentOk && levelOk && completionOk;
+    }
+
+    async function loadDashboard() {
+      const { data: userData, error: userError } = await client
+        .from('users')
+        .select('id, name, email, role, payment_status, level, created_at')
+        .eq('email', state.targetEmail)
+        .maybeSingle();
+
+      if (userError || !userData) {
+        console.error(userError);
+        document.getElementById('actionStatus').textContent = 'Could not load the student profile.';
+        return;
+      }
+
+      state.user = userData;
+
+      const { data: enrollData, error: enrollError } = await client
+        .from('enrollments')
+        .select('id, name, email, course, note, status, created_at')
+        .eq('email', state.targetEmail)
+        .order('created_at', { ascending: false });
+
+      if (enrollError) {
+        console.error(enrollError);
+      }
+
+      state.enrollments = enrollData || [];
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      const user = state.user;
+      const latestEnrollment = state.enrollments[0] || null;
+
+      document.getElementById('studentName').textContent = user?.name || 'Student';
+      document.getElementById('studentLead').textContent =
+        isAdminSession && state.targetEmail !== session.email
+          ? 'You are viewing this student as an admin.'
+          : 'Your profile, course progress, and certificate eligibility are shown below.';
+
+      document.getElementById('studentEmail').textContent = user?.email || '—';
+      document.getElementById('studentRole').textContent = user?.role || 'student';
+      document.getElementById('studentJoined').textContent = fmtDate(user?.created_at || '');
+      document.getElementById('studentActivity').textContent = fmtDate(latestEnrollment?.created_at || user?.created_at || '');
+
+      document.getElementById('statPayment').textContent = user?.payment_status || 'pending';
+      document.getElementById('statLevel').textContent = user?.level || 'not set';
+      document.getElementById('statStatus').textContent = latestEnrollment?.status || 'registered';
+      document.getElementById('statCertificate').textContent = eligible(user, latestEnrollment) ? 'Qualified' : 'Not yet';
+
+      const chips = [];
+      chips.push(`<span class="chip ${String(user?.payment_status || '').toLowerCase() === 'paid' ? 'good' : 'warn'}">Payment: ${escapeHtml(user?.payment_status || 'pending')}</span>`);
+      chips.push(`<span class="chip ${['intermediate','advanced'].includes(String(user?.level || '').toLowerCase()) ? 'good' : 'warn'}">Level: ${escapeHtml(user?.level || 'not set')}</span>`);
+      chips.push(`<span class="chip ${['active','completed'].includes(String(latestEnrollment?.status || '').toLowerCase()) ? 'good' : 'warn'}">Status: ${escapeHtml(latestEnrollment?.status || 'registered')}</span>`);
+      chips.push(`<span class="chip ${eligible(user, latestEnrollment) ? 'good' : 'bad'}">Certificate: ${eligible(user, latestEnrollment) ? 'qualified' : 'not qualified'}</span>`);
+      document.getElementById('statusChips').innerHTML = chips.join('');
+
+      const p = Math.max(levelScore(user?.level), statusScore(latestEnrollment?.status));
+      document.getElementById('progressBar').style.width = `${p}%`;
+      document.getElementById('progressText').textContent =
+        `Current progress estimate: ${p}%. This is based on level and enrollment status.`;
+
+      document.getElementById('readinessText').textContent = eligible(user, latestEnrollment)
+        ? 'This student is currently qualified to request a certificate.'
+        : 'This student is not yet qualified. Payment and stronger performance are still required.';
+
+      const certBtn = document.getElementById('certBtn');
+      certBtn.disabled = isAdminSession && state.targetEmail !== session.email;
+      certBtn.style.opacity = certBtn.disabled ? '0.45' : '1';
+      certBtn.style.cursor = certBtn.disabled ? 'not-allowed' : 'pointer';
+
+      const courseList = document.getElementById('courseList');
+      if (!state.enrollments.length) {
+        courseList.innerHTML = `<div class="course-card"><h3>No enrollments found</h3><p>This account has no course history yet.</p></div>`;
+      } else {
+        courseList.innerHTML = state.enrollments.map(row => `
+          <div class="course-card">
+            <h3>${escapeHtml(row.course || 'Course')}</h3>
+            <p><strong>Status:</strong> ${escapeHtml(row.status || 'registered')}</p>
+            <p><strong>Note:</strong> ${escapeHtml(row.note || '—')}</p>
+            <p class="muted"><strong>Created:</strong> ${escapeHtml(fmtDate(row.created_at))}</p>
+          </div>
+        `).join('');
+      }
+    }
+
+    async function refreshDashboard() {
+      document.getElementById('actionStatus').textContent = 'Refreshing...';
+      await loadDashboard();
+      document.getElementById('actionStatus').textContent = 'Dashboard updated.';
+    }
+
+    async function requestCertificate() {
+      const actionStatus = document.getElementById('actionStatus');
+      const user = state.user;
+      const latestEnrollment = state.enrollments[0] || null;
+
+      if (isAdminSession && state.targetEmail !== session.email) {
+        actionStatus.textContent = 'Admin view mode is read-only.';
+        return;
+      }
+
+      if (!eligible(user, latestEnrollment)) {
+        actionStatus.textContent = 'Not qualified for certificate yet.';
+        return;
+      }
+
+      actionStatus.textContent = 'Sending certificate request...';
+
+      const payload = {
+        name: user?.name || '',
+        email: user?.email || '',
+        course: latestEnrollment?.course || 'Not specified',
+        proof: 'Requested from student dashboard',
+        created_at: new Date().toISOString()
+      };
+
+      const { error } = await client.from('certificate_requests').insert([payload]);
+
+      if (error) {
+        console.error(error);
+        actionStatus.textContent = 'Could not submit certificate request.';
+        alert('❌ ' + error.message);
+        return;
+      }
+
+      actionStatus.textContent = 'Certificate request submitted successfully.';
+      alert('✅ Certificate request submitted successfully.');
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>

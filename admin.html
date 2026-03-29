@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ruya Academy | Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
     :root{
@@ -21,7 +24,6 @@
       --good:#7df0c5;
       --shadow:0 20px 60px rgba(0,0,0,.35);
       --radius:22px;
-      --radius-sm:14px;
     }
     *{box-sizing:border-box}
     body{
@@ -109,10 +111,6 @@
     }
     .stat strong{display:block; font-size:24px; margin-bottom:4px}
     .stat span{color:var(--muted); font-size:13px}
-    .grid{
-      display:grid; grid-template-columns:1fr 1fr; gap:16px;
-    }
-    .box{padding:18px}
     .section{
       margin-top:18px;
       padding:18px;
@@ -199,15 +197,6 @@
     tr:hover td{background:rgba(255,255,255,.02)}
     .muted{color:var(--muted)}
     .small{font-size:12px}
-    .chips{display:flex; gap:8px; flex-wrap:wrap}
-    .chip{
-      display:inline-flex; padding:6px 10px; border-radius:999px;
-      border:1px solid var(--line); background:rgba(255,255,255,.05);
-      color:var(--muted); font-size:12px;
-    }
-    .chip.good{color:var(--good)}
-    .chip.warn{color:var(--warn)}
-    .chip.bad{color:var(--danger)}
     .row-actions{
       display:flex; gap:8px; flex-wrap:wrap; align-items:center
     }
@@ -234,7 +223,7 @@
     }
 
     @media (max-width: 1100px){
-      .hero,.grid{grid-template-columns:1fr}
+      .hero{grid-template-columns:1fr}
       .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
       .quick-form{grid-template-columns:repeat(2,minmax(0,1fr))}
       .span-2{grid-column:span 1}
@@ -268,7 +257,7 @@
       <div class="pill-row">
         <button class="btn btn-dark" onclick="refreshAll()">Refresh</button>
         <button class="btn btn-primary" onclick="exportCurrent()">Export CSV</button>
-        <a class="btn btn-ghost" href="index.html">Back to Site</a>
+        <button class="btn btn-ghost" onclick="logout()">Logout</button>
       </div>
     </div>
   </header>
@@ -303,10 +292,10 @@
         </div>
       </div>
 
-      <div class="panel box">
+      <div class="panel" style="padding:18px">
         <h2 style="margin:0 0 8px;">Quick create user</h2>
         <p class="muted" style="margin:0 0 14px; line-height:1.7;">
-          Create a student account manually after payment confirmation.
+          Create a student account manually after payment confirmation. You can also create admins.
         </p>
 
         <div class="quick-form">
@@ -389,6 +378,11 @@
     const SUPABASE_ANON_KEY = "sb_publishable_mY1y5Sju44l-M4prPHvajQ_n_UznjaD";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    const session = JSON.parse(localStorage.getItem('ruya_user') || 'null');
+    if (!session || String(session.role || '').toLowerCase() !== 'admin') {
+      window.location.href = 'index.html';
+    }
+
     const state = {
       activeTab: "enrollments",
       enrollments: [],
@@ -426,6 +420,12 @@
     function setStatus(message, isError = false) {
       els.mainStatus.textContent = message || "";
       els.mainStatus.style.color = isError ? "var(--danger)" : "var(--accent)";
+    }
+
+    function logout() {
+      localStorage.removeItem('ruya_user');
+      localStorage.removeItem('ruya_view_email');
+      window.location.href = 'index.html';
     }
 
     async function fetchTable(table, columns = "*") {
@@ -472,7 +472,7 @@
       renderActiveTab();
     }
 
-    function matchesSearch(row, fields) {
+    function matchesSearch(fields) {
       const q = (els.searchInput.value || "").trim().toLowerCase();
       if (!q) return true;
       return fields.some(f => String(f || "").toLowerCase().includes(q));
@@ -480,7 +480,6 @@
 
     function renderActiveTab() {
       const tab = state.activeTab;
-
       if (tab === "enrollments") return renderEnrollments();
       if (tab === "users") return renderUsers();
       if (tab === "certificates") return renderCertificates();
@@ -489,7 +488,7 @@
 
     function renderEnrollments() {
       const rows = state.enrollments.filter(r =>
-        matchesSearch(r, [r.name, r.email, r.course, r.status, r.note])
+        matchesSearch([r.name, r.email, r.course, r.status, r.note])
       );
 
       els.tableArea.innerHTML = `
@@ -525,6 +524,7 @@
                     <div class="row-actions">
                       <button class="btn btn-primary" onclick="saveEnrollmentStatus('${row.id}')">Save</button>
                       <button class="btn btn-dark" onclick="promoteEnrollment('${row.id}')">Promote to User</button>
+                      <button class="btn btn-dark" onclick="viewStudent('${escapeHtml(row.email || "")}')">View Student</button>
                       <button class="btn btn-danger" onclick="deleteRow('enrollments','${row.id}','Enrollment')">Delete</button>
                     </div>
                   </td>
@@ -540,7 +540,7 @@
 
     function renderUsers() {
       const rows = state.users.filter(r =>
-        matchesSearch(r, [r.name, r.email, r.role, r.payment_status, r.level])
+        matchesSearch([r.name, r.email, r.role, r.payment_status, r.level])
       );
 
       els.tableArea.innerHTML = `
@@ -583,6 +583,7 @@
                   <td>
                     <div class="row-actions">
                       <button class="btn btn-primary" onclick="saveUser('${row.id}')">Save</button>
+                      <button class="btn btn-dark" onclick="viewStudent('${escapeHtml(row.email || "")}')">View Student</button>
                       <button class="btn btn-dark" onclick="resetPassword('${row.id}')">Reset Password</button>
                       <button class="btn btn-danger" onclick="deleteRow('users','${row.id}','User')">Delete</button>
                     </div>
@@ -599,7 +600,7 @@
 
     function renderCertificates() {
       const rows = state.certificates.filter(r =>
-        matchesSearch(r, [r.name, r.email, r.course, r.proof])
+        matchesSearch([r.name, r.email, r.course, r.proof])
       );
 
       els.tableArea.innerHTML = `
@@ -641,7 +642,7 @@
 
     function renderMessages() {
       const rows = state.messages.filter(r =>
-        matchesSearch(r, [r.name, r.email, r.message])
+        matchesSearch([r.name, r.email, r.message])
       );
 
       els.tableArea.innerHTML = `
@@ -681,7 +682,6 @@
     async function saveEnrollmentStatus(id) {
       const row = document.querySelector(`tr[data-id="${id}"]`);
       const status = row?.querySelector(".enrollment-status")?.value;
-
       if (!status) return;
 
       const { error } = await client
@@ -703,7 +703,7 @@
       const enrollment = state.enrollments.find(x => x.id === id);
       if (!enrollment) return;
 
-      const password = prompt("Set password for this student:");
+      const password = prompt("Set password for this user:");
       if (!password) return;
 
       const payment_status = prompt("Payment status (paid/pending):", "paid") || "paid";
@@ -773,6 +773,12 @@
 
       alert("✅ Password updated");
       await refreshAll();
+    }
+
+    function viewStudent(email) {
+      if (!email) return;
+      localStorage.setItem("ruya_view_email", email);
+      window.location.href = "student.html";
     }
 
     async function markCertificateHandled(id) {
