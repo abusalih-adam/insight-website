@@ -8,268 +8,175 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <style>
-    :root{--bg:#06101d;--bg2:#0b172b;--text:#eef5ff;--muted:#afbdd3;--line:rgba(255,255,255,.12);--accent:#42d6c0;--accent2:#6ea8fe;--danger:#ff9b9b;--shadow:0 20px 60px rgba(0,0,0,.35);--radius:22px;--container:980px}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at top left, rgba(66,214,192,.16), transparent 30%),radial-gradient(circle at top right, rgba(110,168,254,.14), transparent 35%),linear-gradient(180deg,var(--bg),var(--bg2));min-height:100vh;line-height:1.5}
-    a{color:inherit;text-decoration:none} button,input,textarea,select{font:inherit}
-    .container{width:min(var(--container), calc(100% - 32px)); margin:0 auto}
-    .panel{border:1px solid var(--line);background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));border-radius:var(--radius);box-shadow:var(--shadow)}
-    .btn{border:0;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
-    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#03101d} .btn-ghost{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--line)}
-    .topbar{position:sticky;top:0;z-index:20;backdrop-filter:blur(16px);background:rgba(7,17,31,.72);border-bottom:1px solid var(--line)}
-    .topbar-inner{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 0;flex-wrap:wrap}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800} .mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#03101d;font-weight:900;box-shadow:var(--shadow)}
-    .hero{padding:32px 0 18px} .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
-    .card{padding:22px} h1,h2,h3,p{margin-top:0} .muted{color:var(--muted)}
-    .badge{display:inline-flex;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--muted);font-size:13px;margin-bottom:12px}
-    .question{padding:18px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid var(--line);margin-top:16px}
-    .option{display:block;width:100%;text-align:left;margin-top:10px;padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:#0b172b;color:var(--text);cursor:pointer}
-    .option.active{border-color:var(--accent2);box-shadow:0 0 0 2px rgba(110,168,254,.18) inset}
-    .status{margin-top:12px;min-height:22px;color:var(--accent);font-size:14px}
-    .footer{padding:26px 0 40px;color:var(--muted);border-top:1px solid var(--line);margin-top:24px}
-    .list{display:grid;gap:12px;margin-top:12px}
-    .pill{display:inline-flex;padding:7px 11px;border-radius:999px;font-size:13px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--muted);margin-right:8px;margin-bottom:8px}
-    .pill.good{color:#7df0c5} .pill.warn{color:#ffd27a} .pill.bad{color:#ff9b9b}
-    @media (max-width:900px){.grid{grid-template-columns:1fr} .btn{width:100%}}
-  </style>
+  <script src="shared.js"></script>
 </head>
 <body>
   <header class="topbar">
     <div class="container topbar-inner">
       <a class="brand" href="academy.html">
         <div class="mark">R</div>
-        <div><div>Ruya Academy</div><small class="muted">Course Exam</small></div>
+        <div><div>Ruya Academy</div><small style="color:var(--muted)">Course Exam</small></div>
       </a>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <a class="btn btn-ghost" href="academy.html">Back to Academy</a>
+      <div class="nav-links">
+        <a href="academy.html">Back to Academy</a>
+        <a href="student.html">Student Dashboard</a>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <section class="hero">
-      <div class="grid">
-        <div class="panel card">
-          <span class="badge">🧪 Course-based test</span>
-          <h1 id="title">Loading exam...</h1>
-          <p class="muted" id="subtitle">The correct exam is loaded automatically from your chosen course.</p>
-          <div id="examArea" class="list"></div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;">
-            <button class="btn btn-primary" id="submitBtn" onclick="submitExam()">Submit Exam</button>
-            <button class="btn btn-ghost" onclick="resetSelection()">Clear Selection</button>
-          </div>
-          <div class="status" id="status"></div>
+    <section class="hero" style="padding-top:32px;">
+      <div class="panel" style="padding:22px;">
+        <span class="pill">🧪 Course-based test</span>
+        <h1 id="title" style="font-size:clamp(34px,5vw,54px);line-height:1;margin:12px 0 10px;">Loading exam...</h1>
+        <p class="lead" id="subtitle" style="font-size:17px;margin-bottom:0;">The correct exam is loaded automatically from your chosen course.</p>
+        <div id="examArea" style="display:grid;gap:12px;margin-top:18px;"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;">
+          <button class="btn btn-primary" id="submitBtn" onclick="submitExam()">Submit Exam</button>
+          <button class="btn btn-ghost" onclick="resetSelection()">Clear Selection</button>
         </div>
+        <div class="status" id="status"></div>
+      </div>
 
-        <div class="panel card">
-          <h2>Exam info</h2>
-          <p class="muted">
-            Student: <strong id="studentName">—</strong><br>
-            Email: <strong id="studentEmail">—</strong><br>
-            Course: <strong id="studentCourse">—</strong>
-          </p>
-          <div style="margin-top:16px;">
-            <span class="pill warn">Pending review</span>
-            <span class="pill">Auto-assigned by course</span>
-          </div>
-          <div class="question" style="margin-top:18px;">
-            <h3>What happens next?</h3>
-            <p class="muted" style="margin-bottom:0;">
-              After you submit, your score is saved in <strong>exam_results</strong>. The admin can then review, contact you, assign a level, and approve the next step.
-            </p>
-          </div>
+      <div class="panel" style="padding:22px;">
+        <h2 style="margin-top:0;">Exam info</h2>
+        <p class="muted" style="line-height:1.75;">
+          Student: <strong id="studentName">—</strong><br>
+          Email: <strong id="studentEmail">—</strong><br>
+          Course: <strong id="studentCourse">—</strong>
+        </p>
+        <div style="margin-top:16px;">
+          <span class="pill warn">Pending review</span>
+          <span class="pill">Auto-assigned by course</span>
+        </div>
+        <div class="card" style="margin-top:18px;">
+          <h3>What happens next?</h3>
+          <p>After you submit, the score is saved. The admin can then review, contact you, assign a level, and approve the next step.</p>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <div class="container"><div>© 2026 Ruya Academy</div></div>
+    <div class="container footer-inner">
+      <div>© 2026 Ruya Academy</div>
+      <div>Exam → admin review → student classroom</div>
+    </div>
   </footer>
 
   <script>
-    const SUPABASE_URL = "https://xtlvhdtmocshycbunoki.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_mY1y5Sju44l-M4prPHvajQ_n_UznjaD";
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+    const { tryInsert, courseLabel, escapeHtml, moneyLevel } = Ruya;
     const params = new URLSearchParams(window.location.search);
-    const pending = JSON.parse(localStorage.getItem('ruya_exam_pending') || 'null');
-
+    const pending = JSON.parse(localStorage.getItem("ruya_pending_enrollment") || "null");
     const student = {
-      name: params.get('name') || pending?.name || '',
-      email: params.get('email') || pending?.email || '',
-      course: params.get('course') || pending?.course || ''
+      name: params.get("name") || pending?.name || "",
+      email: params.get("email") || pending?.email || "",
+      course: params.get("course") || pending?.course || "MEAL Systems"
     };
 
-    const state = {
-      questions: [],
-      selected: {}
+    const examBank = {
+      "Data Collection with Kobo": [
+        { q: "What is the first step in a good survey design?", options: ["Write random questions", "Define the objective", "Add many pages", "Skip testing"], answer: "Define the objective" },
+        { q: "What should every question be?", options: ["Clear and simple", "Long and confusing", "Hidden", "Optional only"], answer: "Clear and simple" },
+        { q: "What helps data quality most?", options: ["Testing forms", "Ignoring errors", "Guessing answers", "Deleting records"], answer: "Testing forms" }
+      ],
+      "Excel for Data Analysis": [
+        { q: "Which feature helps organize and filter data?", options: ["Sort and Filter", "Page Break", "Theme", "Audio"], answer: "Sort and Filter" },
+        { q: "What is a chart mainly used for?", options: ["Data cleaning", "Visualization", "Deleting rows", "Saving passwords"], answer: "Visualization" },
+        { q: "A formula in Excel starts with...", options: ["#", "=", "@", "!"], answer: "=" }
+      ],
+      "Dashboards & Visualization": [
+        { q: "What is the purpose of a dashboard?", options: ["Hide data", "Show key information quickly", "Replace all reports", "Delete records"], answer: "Show key information quickly" },
+        { q: "Which visual is best for trends over time?", options: ["Line chart", "Emoji list", "Pie chart only", "None"], answer: "Line chart" },
+        { q: "Good dashboards should be...", options: ["Cluttered", "Clear and focused", "Very random", "Unreadable"], answer: "Clear and focused" }
+      ],
+      "MEAL Systems": [
+        { q: "MEAL stands for Monitoring, Evaluation, Accountability and...", options: ["Leadership", "Learning", "Logistics", "Linking"], answer: "Learning" },
+        { q: "Indicators are used to...", options: ["Measure progress", "Hide progress", "Add noise", "Remove targets"], answer: "Measure progress" },
+        { q: "A strong MEAL system supports...", options: ["Decision making", "Guessing", "Confusion", "Delays"], answer: "Decision making" }
+      ],
+      "Leadership & Management": [
+        { q: "A good leader should communicate...", options: ["Clearly", "Randomly", "Only in private", "Never"], answer: "Clearly" },
+        { q: "Teamwork improves...", options: ["Coordination", "Mistakes only", "Silence", "Delays"], answer: "Coordination" },
+        { q: "Management is mainly about...", options: ["Organizing work", "Ignoring tasks", "Avoiding decisions", "Guessing"], answer: "Organizing work" }
+      ],
+      "AI Basics for Work": [
+        { q: "AI can help with...", options: ["Writing and analysis", "Only drawing", "No work at all", "Breaking systems"], answer: "Writing and analysis" },
+        { q: "Good prompts should be...", options: ["Clear", "Confusing", "Very long always", "Secret"], answer: "Clear" },
+        { q: "AI should be used with...", options: ["Review and judgment", "Blind trust", "No checks", "No purpose"], answer: "Review and judgment" }
+      ]
     };
 
-    document.getElementById('studentName').textContent = student.name || '—';
-    document.getElementById('studentEmail').textContent = student.email || '—';
-    document.getElementById('studentCourse').textContent = student.course || '—';
+    let selected = [];
+    let questions = examBank[student.course] || examBank["MEAL Systems"];
+    const area = document.getElementById("examArea");
+    const statusEl = document.getElementById("status");
 
-    async function loadExam() {
-      const status = document.getElementById('status');
-      if (!student.course) {
-        status.textContent = 'No course found. Please return to the academy and enroll again.';
-        document.getElementById('title').textContent = 'No exam found';
-        document.getElementById('examArea').innerHTML = '';
-        return;
-      }
-
-      status.textContent = 'Loading your course exam...';
-
-      const { data, error } = await client
-        .from('exams')
-        .select('*')
-        .eq('course', student.course)
-        .order('created_at', { ascending: true });
-
-      if (error) {
-        console.error(error);
-        status.textContent = 'Could not load the exam.';
-        document.getElementById('title').textContent = 'Error loading exam';
-        return;
-      }
-
-      state.questions = data || [];
-
-      if (!state.questions.length) {
-        document.getElementById('title').textContent = 'No exam has been created yet';
-        document.getElementById('examArea').innerHTML = `
-          <div class="question">
-            <p class="muted">This course has no exam records in the <strong>exams</strong> table yet.</p>
+    function renderExam(items) {
+      area.innerHTML = items.map((item, index) => `
+        <div class="panel" style="padding:18px;">
+          <h3 style="margin:0 0 8px;">${index + 1}. ${escapeHtml(item.q)}</h3>
+          <div style="display:grid;gap:10px;">
+            ${item.options.map(opt => `
+              <button type="button" class="btn btn-dark option-btn" data-index="${index}" data-opt="${escapeHtml(opt)}">${escapeHtml(opt)}</button>
+            `).join("")}
           </div>
-        `;
-        status.textContent = 'Ask the admin to add exam questions for this course.';
-        return;
-      }
+        </div>
+      `).join("");
 
-      document.getElementById('title').textContent = `${student.course} Exam`;
-      renderQuestions();
-      status.textContent = 'Answer all questions and submit.';
-    }
-
-    function renderQuestions() {
-      const area = document.getElementById('examArea');
-      area.innerHTML = state.questions.map((q, index) => {
-        let opts = [];
-        try {
-          opts = Array.isArray(q.options) ? q.options : JSON.parse(q.options || '[]');
-        } catch (e) {
-          opts = [];
-        }
-
-        return `
-          <div class="question">
-            <h3 style="margin-bottom:8px;">${index + 1}. ${escapeHtml(q.question || '')}</h3>
-            <div class="muted" style="margin-bottom:10px;">Choose one answer</div>
-            ${opts.map(opt => `
-              <button type="button"
-                class="option"
-                data-qid="${q.id}"
-                data-opt="${escapeAttr(opt)}"
-                onclick="pickAnswer('${q.id}', '${escapeJs(opt)}', this)">
-                ${escapeHtml(opt)}
-              </button>
-            `).join('')}
-          </div>
-        `;
-      }).join('');
-    }
-
-    function pickAnswer(questionId, option, btn) {
-      state.selected[questionId] = option;
-      document.querySelectorAll(`.option[data-qid="${CSS.escape(questionId)}"]`).forEach((el) => el.classList.remove('active'));
-      btn.classList.add('active');
+      document.querySelectorAll(".option-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const idx = Number(btn.dataset.index);
+          const opt = btn.dataset.opt;
+          selected[idx] = opt;
+          document.querySelectorAll(`.option-btn[data-index="${idx}"]`).forEach(b => b.classList.remove("btn-primary"));
+          btn.classList.add("btn-primary");
+        });
+      });
     }
 
     function resetSelection() {
-      state.selected = {};
-      document.querySelectorAll('.option').forEach((el) => el.classList.remove('active'));
-      document.getElementById('status').textContent = 'Selection cleared.';
+      selected = [];
+      document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("btn-primary"));
+      statusEl.textContent = "Selection cleared.";
     }
 
     async function submitExam() {
-      const status = document.getElementById('status');
-
-      if (!student.email || !student.course) {
-        status.textContent = 'Missing student data. Please go back and enroll again.';
+      const answered = selected.filter(Boolean).length;
+      if (answered < questions.length) {
+        statusEl.textContent = "Please answer all questions before submitting.";
         return;
       }
-
-      if (!state.questions.length) {
-        status.textContent = 'There is no exam to submit.';
-        return;
-      }
-
-      let correct = 0;
-      const total = state.questions.length;
-
-      for (const q of state.questions) {
-        const chosen = state.selected[q.id] || '';
-        const right = String(q.correct_answer || '').trim();
-        if (String(chosen).trim() === right) correct++;
-      }
-
-      const score = Math.round((correct / total) * 100);
-      const passed = score >= 60;
-
-      status.textContent = 'Saving result...';
-
+      const score = questions.reduce((total, item, i) => total + (selected[i] === item.answer ? 1 : 0), 0);
+      const percent = Math.round((score / questions.length) * 100);
+      const level = moneyLevel(percent);
       const payload = {
-        email: student.email,
         name: student.name,
-        course: student.course,
-        score,
-        passed,
-        answers: state.selected,
-        status: 'pending_review',
-        created_at: new Date().toISOString()
-      };
-
-      const { error } = await client.from('exam_results').insert([payload]);
-
-      if (error) {
-        console.error(error);
-        status.textContent = 'Could not save exam result.';
-        alert('❌ ' + error.message);
-        return;
-      }
-
-      localStorage.setItem('ruya_last_exam_result', JSON.stringify({
         email: student.email,
         course: student.course,
         score,
-        passed
-      }));
-
-      localStorage.removeItem('ruya_exam_pending');
-
-      status.textContent = `Submitted successfully. Your score is ${score}%.`;
-      alert(`✅ Exam submitted. Score: ${score}%`);
-      window.location.href = 'academy.html';
+        percent,
+        level,
+        answers: selected,
+        submitted_at: Ruya.nowIso()
+      };
+      statusEl.textContent = "Saving your exam result...";
+      try { await tryInsert("exam_results", payload); } catch (err) { console.warn(err); }
+      localStorage.setItem("ruya_last_exam", JSON.stringify(payload));
+      statusEl.textContent = `Submitted successfully. Score: ${percent}% → ${level}.`;
+      setTimeout(() => {
+        window.location.href = `student.html?email=${encodeURIComponent(student.email)}`;
+      }, 1000);
     }
 
-    function escapeHtml(str) {
-      return String(str)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-    }
-    function escapeAttr(str) { return String(str).replaceAll('"', '&quot;'); }
-    function escapeJs(str) { return String(str).replaceAll('\', '\\').replaceAll("'", "\'"); }
-
-    loadExam();
-    window.pickAnswer = pickAnswer;
-    window.submitExam = submitExam;
-    window.resetSelection = resetSelection;
+    document.getElementById("studentName").textContent = student.name || "—";
+    document.getElementById("studentEmail").textContent = student.email || "—";
+    document.getElementById("studentCourse").textContent = student.course || "—";
+    document.getElementById("title").textContent = `${courseLabel(student.course)} Exam`;
+    document.getElementById("subtitle").textContent = "Answer every question and submit your attempt for admin review.";
+    renderExam(questions);
   </script>
 </body>
 </html>

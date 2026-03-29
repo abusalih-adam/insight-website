@@ -9,134 +9,110 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <style>
-    :root{--bg:#06101d;--bg2:#0b172b;--text:#eef5ff;--muted:#afbdd3;--line:rgba(255,255,255,.12);--accent:#42d6c0;--accent2:#6ea8fe;--accent3:#f5b971;--good:#7df0c5;--warn:#ffd27a;--danger:#ff9b9b;--shadow:0 20px 60px rgba(0,0,0,.35);--radius:22px;--container:1180px}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at top left, rgba(66,214,192,.16), transparent 30%),radial-gradient(circle at top right, rgba(110,168,254,.14), transparent 35%),linear-gradient(180deg,var(--bg),var(--bg2));min-height:100vh;line-height:1.5;overflow-x:hidden}
-    a{color:inherit;text-decoration:none} button,input,textarea,select{font:inherit}
-    .container{width:min(var(--container), calc(100% - 32px)); margin:0 auto}
-    .panel{border:1px solid var(--line);background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));border-radius:var(--radius);box-shadow:var(--shadow)}
-    .btn{border:0;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
-    .btn:hover{transform:translateY(-1px)} .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#03101d} .btn-ghost{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--line)} .btn-dark{background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--line)}
-    .topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);background:rgba(7,17,31,.72);border-bottom:1px solid var(--line)}
-    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 0;flex-wrap:wrap}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800} .mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#03101d;font-weight:900;box-shadow:var(--shadow)}
-    .hero{padding:34px 0 20px;display:grid;grid-template-columns:1.05fr .95fr;gap:16px;align-items:stretch}
-    .hero-card{padding:22px} .profile{padding:22px}
-    .headline{font-size:clamp(34px,5vw,56px);line-height:1;letter-spacing:-1.2px;margin:12px 0 12px}
-    .lead{color:var(--muted);line-height:1.75;max-width:70ch;margin:0}
-    .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
-    .metric{padding:16px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid var(--line)} .metric strong{display:block;font-size:24px;margin-bottom:4px} .metric span{color:var(--muted);font-size:13px}
-    .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-    .box{padding:16px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid var(--line)} .box h3{margin:0 0 8px;font-size:16px} .box p{margin:0;color:var(--muted);line-height:1.7}
-    .section-title{display:flex;justify-content:space-between;align-items:end;gap:18px;flex-wrap:wrap;margin-bottom:18px;padding-top:18px}
-    .section-title h2{margin:0;font-size:30px} .section-title p{margin:0;color:var(--muted);max-width:68ch;line-height:1.7}
-    .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .progress-wrap{margin-top:12px;width:100%;height:12px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;border:1px solid var(--line)}
-    .progress-bar{height:100%;width:0%;border-radius:inherit;background:linear-gradient(135deg,var(--accent),var(--accent2));transition:width .35s ease}
-    .pill{display:inline-flex;padding:7px 11px;border-radius:999px;font-size:13px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--muted);margin-right:8px;margin-bottom:8px}
-    .pill.good{color:var(--good)} .pill.warn{color:var(--warn)} .pill.bad{color:var(--danger)}
-    .footer{padding:34px 0 50px;color:var(--muted);border-top:1px solid var(--line);margin-top:30px}
-    .footer-inner{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-    .alert{padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--muted)}
-    .status{margin-top:12px;min-height:22px;color:var(--accent);font-size:14px}
-    .hidden{display:none !important}
-    .course-card{padding:18px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
-    .task-list{display:grid;gap:10px;margin-top:12px}
-    @media (max-width:980px){.hero,.split{grid-template-columns:1fr} .topbar-inner{flex-direction:column;align-items:flex-start}}
-    @media (max-width:760px){.metrics,.profile-grid{grid-template-columns:1fr} .btn{width:100%} .nav-links{justify-content:flex-start}}
-  </style>
+  <script src="shared.js"></script>
 </head>
 <body>
   <header class="topbar">
     <div class="container topbar-inner">
-      <a class="brand" href="academy.html" aria-label="Ruya Academy">
+      <a class="brand" href="academy.html">
         <div class="mark">R</div>
-        <div><div>Student Dashboard</div><small class="muted">Ruya Academy</small></div>
+        <div><div>Student Dashboard</div><small style="color:var(--muted)">Ruya Academy</small></div>
       </a>
-
-      <nav class="nav-links" aria-label="Main navigation" style="display:flex;gap:18px;flex-wrap:wrap;">
+      <nav class="nav-links">
         <a href="#dashboard">Dashboard</a>
         <a href="#progress">Progress</a>
         <a href="#certificate">Certificate</a>
         <a href="admin.html" id="adminLink" class="hidden">Admin panel</a>
       </nav>
-
-      <div class="nav-actions">
-        <button class="btn btn-dark" onclick="logout()">Logout</button>
-      </div>
+      <button class="btn btn-dark" onclick="logout()">Logout</button>
     </div>
   </header>
 
   <main class="container">
-    <section class="hero" id="dashboard">
-      <div class="panel hero-card">
-        <span class="pill">👤 Student view</span>
-        <h1 class="headline" id="studentTitle">Welcome</h1>
-        <p class="lead" id="studentIntro">Loading your profile and records...</p>
-
-        <div class="metrics">
-          <div class="metric"><strong id="mStatus">—</strong><span>Enrollment status</span></div>
-          <div class="metric"><strong id="mLevel">—</strong><span>Level</span></div>
-          <div class="metric"><strong id="mPay">—</strong><span>Payment</span></div>
-          <div class="metric"><strong id="mCert">—</strong><span>Certificate</span></div>
-        </div>
-      </div>
-
-      <div class="panel profile">
-        <h2 style="margin-top:0;">Profile</h2>
-        <div id="profileArea" class="profile-grid"></div>
-        <div class="status" id="studentStatus"></div>
-      </div>
-    </section>
-
-    <section class="section" id="progress">
-      <div class="section-title">
-        <div>
-          <h2>Progress and performance</h2>
-          <p>This dashboard shows the student’s course history, exam score, approval state, and daily task placeholders.</p>
-        </div>
-      </div>
-
-      <div class="split">
-        <div class="panel" style="padding:22px;">
-          <h3 style="margin-top:0;">Current progress</h3>
-          <div class="progress-wrap" aria-label="Student progress"><div id="progressBar" class="progress-bar"></div></div>
-          <p class="muted" id="progressText" style="margin-bottom:0; line-height:1.7; margin-top:12px;"></p>
-        </div>
-
-        <div class="panel" style="padding:22px;">
-          <h3 style="margin-top:0;">Courses and tasks</h3>
-          <div id="courseList" class="task-list"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="certificate">
-      <div class="section-title">
-        <div>
-          <h2>Certificate and exam history</h2>
-          <p>Students can only move toward the certificate stage after exam review, payment confirmation, and approval.</p>
-        </div>
-      </div>
-
-      <div class="split">
-        <div class="panel" style="padding:22px;">
-          <h3 style="margin-top:0;">Certificate status</h3>
-          <div class="alert" id="certAlert">Checking your eligibility...</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
-            <button class="btn btn-primary" id="certBtn" onclick="requestCertificate()">Request Certificate</button>
-            <button class="btn btn-ghost" onclick="reloadStudent()">Refresh</button>
+    <section id="loginView" class="section">
+      <div class="panel" style="max-width:520px;margin:0 auto;padding:28px;">
+        <h1 style="margin:0 0 8px;">Student login</h1>
+        <p style="margin:0;color:var(--muted);line-height:1.7;">Log in with the username or email created after approval and payment confirmation.</p>
+        <form id="loginForm" style="margin-top:16px;">
+          <div class="form-grid">
+            <div class="full"><label class="small" style="color:var(--muted)">Email or username</label><input id="loginId" placeholder="name@example.com or username" required /></div>
+            <div class="full"><label class="small" style="color:var(--muted)">Password</label><input id="loginPassword" type="password" placeholder="••••••••" required /></div>
           </div>
-          <div class="status" id="certStatus"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+            <button class="btn btn-primary" type="submit">Login</button>
+            <a class="btn btn-ghost" href="academy.html">Back to Academy</a>
+          </div>
+        </form>
+        <div class="status" id="loginStatus"></div>
+      </div>
+    </section>
+
+    <section id="dashboardView" class="hidden">
+      <section class="hero" id="dashboard" style="padding-top:26px;">
+        <div class="panel" style="padding:22px;">
+          <span class="pill">👤 Student view</span>
+          <h1 id="studentTitle" style="font-size:clamp(34px,5vw,56px);line-height:1;margin:12px 0 12px;">Welcome</h1>
+          <p class="lead" id="studentIntro" style="font-size:17px;margin-bottom:0;">Loading your profile and records...</p>
+          <div class="stats">
+            <div class="stat"><strong id="mStatus">—</strong><span>Enrollment status</span></div>
+            <div class="stat"><strong id="mLevel">—</strong><span>Level</span></div>
+            <div class="stat"><strong id="mPay">—</strong><span>Payment</span></div>
+            <div class="stat"><strong id="mCert">—</strong><span>Certificate</span></div>
+          </div>
         </div>
 
         <div class="panel" style="padding:22px;">
-          <h3 style="margin-top:0;">Exam results</h3>
-          <div id="resultsArea" class="task-list"></div>
+          <h2 style="margin-top:0;">Profile</h2>
+          <div id="profileArea" class="grid-2"></div>
+          <div class="status" id="studentStatus"></div>
         </div>
-      </div>
+      </section>
+
+      <section class="section" id="progress">
+        <div class="section-head">
+          <div>
+            <h2>Progress and performance</h2>
+            <p>This dashboard shows the student’s course history, exam score, approval state, and daily task placeholders.</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="panel" style="padding:22px;">
+            <h3 style="margin-top:0;">Current progress</h3>
+            <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
+            <p id="progressText" style="margin-bottom:0;color:var(--muted);line-height:1.75;margin-top:12px;"></p>
+          </div>
+          <div class="panel" style="padding:22px;">
+            <h3 style="margin-top:0;">Courses and tasks</h3>
+            <div id="courseList" style="display:grid;gap:10px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="certificate">
+        <div class="section-head">
+          <div>
+            <h2>Certificate and exam history</h2>
+            <p>Students can move toward the certificate stage after exam review, payment confirmation, and approval.</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="panel" style="padding:22px;">
+            <h3 style="margin-top:0;">Certificate status</h3>
+            <div class="card" id="certAlert">Checking your eligibility...</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
+              <button class="btn btn-primary" id="certBtn" onclick="requestCertificate()">Request Certificate</button>
+              <button class="btn btn-ghost" onclick="reloadStudent()">Refresh</button>
+            </div>
+            <div class="status" id="certStatus"></div>
+          </div>
+          <div class="panel" style="padding:22px;">
+            <h3 style="margin-top:0;">Exam results</h3>
+            <div id="resultsArea" style="display:grid;gap:10px;"></div>
+          </div>
+        </div>
+      </section>
     </section>
   </main>
 
@@ -148,188 +124,173 @@
   </footer>
 
   <script>
-    const SUPABASE_URL = "https://xtlvhdtmocshycbunoki.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_mY1y5Sju44l-M4prPHvajQ_n_UznjaD";
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const { getSession, setSession, clearSession, tryFetch, tryInsert, courseLabel, moneyLevel, escapeHtml } = Ruya;
 
-    function getSession() {
-      try { return JSON.parse(localStorage.getItem('ruya_user') || 'null'); }
-      catch { return null; }
-    }
+    const loginView = document.getElementById("loginView");
+    const dashboardView = document.getElementById("dashboardView");
+    const loginStatus = document.getElementById("loginStatus");
 
     let currentUser = getSession();
+    let profile = null;
+    let enrollments = [];
+    let examResults = [];
+    let certRequests = [];
 
-    if (!currentUser) {
-      window.location.href = 'academy.html';
-    }
-
-    const els = {
-      studentTitle: document.getElementById('studentTitle'),
-      studentIntro: document.getElementById('studentIntro'),
-      studentStatus: document.getElementById('studentStatus'),
-      profileArea: document.getElementById('profileArea'),
-      progressBar: document.getElementById('progressBar'),
-      progressText: document.getElementById('progressText'),
-      courseList: document.getElementById('courseList'),
-      certAlert: document.getElementById('certAlert'),
-      certStatus: document.getElementById('certStatus'),
-      resultsArea: document.getElementById('resultsArea'),
-      mStatus: document.getElementById('mStatus'),
-      mLevel: document.getElementById('mLevel'),
-      mPay: document.getElementById('mPay'),
-      mCert: document.getElementById('mCert'),
-      certBtn: document.getElementById('certBtn'),
-      adminLink: document.getElementById('adminLink')
-    };
-
-    const esc = (str = '') => String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
-
-    function normalizeUser(u) {
-      return {
-        name: u?.name || '',
-        email: u?.email || '',
-        username: u?.username || '',
-        role: u?.role || 'student',
-        approved: !!u?.approved,
-        payment_status: u?.payment_status || 'pending',
-        level: u?.level || 'beginner',
-        course: u?.course || '',
-        password: u?.password || ''
-      };
+    function showDashboard() {
+      loginView.classList.add("hidden");
+      dashboardView.classList.remove("hidden");
+      if (currentUser?.role === "admin") document.getElementById("adminLink").classList.remove("hidden");
     }
 
     async function reloadStudent() {
-      currentUser = normalizeUser(getSession());
+      if (!currentUser) return;
+      const email = currentUser.email;
+      document.getElementById("studentTitle").textContent = `Welcome, ${currentUser.name || "Student"}`;
+      document.getElementById("studentIntro").textContent = "This is your private classroom with progress, tasks, results, and certificate status.";
+      profile = currentUser;
 
-      if (!currentUser.email && !currentUser.username) {
-        window.location.href = 'academy.html';
-        return;
-      }
+      try { enrollments = await tryFetch(["enrollments", "course_enrollments"], { eq: { email }, orderBy: "created_at", ascending: false }); }
+      catch { enrollments = []; }
+      try { examResults = await tryFetch("exam_results", { eq: { email }, orderBy: "submitted_at", ascending: false }); }
+      catch { examResults = []; }
+      try { certRequests = await tryFetch("certificate_requests", { eq: { email }, orderBy: "created_at", ascending: false }); }
+      catch { certRequests = []; }
 
-      const loginKey = currentUser.email || currentUser.username;
+      renderProfile();
+      renderProgress();
+      renderResults();
+      renderCertificate();
+    }
 
-      const { data: userRows, error: userErr } = await client
-        .from('users')
-        .select('*')
-        .or(`email.eq.${loginKey},username.eq.${loginKey}`)
-        .limit(1);
+    function renderProfile() {
+      const items = [
+        ["Name", profile.name || "—"],
+        ["Email", profile.email || "—"],
+        ["Username", profile.username || "—"],
+        ["Course", courseLabel(profile.course || enrollments[0]?.course || "—")],
+        ["Role", profile.role || "student"],
+        ["Approved", profile.approved ? "Yes" : "No"],
+        ["Payment", profile.payment_status || "pending"],
+        ["Level", profile.level || "beginner"]
+      ];
+      document.getElementById("profileArea").innerHTML = items.map(([k,v]) => `
+        <div class="card"><div style="font-size:13px;color:var(--muted);margin-bottom:6px;">${k}</div><div style="font-weight:800;">${escapeHtml(v)}</div></div>
+      `).join("");
 
-      let user = currentUser;
-      if (!userErr && userRows && userRows.length) {
-        user = normalizeUser(userRows[0]);
-        localStorage.setItem('ruya_user', JSON.stringify(userRows[0]));
-      }
+      const approved = !!profile.approved;
+      const paid = String(profile.payment_status || "").toLowerCase() === "paid";
+      document.getElementById("mStatus").textContent = approved ? "Approved" : "Pending";
+      document.getElementById("mLevel").textContent = profile.level || "beginner";
+      document.getElementById("mPay").textContent = paid ? "Paid" : "Pending";
+      document.getElementById("mCert").textContent = certRequests.length ? "Requested" : "Not yet";
 
-      if (user.role === 'admin') {
-        els.adminLink.classList.remove('hidden');
-      }
+      document.getElementById("studentStatus").textContent = approved && paid
+        ? "Your account is active."
+        : "Your account is waiting for admin approval or payment confirmation.";
+    }
 
-      els.studentTitle.textContent = `Welcome ${user.name || user.username || user.email || ''}`;
-      els.studentIntro.textContent = user.approved
-        ? 'Your account is active. You can view progress, courses, and exam history.'
-        : 'Your enrollment is still pending review or approval.';
-
-      els.mStatus.textContent = user.approved ? 'Approved' : 'Pending';
-      els.mLevel.textContent = user.level || '—';
-      els.mPay.textContent = user.payment_status || 'pending';
-      els.mCert.textContent = (user.approved && user.payment_status === 'paid') ? 'Unlocked' : 'Locked';
-
-      const progressValue = user.approved ? (user.payment_status === 'paid' ? 85 : 55) : 20;
-      els.progressBar.style.width = `${progressValue}%`;
-      els.progressText.textContent = user.approved
-        ? (user.payment_status === 'paid'
-            ? 'You are fully active. Finish tasks and maintain strong performance to qualify for the certificate.'
-            : 'Your profile is approved, but payment is still pending.')
-        : 'Complete enrollment, exam, payment, and approval to unlock the dashboard fully.';
-
-      els.profileArea.innerHTML = `
-        <div class="box"><h3>Name</h3><p>${esc(user.name || '—')}</p></div>
-        <div class="box"><h3>Email</h3><p>${esc(user.email || '—')}</p></div>
-        <div class="box"><h3>Username</h3><p>${esc(user.username || '—')}</p></div>
-        <div class="box"><h3>Role</h3><p>${esc(user.role || 'student')}</p></div>
-        <div class="box"><h3>Approval</h3><p>${user.approved ? 'Approved' : 'Waiting'}</p></div>
-        <div class="box"><h3>Payment</h3><p>${esc(user.payment_status || 'pending')}</p></div>
+    function renderProgress() {
+      const approved = !!profile.approved;
+      const paid = String(profile.payment_status || "").toLowerCase() === "paid";
+      const score = examResults[0]?.percent ?? 0;
+      const progress = Math.min(100, (approved ? 30 : 10) + (paid ? 25 : 0) + Math.min(score, 45));
+      document.getElementById("progressBar").style.width = `${progress}%`;
+      document.getElementById("progressText").textContent =
+        `Your current progress is ${progress}%. Finish the course tasks, improve your exam result, and keep payment/approval status complete.`;
+      const course = enrollments[0]?.course || profile.course || "General Course";
+      document.getElementById("courseList").innerHTML = `
+        <div class="card"><strong>${escapeHtml(courseLabel(course))}</strong><p>Current course enrollment and study path.</p></div>
+        <div class="card"><strong>Exam score</strong><p>${examResults[0]?.percent ?? "—"}%</p></div>
+        <div class="card"><strong>Daily task</strong><p>Read the lesson, practice, and complete the quiz.</p></div>
+        <div class="card"><strong>Next step</strong><p>Request certificate after completion.</p></div>
       `;
-
-      const { data: enrollments, error: enrollErr } = await client
-        .from('enrollments')
-        .select('*')
-        .eq('email', user.email)
-        .order('created_at', { ascending: false });
-
-      const { data: results, error: resultErr } = await client
-        .from('exam_results')
-        .select('*')
-        .eq('email', user.email)
-        .order('created_at', { ascending: false });
-
-      if (enrollErr) console.error(enrollErr);
-      if (resultErr) console.error(resultErr);
-
-      const courseRows = enrollments || [];
-      const resultRows = results || [];
-
-      els.courseList.innerHTML = courseRows.length
-        ? courseRows.map(row => {
-            const task1 = `Daily task: review today's lesson for ${esc(row.course || '')}.`;
-            const task2 = `Daily task: complete one practice exercise and update your notes.`;
-            const task3 = `Daily task: check your progress with the admin if needed.`;
-            return `
-              <div class="course-card">
-                <strong>${esc(row.course || 'Course')}</strong><br>
-                <span class="muted">Status: ${esc(row.status || 'pending')}</span>
-                <div style="margin-top:10px;" class="task-list">
-                  <div class="pill">#1 ${esc(task1)}</div>
-                  <div class="pill">#2 ${esc(task2)}</div>
-                  <div class="pill">#3 ${esc(task3)}</div>
-                </div>
-              </div>
-            `;
-          }).join('')
-        : '<div class="alert">No enrollment records found.</div>';
-
-      els.resultsArea.innerHTML = resultRows.length
-        ? resultRows.map(r => `
-            <div class="course-card">
-              <strong>${esc(r.course || '')}</strong><br>
-              <span class="muted">Score: ${esc(r.score ?? '')}% | Passed: ${r.passed ? 'Yes' : 'No'}</span><br>
-              <span class="muted">Status: ${esc(r.status || 'pending_review')}</span>
-            </div>
-          `).join('')
-        : '<div class="alert">No exam results yet.</div>';
-
-      const eligible = user.approved && user.payment_status === 'paid';
-      els.certAlert.textContent = eligible
-        ? 'You are eligible to request the certificate.'
-        : 'Certificate is locked until exam review, payment confirmation, and approval are complete.';
-      els.certBtn.disabled = !eligible;
-      els.certBtn.style.opacity = eligible ? '1' : '.5';
-
-      els.studentStatus.textContent = user.approved
-        ? 'Access granted.'
-        : 'Access limited until approval.';
     }
 
-    function requestCertificate() {
-      const user = getSession();
-      if (!user || !(user.approved && user.payment_status === 'paid')) {
-        els.certStatus.textContent = 'You are not eligible yet.';
+    function renderResults() {
+      const container = document.getElementById("resultsArea");
+      if (!examResults.length) {
+        container.innerHTML = `<div class="card">No exam results yet.</div>`;
         return;
       }
-      els.certStatus.textContent = 'Certificate request sent to admin.';
-      alert('Certificate request sent to admin.');
+      container.innerHTML = examResults.map(r => `
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+            <strong>${escapeHtml(courseLabel(r.course))}</strong>
+            <span class="chip">${escapeHtml(r.percent ?? "—")}%</span>
+          </div>
+          <p style="margin-top:8px;">Score: ${escapeHtml(r.score ?? "—")} | Level: ${escapeHtml(r.level || moneyLevel(Number(r.percent || 0)))}</p>
+        </div>
+      `).join("");
     }
+
+    function renderCertificate() {
+      const approved = !!profile.approved;
+      const paid = String(profile.payment_status || "").toLowerCase() === "paid";
+      const passed = Number(examResults[0]?.percent || 0) >= 50;
+      const finished = approved && paid && passed;
+      document.getElementById("certAlert").textContent = finished
+        ? "You are eligible to request a certificate."
+        : "You still need to complete approval, payment, or the exam threshold.";
+      document.getElementById("certBtn").disabled = !finished;
+      document.getElementById("certStatus").textContent = certRequests.length ? "Certificate request submitted." : "";
+    }
+
+    async function requestCertificate() {
+      if (!currentUser) return;
+      const approved = !!profile.approved;
+      const paid = String(profile.payment_status || "").toLowerCase() === "paid";
+      const passed = Number(examResults[0]?.percent || 0) >= 50;
+      if (!(approved && paid && passed)) {
+        document.getElementById("certStatus").textContent = "You are not eligible yet.";
+        return;
+      }
+      try {
+        await tryInsert("certificate_requests", {
+          name: profile.name,
+          email: profile.email,
+          course: profile.course || enrollments[0]?.course || "General",
+          status: "pending",
+          created_at: Ruya.nowIso()
+        });
+        document.getElementById("certStatus").textContent = "Certificate request submitted.";
+        await reloadStudent();
+      } catch (err) {
+        console.error(err);
+        document.getElementById("certStatus").textContent = "Request could not be saved. Check the certificate_requests table.";
+      }
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      loginStatus.textContent = "Checking credentials...";
+      const loginId = document.getElementById("loginId").value.trim().toLowerCase();
+      const password = document.getElementById("loginPassword").value.trim();
+      try {
+        const rows = await tryFetch("users", { limit: 200 });
+        const user = rows.find(row => [row.email, row.username].some(v => String(v || "").toLowerCase() === loginId) && String(row.password || "") === password);
+        if (!user) {
+          loginStatus.textContent = "Account not found. Ask admin to create the user first.";
+          return;
+        }
+        currentUser = user;
+        setSession(user);
+        showDashboard();
+        await reloadStudent();
+      } catch (err) {
+        console.error(err);
+        loginStatus.textContent = "Login failed. Check the users table.";
+      }
+    });
 
     function logout() {
-      localStorage.removeItem('ruya_user');
-      window.location.href = 'academy.html';
+      clearSession();
+      window.location.reload();
     }
 
-    window.reloadStudent = reloadStudent;
-    window.logout = logout;
-    window.requestCertificate = requestCertificate;
-
-    reloadStudent();
+    if (currentUser) {
+      showDashboard();
+      reloadStudent();
+    }
   </script>
 </body>
 </html>

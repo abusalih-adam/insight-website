@@ -9,561 +9,357 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <style>
-    :root{--bg:#06101d;--bg2:#0b172b;--text:#eef5ff;--muted:#afbdd3;--line:rgba(255,255,255,.12);--accent:#42d6c0;--accent2:#6ea8fe;--accent3:#f5b971;--good:#7df0c5;--warn:#ffd27a;--danger:#ff9b9b;--shadow:0 20px 60px rgba(0,0,0,.35);--radius:22px;--container:1180px}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at top left, rgba(66,214,192,.16), transparent 30%),radial-gradient(circle at top right, rgba(110,168,254,.14), transparent 35%),linear-gradient(180deg,var(--bg),var(--bg2));min-height:100vh;line-height:1.5;overflow-x:hidden}
-    a{color:inherit;text-decoration:none} button,input,textarea,select{font:inherit}
-    .container{width:min(var(--container), calc(100% - 32px)); margin:0 auto}
-    .panel{border:1px solid var(--line);background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));border-radius:var(--radius);box-shadow:var(--shadow)}
-    .btn{border:0;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
-    .btn:hover{transform:translateY(-1px)} .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#03101d} .btn-ghost{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--line)} .btn-dark{background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--line)} .btn-danger{background:rgba(255,125,125,.14);color:#ffdede;border:1px solid rgba(255,125,125,.28)}
-    input,textarea,select{width:100%;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:#0b172b;color:var(--text);outline:none}
-    .topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);background:rgba(7,17,31,.72);border-bottom:1px solid var(--line)}
-    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;flex-wrap:wrap}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.3px}
-    .mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#03101d;font-weight:900;box-shadow:var(--shadow)}
-    .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{display:inline-flex;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--muted);font-size:12px}
-    .hero{padding:26px 0 12px;display:grid;grid-template-columns:1.08fr .92fr;gap:16px}
-    .hero-card{padding:22px}
-    .headline{font-size:clamp(34px,5vw,54px);line-height:1;letter-spacing:-1.3px;margin:12px 0 10px}
-    .lead{margin:0;color:var(--muted);line-height:1.75;max-width:72ch}
-    .stats{margin-top:18px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-    .stat{padding:16px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
-    .stat strong{display:block;font-size:24px;margin-bottom:4px} .stat span{color:var(--muted);font-size:13px}
-    .box{padding:18px}
-    .section{margin-top:18px;padding:18px} .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;flex-wrap:wrap;margin-bottom:18px}
-    .section-head h2{margin:0;font-size:32px;letter-spacing:-.6px} .section-head p{margin:0;color:var(--muted);max-width:72ch;line-height:1.7}
-    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center} .search{min-width:min(420px,100%);flex:1}
-    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px} .tab{padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);cursor:pointer;font-weight:700} .tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#03101d}
-    .quick-form{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:12px} .quick-form .full{grid-column:1/-1} .quick-form .span-2{grid-column:span 2} .quick-form .span-3{grid-column:span 3}
-    .footer{margin:18px 0 34px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:14px}
-    .table-wrap{overflow:auto;border-radius:18px;border:1px solid var(--line)}
-    table{width:100%;border-collapse:collapse;min-width:980px;background:rgba(255,255,255,.03)}
-    th,td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,.08);vertical-align:top;text-align:left;font-size:14px}
-    th{position:sticky;top:0;background:#0b172b;color:var(--muted);z-index:1;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
-    .row-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    .status{margin-top:12px;min-height:22px;color:var(--accent);font-size:14px}
-    .muted{color:var(--muted)}
-    .small{font-size:13px}
-    .inline-select{min-width:140px;padding:9px 10px;border-radius:12px}
-    .pill{display:inline-flex;padding:7px 11px;border-radius:999px;font-size:13px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--muted);margin-right:8px;margin-bottom:8px}
-    .pill.good{color:var(--good)} .pill.warn{color:var(--warn)} .pill.bad{color:var(--danger)}
-    @media (max-width:1100px){.hero{grid-template-columns:1fr} .stats{grid-template-columns:repeat(2,minmax(0,1fr))} .quick-form{grid-template-columns:repeat(2,minmax(0,1fr))} .span-2,.span-3{grid-column:span 1}}
-    @media (max-width:760px){.stats,.quick-form{grid-template-columns:1fr} .search{min-width:100%} .btn{width:100%} .toolbar{width:100%}}
-  </style>
+  <script src="shared.js"></script>
 </head>
 <body>
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <a class="brand" href="academy.html" aria-label="Back to academy">
+  <div id="loginWrap" class="container" style="min-height:100vh;display:grid;place-items:center;padding:24px;">
+    <div class="panel" style="width:min(520px,100%);padding:28px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
         <div class="mark">R</div>
-        <div><div>Admin Control Center</div><small class="muted">Ruya Academy</small></div>
-      </a>
-
-      <div class="chips">
-        <span class="chip">👥 Users</span>
-        <span class="chip">📝 Enrollments</span>
-        <span class="chip">🧪 Exams</span>
-        <span class="chip">🎓 Results</span>
+        <div><h1 style="margin:0;font-size:26px;">Admin Control Center</h1><div style="color:var(--muted);font-size:13px;">Ruya Academy</div></div>
       </div>
-
-      <div class="toolbar">
-        <button class="btn btn-dark" onclick="refreshAll()">Refresh</button>
-        <button class="btn btn-primary" onclick="setTab('builder')">Add Exam Question</button>
-        <a class="btn btn-ghost" href="academy.html">Back to Academy</a>
-      </div>
+      <h2 style="margin:0 0 8px;">Sign in as admin</h2>
+      <p style="margin:0;color:var(--muted);line-height:1.7;">Use an account from the <strong>users</strong> table with role <strong>admin</strong>.</p>
+      <form id="adminLoginForm" style="margin-top:16px;">
+        <div class="form-grid">
+          <div class="full"><label class="small" style="color:var(--muted)">Email</label><input id="adminEmail" type="email" placeholder="admin@email.com" required /></div>
+          <div class="full"><label class="small" style="color:var(--muted)">Password</label><input id="adminPassword" type="password" placeholder="••••••••" required /></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+          <button class="btn btn-primary" type="submit">Sign in</button>
+          <a class="btn btn-ghost" href="academy.html">Back to Academy</a>
+        </div>
+      </form>
+      <div class="status" id="loginStatus"></div>
     </div>
-  </header>
+  </div>
 
-  <main class="container">
-    <section class="hero">
-      <div class="panel hero-card">
+  <div id="app" class="container hidden" style="padding:18px 0 28px;">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a class="brand" href="academy.html">
+          <div class="mark">R</div>
+          <div><div>Admin Control Center</div><small style="color:var(--muted)">Ruya Academy</small></div>
+        </a>
+        <div class="nav-links">
+          <span class="chip">👥 Users</span>
+          <span class="chip">📝 Enrollments</span>
+          <span class="chip">🧪 Exams</span>
+          <span class="chip">🎓 Results</span>
+        </div>
+        <div class="nav-links">
+          <button class="btn btn-dark" onclick="refreshAll()">Refresh</button>
+          <button class="btn btn-primary" onclick="document.getElementById('builder').scrollIntoView({behavior:'smooth'})">Add Exam Question</button>
+          <button class="btn btn-ghost" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero" style="padding-top:18px;">
+      <div class="panel" style="padding:22px;">
         <span class="chip">🚀 Full control</span>
-        <h1 class="headline">Manage enrollments, exams, users, approval, and credentials.</h1>
-        <p class="lead">
-          Only admin accounts should use this page. From here you review enrollments, create or edit exam questions, see exam results, assign levels, and approve students for login.
+        <h1 style="font-size:clamp(32px,5vw,54px);margin:12px 0 10px;">Manage enrollments, exams, users, approval, and credentials.</h1>
+        <p class="lead" style="font-size:17px;margin-bottom:0;">
+          From here you review enrollments, create or edit exam questions, see exam results, assign levels, and approve students for login.
         </p>
-
         <div class="stats">
           <div class="stat"><strong id="countEnrollments">0</strong><span>Enrollments</span></div>
           <div class="stat"><strong id="countUsers">0</strong><span>Users</span></div>
           <div class="stat"><strong id="countResults">0</strong><span>Exam results</span></div>
           <div class="stat"><strong id="countQuestions">0</strong><span>Exam questions</span></div>
+          <div class="stat"><strong id="countPending">0</strong><span>Pending</span></div>
+          <div class="stat"><strong id="countPaid">0</strong><span>Paid</span></div>
         </div>
       </div>
 
-      <div class="panel box">
+      <div class="panel" style="padding:22px;">
         <h2 style="margin:0 0 8px;">Quick create user</h2>
-        <p class="muted" style="margin:0 0 14px; line-height:1.7;">Create or update student credentials after payment.</p>
-        <div class="quick-form">
-          <div class="span-3">
-            <label class="small muted">Name</label>
-            <input id="qcName" placeholder="Student name" />
-          </div>
-          <div class="span-3">
-            <label class="small muted">Email</label>
-            <input id="qcEmail" placeholder="student@email.com" />
-          </div>
-          <div class="span-2">
-            <label class="small muted">Username</label>
-            <input id="qcUsername" placeholder="username" />
-          </div>
-          <div class="span-2">
-            <label class="small muted">Password</label>
-            <input id="qcPassword" placeholder="Set password" />
-          </div>
-          <div>
-            <label class="small muted">Payment</label>
-            <select id="qcPayment"><option value="pending">pending</option><option value="paid">paid</option></select>
-          </div>
-          <div>
-            <label class="small muted">Level</label>
-            <select id="qcLevel"><option value="beginner">beginner</option><option value="intermediate">intermediate</option><option value="advanced">advanced</option></select>
-          </div>
-          <div>
-            <label class="small muted">Role</label>
-            <select id="qcRole"><option value="student">student</option><option value="admin">admin</option></select>
-          </div>
-          <div>
-            <label class="small muted">Approved</label>
-            <select id="qcApproved"><option value="false">false</option><option value="true">true</option></select>
-          </div>
-          <div class="full">
-            <button class="btn btn-primary" onclick="createQuickUser()">Save User</button>
-          </div>
+        <p style="margin:0 0 14px;color:var(--muted);line-height:1.7;">Create or update student credentials after payment.</p>
+        <div class="form-grid">
+          <div><label class="small" style="color:var(--muted)">Name</label><input id="qcName" placeholder="Student name" /></div>
+          <div><label class="small" style="color:var(--muted)">Email</label><input id="qcEmail" placeholder="student@email.com" /></div>
+          <div><label class="small" style="color:var(--muted)">Username</label><input id="qcUsername" placeholder="username" /></div>
+          <div><label class="small" style="color:var(--muted)">Password</label><input id="qcPassword" placeholder="Set password" /></div>
+          <div><label class="small" style="color:var(--muted)">Payment</label><select id="qcPayment"><option value="pending">pending</option><option value="paid">paid</option></select></div>
+          <div><label class="small" style="color:var(--muted)">Level</label><select id="qcLevel"><option value="beginner">beginner</option><option value="intermediate">intermediate</option><option value="advanced">advanced</option></select></div>
+          <div class="full"><label class="small" style="color:var(--muted)">Role</label><select id="qcRole"><option value="student">student</option><option value="admin">admin</option></select></div>
         </div>
-        <div class="status" id="quickStatus"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+          <button class="btn btn-primary" onclick="createUser()">Save user</button>
+          <button class="btn btn-ghost" onclick="seedDemo()">Seed demo data</button>
+        </div>
+        <div class="status" id="qcStatus"></div>
       </div>
     </section>
 
-    <section class="panel section">
+    <section class="section" id="builder">
       <div class="section-head">
         <div>
-          <h2>Operations</h2>
-          <p>Switch between enrollments, exam results, users, and exam builder. Search works in every tab.</p>
-        </div>
-        <div class="toolbar">
-          <input class="search" id="searchInput" placeholder="Search by name, email, course, status..." oninput="renderActiveTab()" />
+          <h2>Exam builder</h2>
+          <p>Add a new question to the exams table.</p>
         </div>
       </div>
-
-      <div class="tabs">
-        <button class="tab active" data-tab="enrollments" onclick="setTab('enrollments')">Enrollments</button>
-        <button class="tab" data-tab="results" onclick="setTab('results')">Exam Results</button>
-        <button class="tab" data-tab="users" onclick="setTab('users')">Users</button>
-        <button class="tab" data-tab="builder" onclick="setTab('builder')">Exam Builder</button>
+      <div class="panel" style="padding:22px;">
+        <div class="form-grid">
+          <div><label class="small" style="color:var(--muted)">Course</label><input id="exCourse" placeholder="MEAL Systems" /></div>
+          <div><label class="small" style="color:var(--muted)">Question</label><input id="exQuestion" placeholder="Write the question" /></div>
+          <div class="full"><label class="small" style="color:var(--muted)">Options (one per line)</label><textarea id="exOptions" placeholder="Option A&#10;Option B&#10;Option C&#10;Option D"></textarea></div>
+          <div class="full"><label class="small" style="color:var(--muted)">Correct answer</label><input id="exAnswer" placeholder="Option B" /></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+          <button class="btn btn-primary" onclick="addQuestion()">Save question</button>
+        </div>
+        <div class="status" id="builderStatus"></div>
       </div>
+    </section>
 
-      <div id="tableArea" class="table-wrap"></div>
-      <div class="status" id="mainStatus"></div>
+    <section class="section">
+      <div class="section-head">
+        <div><h2>Filters</h2><p>Search enrollments, results, and users.</p></div>
+      </div>
+      <div class="panel" style="padding:18px;">
+        <input id="searchInput" placeholder="Search by name, email, course, username, or level..." oninput="renderAll()" />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><h2>Enrollments</h2><p>Review requests, assign levels, and confirm payment.</p></div></div>
+      <div class="panel table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Course</th><th>Reason</th><th>Approved</th><th>Payment</th><th>Level</th><th>Actions</th></tr></thead><tbody id="enrollBody"></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><h2>Exam results</h2><p>See scores and suggested levels.</p></div></div>
+      <div class="panel table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Course</th><th>Score</th><th>Percent</th><th>Level</th><th>Submitted</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><h2>Users</h2><p>Manage student and admin credentials.</p></div></div>
+      <div class="panel table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Username</th><th>Role</th><th>Payment</th><th>Level</th><th>Approved</th><th>Course</th><th>Actions</th></tr></thead><tbody id="usersBody"></tbody></table></div>
     </section>
 
     <div class="footer">
-      <div>Built for your current Supabase setup.</div>
-      <div>Next step: secure auth and progress tracking.</div>
+      <div>© 2026 Ruya Academy. Admin control center.</div>
+      <div id="adminUserLine">Logged in.</div>
     </div>
-  </main>
+  </div>
 
   <script>
-    const SUPABASE_URL = "https://xtlvhdtmocshycbunoki.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_mY1y5Sju44l-M4prPHvajQ_n_UznjaD";
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const { getSession, setSession, clearSession, tryFetch, tryInsert, tryUpdate, moneyLevel, courseLabel, escapeHtml, nowIso } = Ruya;
+    let currentAdmin = getSession();
+    let enrollments = [];
+    let results = [];
+    let users = [];
+    let questions = [];
 
-    function getSession() {
-      try { return JSON.parse(localStorage.getItem('ruya_user') || 'null'); }
-      catch { return null; }
-    }
+    const loginWrap = document.getElementById("loginWrap");
+    const app = document.getElementById("app");
+    const loginStatus = document.getElementById("loginStatus");
 
-    const session = getSession();
-    if (!session || session.role !== 'admin') {
-      alert('Access denied');
-      window.location.href = 'academy.html';
-    }
-
-    const state = {
-      activeTab: 'enrollments',
-      enrollments: [],
-      users: [],
-      results: [],
-      exams: []
-    };
-
-    const els = {
-      tableArea: document.getElementById('tableArea'),
-      mainStatus: document.getElementById('mainStatus'),
-      searchInput: document.getElementById('searchInput'),
-      countEnrollments: document.getElementById('countEnrollments'),
-      countUsers: document.getElementById('countUsers'),
-      countResults: document.getElementById('countResults'),
-      countQuestions: document.getElementById('countQuestions'),
-      quickStatus: document.getElementById('quickStatus')
-    };
-
-    const esc = (str = '') => String(str)
-      .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
-    const escAttr = (str = '') => String(str).replaceAll('"','&quot;').replaceAll("'",'&#039;');
-    const fmtDate = (value) => {
-      if (!value) return '';
-      const d = new Date(value);
-      return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleString();
-    };
-
-    function setStatus(message, isError = false) {
-      els.mainStatus.textContent = message || '';
-      els.mainStatus.style.color = isError ? 'var(--danger)' : 'var(--accent)';
-    }
-
-    async function fetchTable(table) {
-      const { data, error } = await client.from(table).select('*').order('created_at', { ascending: false });
-      if (error) {
-        console.error(error);
-        return [];
-      }
-      return data || [];
+    function showApp() {
+      loginWrap.classList.add("hidden");
+      app.classList.remove("hidden");
+      if (currentAdmin) document.getElementById("adminUserLine").textContent = `${currentAdmin.name || currentAdmin.email} • ${currentAdmin.role}`;
     }
 
     async function refreshAll() {
-      setStatus('Loading data...');
-      const [enrollments, users, results, exams] = await Promise.all([
-        fetchTable('enrollments'),
-        fetchTable('users'),
-        fetchTable('exam_results'),
-        fetchTable('exams')
-      ]);
+      try { enrollments = await tryFetch(["enrollments", "course_enrollments"], { orderBy: "created_at", ascending: false }); }
+      catch { enrollments = []; }
+      try { results = await tryFetch("exam_results", { orderBy: "submitted_at", ascending: false }); }
+      catch { results = []; }
+      try { users = await tryFetch("users", { orderBy: "created_at", ascending: false }); }
+      catch { users = []; }
+      try { questions = await tryFetch("exams", { orderBy: "created_at", ascending: false }); }
+      catch { questions = []; }
 
-      state.enrollments = enrollments;
-      state.users = users;
-      state.results = results;
-      state.exams = exams;
-
-      els.countEnrollments.textContent = enrollments.length;
-      els.countUsers.textContent = users.length;
-      els.countResults.textContent = results.length;
-      els.countQuestions.textContent = exams.length;
-
-      renderActiveTab();
-      setStatus('Ready.');
+      document.getElementById("countEnrollments").textContent = enrollments.length;
+      document.getElementById("countUsers").textContent = users.length;
+      document.getElementById("countResults").textContent = results.length;
+      document.getElementById("countQuestions").textContent = questions.length;
+      document.getElementById("countPending").textContent = enrollments.filter(x => !x.approved).length;
+      document.getElementById("countPaid").textContent = enrollments.filter(x => String(x.payment_status || "").toLowerCase() === "paid").length;
+      renderAll();
     }
 
-    function setTab(tab) {
-      state.activeTab = tab;
-      document.querySelectorAll('.tab').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
-      renderActiveTab();
-    }
+    function renderAll() {
+      const q = (document.getElementById("searchInput").value || "").toLowerCase();
+      const filter = row => !q || Object.values(row).some(v => String(v ?? "").toLowerCase().includes(q));
 
-    function filterRows(rows) {
-      const q = (els.searchInput.value || '').toLowerCase();
-      return rows.filter(row => {
-        return Object.values(row || {}).some(v => String(v ?? '').toLowerCase().includes(q));
-      });
-    }
-
-    function renderActiveTab() {
-      if (state.activeTab === 'enrollments') return renderEnrollments();
-      if (state.activeTab === 'results') return renderResults();
-      if (state.activeTab === 'users') return renderUsers();
-      if (state.activeTab === 'builder') return renderBuilder();
-    }
-
-    function renderEnrollments() {
-      const rows = filterRows(state.enrollments);
-      els.tableArea.innerHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th><th>Email</th><th>Course</th><th>Status</th><th>Payment</th><th>Approved</th><th>Created</th><th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows.map(r => `
-              <tr>
-                <td>${esc(r.name || '')}</td>
-                <td>${esc(r.email || '')}</td>
-                <td>${esc(r.course || '')}</td>
-                <td>${esc(r.status || '')}</td>
-                <td>${esc(r.payment_status || 'pending')}</td>
-                <td>${r.approved ? 'yes' : 'no'}</td>
-                <td>${fmtDate(r.created_at)}</td>
-                <td>
-                  <div class="row-actions">
-                    <button class="btn btn-ghost" onclick="assignLevel('${escAttr(r.email)}','${escAttr(r.course)}')">Assign level</button>
-                    <button class="btn btn-primary" onclick="approveByEnrollment('${escAttr(r.email)}','${escAttr(r.course)}')">Approve</button>
-                  </div>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `;
-    }
-
-    function renderResults() {
-      const rows = filterRows(state.results);
-      els.tableArea.innerHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th><th>Email</th><th>Course</th><th>Score</th><th>Passed</th><th>Status</th><th>Created</th><th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows.map(r => `
-              <tr>
-                <td>${esc(r.name || '')}</td>
-                <td>${esc(r.email || '')}</td>
-                <td>${esc(r.course || '')}</td>
-                <td>${esc(r.score ?? '')}%</td>
-                <td>${r.passed ? 'yes' : 'no'}</td>
-                <td>${esc(r.status || 'pending_review')}</td>
-                <td>${fmtDate(r.created_at)}</td>
-                <td>
-                  <div class="row-actions">
-                    <button class="btn btn-primary" onclick="approveFromResult('${escAttr(r.email)}','${escAttr(r.course)}')">Approve</button>
-                  </div>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `;
-    }
-
-    function renderUsers() {
-      const rows = filterRows(state.users);
-      els.tableArea.innerHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th><th>Email</th><th>Username</th><th>Role</th><th>Approved</th><th>Payment</th><th>Level</th><th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows.map(r => `
-              <tr>
-                <td>${esc(r.name || '')}</td>
-                <td>${esc(r.email || '')}</td>
-                <td>${esc(r.username || '')}</td>
-                <td>${esc(r.role || '')}</td>
-                <td>${r.approved ? 'yes' : 'no'}</td>
-                <td>${esc(r.payment_status || '')}</td>
-                <td>${esc(r.level || '')}</td>
-                <td>
-                  <div class="row-actions">
-                    <button class="btn btn-ghost" onclick="openStudent('${escAttr(r.email)}')">Open student</button>
-                    <button class="btn btn-primary" onclick="forceApproveUser('${escAttr(r.email)}')">Approve</button>
-                  </div>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `;
-    }
-
-    function renderBuilder() {
-      const courseOptions = [...new Set([...state.enrollments.map(x => x.course), ...state.exams.map(x => x.course)].filter(Boolean))];
-      els.tableArea.innerHTML = `
-        <div class="panel" style="padding:20px; margin-bottom:16px;">
-          <h3 style="margin-top:0;">Create exam question</h3>
-          <div class="quick-form">
-            <div class="span-2">
-              <label class="small muted">Course</label>
-              <input id="examCourse" list="courseList" placeholder="Course name" />
-              <datalist id="courseList">
-                ${courseOptions.map(c => `<option value="${escAttr(c)}"></option>`).join('')}
-              </datalist>
+      document.getElementById("enrollBody").innerHTML = enrollments.filter(filter).map(row => `
+        <tr>
+          <td>${escapeHtml(row.name || "—")}</td>
+          <td>${escapeHtml(row.email || "—")}</td>
+          <td>${escapeHtml(courseLabel(row.course))}</td>
+          <td>${escapeHtml(row.reason || "—")}</td>
+          <td>${String(row.approved) === "true" || row.approved === true ? "Yes" : "No"}</td>
+          <td>${escapeHtml(row.payment_status || "pending")}</td>
+          <td>${escapeHtml(row.level || "beginner")}</td>
+          <td>
+            <div class="row-actions">
+              <button class="btn btn-primary" onclick="approveEnroll('${row.id}')">Approve</button>
+              <button class="btn btn-ghost" onclick="setLevelPrompt('${row.id}')">Set level</button>
+              <button class="btn btn-dark" onclick="markPaid('${row.id}')">Paid</button>
             </div>
-            <div class="span-2">
-              <label class="small muted">Question</label>
-              <input id="examQuestion" placeholder="Write the question" />
-            </div>
-            <div class="span-2">
-              <label class="small muted">Options (comma separated)</label>
-              <input id="examOptions" placeholder="Option 1, Option 2, Option 3, Option 4" />
-            </div>
-            <div class="span-2">
-              <label class="small muted">Correct answer</label>
-              <input id="examCorrect" placeholder="Exact correct answer" />
-            </div>
-            <div class="full">
-              <button class="btn btn-primary" onclick="saveExamQuestion()">Save question</button>
-            </div>
-          </div>
-          <div class="status" id="builderStatus"></div>
-        </div>
+          </td>
+        </tr>
+      `).join("") || `<tr><td colspan="8" style="color:var(--muted);padding:18px;">No enrollments found.</td></tr>`;
 
-        <table>
-          <thead>
-            <tr><th>Course</th><th>Question</th><th>Correct answer</th><th>Created</th><th>Action</th></tr>
-          </thead>
-          <tbody>
-            ${filterRows(state.exams).map(r => `
-              <tr>
-                <td>${esc(r.course || '')}</td>
-                <td>${esc(r.question || '')}</td>
-                <td>${esc(r.correct_answer || '')}</td>
-                <td>${fmtDate(r.created_at)}</td>
-                <td><button class="btn btn-danger" onclick="deleteExam('${escAttr(r.id)}')">Delete</button></td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `;
+      document.getElementById("resultsBody").innerHTML = results.filter(filter).map(row => `
+        <tr>
+          <td>${escapeHtml(row.name || "—")}</td>
+          <td>${escapeHtml(row.email || "—")}</td>
+          <td>${escapeHtml(courseLabel(row.course))}</td>
+          <td>${escapeHtml(row.score ?? "—")}</td>
+          <td>${escapeHtml(row.percent ?? "—")}</td>
+          <td>${escapeHtml(row.level || moneyLevel(Number(row.percent || 0)))}</td>
+          <td>${escapeHtml(row.submitted_at || row.created_at || "—")}</td>
+        </tr>
+      `).join("") || `<tr><td colspan="7" style="color:var(--muted);padding:18px;">No exam results yet.</td></tr>`;
+
+      document.getElementById("usersBody").innerHTML = users.filter(filter).map(row => `
+        <tr>
+          <td>${escapeHtml(row.name || "—")}</td>
+          <td>${escapeHtml(row.email || "—")}</td>
+          <td>${escapeHtml(row.username || "—")}</td>
+          <td>${escapeHtml(row.role || "student")}</td>
+          <td>${escapeHtml(row.payment_status || "pending")}</td>
+          <td>${escapeHtml(row.level || "beginner")}</td>
+          <td>${String(row.approved) === "true" || row.approved === true ? "Yes" : "No"}</td>
+          <td>${escapeHtml(courseLabel(row.course))}</td>
+          <td>
+            <div class="row-actions">
+              <button class="btn btn-primary" onclick="setUserApproved('${row.id}', true)">Approve</button>
+              <button class="btn btn-ghost" onclick="setUserPaid('${row.id}')">Paid</button>
+            </div>
+          </td>
+        </tr>
+      `).join("") || `<tr><td colspan="9" style="color:var(--muted);padding:18px;">No users found.</td></tr>`;
     }
 
-    async function saveExamQuestion() {
-      const course = document.getElementById('examCourse').value.trim();
-      const question = document.getElementById('examQuestion').value.trim();
-      const optionsRaw = document.getElementById('examOptions').value.trim();
-      const correct_answer = document.getElementById('examCorrect').value.trim();
-
-      const builderStatus = document.getElementById('builderStatus');
-      if (!course || !question || !optionsRaw || !correct_answer) {
-        builderStatus.textContent = 'Fill all exam fields.';
-        return;
-      }
-
-      const options = optionsRaw.split(',').map(x => x.trim()).filter(Boolean);
-      const { error } = await client.from('exams').insert([{
-        course, question, options, correct_answer, created_at: new Date().toISOString()
-      }]);
-
-      if (error) {
-        console.error(error);
-        builderStatus.textContent = 'Could not save question.';
-        alert('❌ ' + error.message);
-        return;
-      }
-
-      builderStatus.textContent = 'Question saved.';
+    async function approveEnroll(id) {
+      await tryUpdate(["enrollments", "course_enrollments"], { id }, { approved: true });
       await refreshAll();
     }
 
-    async function deleteExam(id) {
-      if (!confirm('Delete this question?')) return;
-      const { error } = await client.from('exams').delete().eq('id', id);
-      if (error) {
-        alert('❌ ' + error.message);
-        return;
-      }
+    async function markPaid(id) {
+      await tryUpdate(["enrollments", "course_enrollments"], { id }, { payment_status: "paid" });
       await refreshAll();
     }
 
-    async function createQuickUser() {
-      const payload = {
-        name: document.getElementById('qcName').value.trim(),
-        email: document.getElementById('qcEmail').value.trim(),
-        username: document.getElementById('qcUsername').value.trim(),
-        password: document.getElementById('qcPassword').value.trim(),
-        payment_status: document.getElementById('qcPayment').value,
-        level: document.getElementById('qcLevel').value,
-        role: document.getElementById('qcRole').value,
-        approved: document.getElementById('qcApproved').value === 'true',
-        created_at: new Date().toISOString()
-      };
-
-      if (!payload.name || !payload.email || !payload.username || !payload.password) {
-        els.quickStatus.textContent = 'Name, email, username, and password are required.';
-        return;
-      }
-
-      const { error } = await client.from('users').upsert([payload], { onConflict: 'email' });
-      if (error) {
-        els.quickStatus.textContent = 'Could not save user.';
-        alert('❌ ' + error.message);
-        return;
-      }
-
-      els.quickStatus.textContent = 'User saved.';
-      await refreshAll();
-    }
-
-    async function assignLevel(email, course) {
-      const level = prompt('Set level for this student (beginner / intermediate / advanced):', 'beginner');
+    async function setLevelPrompt(id) {
+      const level = prompt("Set level (beginner, intermediate, advanced):", "beginner");
       if (!level) return;
-
-      const { error } = await client
-        .from('users')
-        .update({ level, course, status: 'level_assigned' })
-        .eq('email', email);
-
-      if (error) {
-        alert('❌ ' + error.message);
-        return;
-      }
-
-      await client.from('enrollments').update({ level, status: 'level_assigned' }).eq('email', email).eq('course', course);
-      alert('Level assigned.');
+      await tryUpdate(["enrollments", "course_enrollments"], { id }, { level });
       await refreshAll();
     }
 
-    async function approveByEnrollment(email, course) {
-      const username = prompt('Username to give this student:', email.split('@')[0]);
-      if (username === null) return;
-      const password = prompt('Password to give this student:', 'ruya1234');
-      if (password === null) return;
-
-      const { error } = await client
-        .from('users')
-        .upsert([{ email, username, password, approved: true, payment_status: 'paid', role: 'student', login_enabled: true, updated_at: new Date().toISOString() }], { onConflict: 'email' });
-
-      if (error) {
-        alert('❌ ' + error.message);
-        return;
-      }
-
-      await client.from('enrollments').update({ approved: true, payment_status: 'paid', status: 'approved' }).eq('email', email).eq('course', course);
-      await client.from('exam_results').update({ status: 'approved' }).eq('email', email).eq('course', course);
-      alert('Student approved and credentials saved.');
+    async function setUserApproved(id, approved) {
+      await tryUpdate("users", { id }, { approved });
       await refreshAll();
     }
 
-    async function approveFromResult(email, course) {
-      await approveByEnrollment(email, course);
-    }
-
-    async function forceApproveUser(email) {
-      const username = prompt('Username:', email.split('@')[0]);
-      if (username === null) return;
-      const password = prompt('Password:', 'ruya1234');
-      if (password === null) return;
-
-      const { error } = await client
-        .from('users')
-        .upsert([{ email, username, password, approved: true, payment_status: 'paid', role: 'student', login_enabled: true, updated_at: new Date().toISOString() }], { onConflict: 'email' });
-
-      if (error) {
-        alert('❌ ' + error.message);
-        return;
-      }
-
-      alert('User approved.');
+    async function setUserPaid(id) {
+      await tryUpdate("users", { id }, { payment_status: "paid" });
       await refreshAll();
     }
 
-    function openStudent(email) {
-      const match = state.users.find(u => String(u.email || '') === String(email || ''));
-      if (match) {
-        localStorage.setItem('ruya_user', JSON.stringify(match));
-        window.location.href = 'student.html';
+    async function createUser() {
+      const payload = {
+        name: document.getElementById("qcName").value.trim(),
+        email: document.getElementById("qcEmail").value.trim(),
+        username: document.getElementById("qcUsername").value.trim(),
+        password: document.getElementById("qcPassword").value.trim(),
+        role: document.getElementById("qcRole").value,
+        payment_status: document.getElementById("qcPayment").value,
+        level: document.getElementById("qcLevel").value,
+        approved: document.getElementById("qcPayment").value === "paid",
+        course: document.getElementById("qcLevel").value,
+        created_at: nowIso()
+      };
+      document.getElementById("qcStatus").textContent = "Saving user...";
+      try {
+        await tryInsert("users", payload);
+        document.getElementById("qcStatus").textContent = "User saved.";
+        await refreshAll();
+      } catch (err) {
+        console.error(err);
+        document.getElementById("qcStatus").textContent = "Could not save the user. Check the users table columns.";
       }
     }
 
-    window.refreshAll = refreshAll;
-    window.setTab = setTab;
-    window.createQuickUser = createQuickUser;
-    window.assignLevel = assignLevel;
-    window.approveByEnrollment = approveByEnrollment;
-    window.approveFromResult = approveFromResult;
-    window.forceApproveUser = forceApproveUser;
-    window.saveExamQuestion = saveExamQuestion;
-    window.deleteExam = deleteExam;
-    window.openStudent = openStudent;
+    async function addQuestion() {
+      const course = document.getElementById("exCourse").value.trim();
+      const question = document.getElementById("exQuestion").value.trim();
+      const options = document.getElementById("exOptions").value.split("
+").map(s => s.trim()).filter(Boolean);
+      const answer = document.getElementById("exAnswer").value.trim();
+      document.getElementById("builderStatus").textContent = "Saving question...";
+      if (!course || !question || options.length < 2 || !answer) {
+        document.getElementById("builderStatus").textContent = "Fill course, question, options, and answer.";
+        return;
+      }
+      try {
+        await tryInsert("exams", { course, question, options, correct_answer: answer, created_at: nowIso() });
+        document.getElementById("builderStatus").textContent = "Question saved.";
+        await refreshAll();
+      } catch (err) {
+        console.error(err);
+        document.getElementById("builderStatus").textContent = "Could not save question. Check the exams table columns.";
+      }
+    }
 
-    refreshAll();
+    async function seedDemo() {
+      try {
+        await tryInsert("users", {
+          name: "Demo Student",
+          email: "student@ruya.local",
+          username: "demo.student",
+          password: "123456",
+          role: "student",
+          approved: true,
+          payment_status: "paid",
+          level: "beginner",
+          course: "MEAL Systems",
+          created_at: nowIso()
+        });
+        document.getElementById("qcStatus").textContent = "Demo student added.";
+        await refreshAll();
+      } catch (err) {
+        document.getElementById("qcStatus").textContent = "Demo data could not be added.";
+      }
+    }
+
+    function logout() {
+      clearSession();
+      window.location.reload();
+    }
+
+    if (currentAdmin && currentAdmin.role === "admin") {
+      showApp();
+      refreshAll();
+    }
+
+    document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      loginStatus.textContent = "Signing in...";
+      const email = document.getElementById("adminEmail").value.trim();
+      const password = document.getElementById("adminPassword").value.trim();
+      try {
+        const rows = await tryFetch("users", { eq: { email, password, role: "admin" }, limit: 1 });
+        if (!rows.length) {
+          loginStatus.textContent = "Admin not found. Create the account in the users table first.";
+          return;
+        }
+        currentAdmin = rows[0];
+        setSession(currentAdmin);
+        showApp();
+        refreshAll();
+      } catch (err) {
+        console.error(err);
+        loginStatus.textContent = "Login failed. Check the users table and credentials.";
+      }
+    });
   </script>
 </body>
 </html>

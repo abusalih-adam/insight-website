@@ -3,240 +3,154 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Ruya Academy is where students enroll, take course-based exams, and access their dashboard after approval." />
+  <meta name="description" content="Ruya Academy is where students enroll, take a course test, and move into the classroom after approval." />
   <meta name="theme-color" content="#07111f" />
   <title>Ruya Academy | Enroll. Exam. Grow.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <style>
-    :root{
-      --bg:#06101d; --bg2:#0b172b; --text:#eef5ff; --muted:#afbdd3; --line:rgba(255,255,255,.12);
-      --accent:#42d6c0; --accent2:#6ea8fe; --accent3:#f5b971; --good:#7df0c5; --warn:#ffd27a; --danger:#ff9b9b;
-      --shadow:0 20px 60px rgba(0,0,0,.35); --radius:22px; --container:1180px;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0; font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(66,214,192,.16), transparent 30%),
-        radial-gradient(circle at top right, rgba(110,168,254,.14), transparent 35%),
-        linear-gradient(180deg,var(--bg),var(--bg2));
-      min-height:100vh; line-height:1.5; overflow-x:hidden;
-    }
-    a{color:inherit;text-decoration:none} button,input,textarea,select{font:inherit}
-    .container{width:min(var(--container), calc(100% - 32px)); margin:0 auto}
-    .panel{border:1px solid var(--line); background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05)); border-radius:var(--radius); box-shadow:var(--shadow)}
-    .btn{border:0; border-radius:999px; padding:12px 18px; font-weight:700; cursor:pointer; transition:.2s; display:inline-flex; align-items:center; justify-content:center; gap:8px; white-space:nowrap}
-    .btn:hover{transform:translateY(-1px)}
-    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#03101d}
-    .btn-ghost{background:rgba(255,255,255,.08); color:var(--text); border:1px solid var(--line)}
-    .btn-dark{background:rgba(255,255,255,.04); color:var(--text); border:1px solid var(--line)}
-    input,textarea,select{
-      width:100%; padding:14px 16px; border-radius:14px; border:1px solid var(--line);
-      background:#0b172b; color:var(--text); outline:none;
-    }
-    textarea{min-height:120px; resize:vertical}
-    .topbar{position:sticky; top:0; z-index:50; backdrop-filter:blur(16px); background:rgba(7,17,31,.72); border-bottom:1px solid var(--line)}
-    .topbar-inner{display:flex; align-items:center; justify-content:space-between; gap:18px; padding:16px 0; flex-wrap:wrap}
-    .brand{display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px; min-width:220px}
-    .mark{width:44px; height:44px; border-radius:14px; display:grid; place-items:center; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#03101d; font-weight:900; box-shadow:var(--shadow)}
-    .nav-links{display:flex; gap:18px; color:var(--muted); flex-wrap:wrap; justify-content:center}
-    .nav-links a:hover{color:var(--text)}
-    .hero{padding:72px 0 20px; display:grid; grid-template-columns:1.05fr .95fr; gap:28px; align-items:center}
-    .eyebrow{display:inline-flex; gap:8px; align-items:center; padding:10px 14px; border:1px solid var(--line); border-radius:999px; background:rgba(255,255,255,.05); color:var(--muted); margin-bottom:18px; font-size:14px}
-    h1{font-size:clamp(42px,6vw,72px); line-height:.98; margin:0 0 18px; letter-spacing:-1.6px}
-    .gradient-text{background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3)); -webkit-background-clip:text; background-clip:text; color:transparent}
-    .lead{font-size:18px; line-height:1.75; color:var(--muted); max-width:62ch; margin-bottom:26px}
-    .hero-actions{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px}
-    .stats{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px}
-    .stat{padding:16px; border-radius:18px; background:rgba(255,255,255,.05); border:1px solid var(--line)}
-    .stat strong{display:block; font-size:22px; margin-bottom:4px}
-    .stat span{color:var(--muted); font-size:14px}
-    .hero-card{padding:22px; overflow:hidden; position:relative}
-    .hero-card::after{content:""; position:absolute; right:-120px; bottom:-120px; width:260px; height:260px; border-radius:50%; background:radial-gradient(circle, rgba(66,214,192,.28), transparent 66%); pointer-events:none}
-    .mini-label{color:var(--muted); font-size:13px; text-transform:uppercase; letter-spacing:1.2px; margin-bottom:14px}
-    .dashboard-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px}
-    .dashboard-card{padding:16px; border-radius:18px; background:rgba(255,255,255,.07); border:1px solid var(--line)}
-    .dashboard-card h3{margin:0 0 8px; font-size:16px} .dashboard-card p{margin:0; color:var(--muted); line-height:1.6; font-size:14px}
-    .section{padding:28px 0} .section-head{display:flex; justify-content:space-between; align-items:end; gap:18px; flex-wrap:wrap; margin-bottom:18px}
-    .section-head h2{margin:0; font-size:32px; letter-spacing:-.6px} .section-head p{margin:0; color:var(--muted); max-width:72ch; line-height:1.7}
-    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
-    .card{padding:20px; border-radius:20px; background:rgba(255,255,255,.06); border:1px solid var(--line)}
-    .card h3{margin:0 0 10px} .card p{margin:0; color:var(--muted); line-height:1.7}
-    .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px} .full{grid-column:1/-1}
-    .status{margin-top:12px; min-height:22px; color:var(--accent); font-size:14px}
-    .footer{padding:34px 0 50px; color:var(--muted); border-top:1px solid var(--line); margin-top:30px}
-    .footer-inner{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap}
-    .chip{display:inline-flex; padding:7px 11px; border-radius:999px; background:rgba(255,255,255,.08); border:1px solid var(--line); color:var(--muted); font-size:13px; margin-right:8px; margin-bottom:8px}
-    .chip.good{color:var(--good)} .chip.warn{color:var(--warn)} .chip.bad{color:var(--danger)}
-    .note{color:var(--muted); font-size:13px; line-height:1.7; margin-top:10px}
-    @media (max-width:980px){.hero,.grid-2{grid-template-columns:1fr} .topbar-inner{flex-direction:column; align-items:flex-start}}
-    @media (max-width:760px){.stats,.dashboard-grid,.form-grid{grid-template-columns:1fr} .btn{width:100%} .hero-actions{flex-direction:column} .nav-links{justify-content:flex-start}}
-  </style>
+  <script src="shared.js"></script>
 </head>
 <body>
   <header class="topbar">
     <div class="container topbar-inner">
-      <a class="brand" href="index.html" aria-label="Ruya home">
+      <a class="brand" href="index.html">
         <div class="mark">R</div>
-        <div>
-          <div>Ruya Academy</div>
-          <small class="muted">Enroll • Exam • Grow</small>
-        </div>
+        <div><div>Ruya Academy</div><small style="color:var(--muted)">Enroll • Exam • Grow</small></div>
       </a>
-
-      <nav class="nav-links" aria-label="Main navigation">
+      <nav class="nav-links">
         <a href="#courses">Courses</a>
-        <a href="#join">Join</a>
-        <a href="#login">Login</a>
-        <a href="index.html">Main Platform</a>
+        <a href="#journey">Journey</a>
+        <a href="#join">Register</a>
       </nav>
-
-      <div class="nav-actions">
-        <a class="btn btn-ghost" href="index.html">Back to Ruya</a>
-        <button class="btn btn-primary" type="button" onclick="document.getElementById('login').scrollIntoView({behavior:'smooth'})">Sign In</button>
-      </div>
+      <a class="btn btn-ghost" href="index.html">Back to Ruya</a>
     </div>
   </header>
 
   <main class="container">
     <section class="hero">
       <div>
-        <div class="eyebrow">🎓 Practical learning for real-world skills</div>
-        <h1>Learn. <span class="gradient-text">Grow.</span><br />Work with confidence.</h1>
+        <span class="eyebrow">🎓 Practical learning for real-world skills</span>
+        <h1>Learn. Grow. <span class="gradient-text">Work</span> with confidence.</h1>
         <p class="lead">
-          Students enroll in a course, immediately take the course-based exam, and then wait for admin review, payment confirmation, and account approval.
+          Ruya Academy is a practical learning path for data, MEAL, dashboards, leadership, research, and AI basics.
+          Students register from the website, take a course exam, and then move into the classroom after review and approval.
         </p>
-
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#join">Join a Course</a>
-          <a class="btn btn-dark" href="#courses">See Courses</a>
-          <button class="btn btn-ghost" type="button" onclick="document.getElementById('login').scrollIntoView({behavior:'smooth'})">Login</button>
+          <a class="btn btn-primary" href="#join">Register Now</a>
+          <a class="btn btn-ghost" href="#courses">See Courses</a>
+          <a class="btn btn-dark" href="student.html">Student Login</a>
         </div>
-
         <div class="stats">
-          <div class="stat panel">
-            <strong>One flow</strong>
-            <span>Enroll → exam → approval</span>
-          </div>
-          <div class="stat panel">
-            <strong>Course-based</strong>
-            <span>Right exam for the right course</span>
-          </div>
-          <div class="stat panel">
-            <strong>Dashboard ready</strong>
-            <span>Access after approval</span>
-          </div>
+          <div class="stat"><strong>Hands-on</strong><span>Exercises and practical tasks</span></div>
+          <div class="stat"><strong>Flexible</strong><span>Online and offline ready</span></div>
+          <div class="stat"><strong>Career-ready</strong><span>Built for real work</span></div>
         </div>
       </div>
 
-      <div class="panel hero-card">
-        <div class="mini-label">Academy overview</div>
-        <h2 style="margin:0 0 6px; font-size:28px;">What happens here</h2>
-        <p style="margin:0; color:var(--muted); line-height:1.65;">
-          This is the operational front door for the learning system: enrollment, sign-in, exam assignment, certificate flow, and support.
+      <div class="panel" style="padding:22px;">
+        <div class="eyebrow" style="margin-bottom:12px;">Academy overview</div>
+        <h2 style="margin:0 0 10px;">What Ruya Academy does</h2>
+        <p style="margin:0;color:var(--muted);line-height:1.75;">
+          We teach useful skills, guide learners through practice, and help the best learners grow into real project opportunities.
         </p>
 
-        <div class="dashboard-grid">
-          <div class="dashboard-card"><h3>📝 Enroll</h3><p>Register and choose a course</p></div>
-          <div class="dashboard-card"><h3>🧪 Exam</h3><p>Take the course-specific test</p></div>
-          <div class="dashboard-card"><h3>🧑‍💼 Admin</h3><p>Review, approve, and assign level</p></div>
-          <div class="dashboard-card"><h3>🎓 Dashboard</h3><p>Unlock after payment and approval</p></div>
+        <div class="grid-2" style="margin-top:16px;">
+          <div class="card"><h3>📚 Learn</h3><p>Understand tools and concepts.</p></div>
+          <div class="card"><h3>🛠️ Practice</h3><p>Apply skills in exercises.</p></div>
+          <div class="card"><h3>✅ Validate</h3><p>Tests, tasks, and certificates.</p></div>
+          <div class="card"><h3>💼 Work</h3><p>Join real Ruya opportunities.</p></div>
         </div>
       </div>
     </section>
 
-    <section class="section reveal" id="courses">
+    <section class="section" id="courses">
       <div class="section-head">
         <div>
           <h2>Courses</h2>
-          <p>Choose one course and use the same enrollment flow for every learner.</p>
+          <p>Each course is practical, short, and focused on real skill-building.</p>
         </div>
       </div>
-
-      <div class="grid-2">
-        <article class="card"><h3>Data Collection with Kobo</h3><p>Survey design, question building, and quality data collection.</p></article>
-        <article class="card"><h3>MEAL Foundations</h3><p>Monitoring, evaluation, accountability, and learning workflows.</p></article>
-        <article class="card"><h3>Excel for Reporting</h3><p>Data cleaning, summaries, pivots, and reporting dashboards.</p></article>
-        <article class="card"><h3>Field Operations</h3><p>Practical operations, coordination, and implementation tools.</p></article>
+      <div class="grid-3">
+        <div class="card"><h3>📋 Data Collection with Kobo</h3><p>Learn survey design, question building, and collecting quality data.</p></div>
+        <div class="card"><h3>📊 Excel for Data Analysis</h3><p>Clean data, organize files, and do practical analysis using Excel tools.</p></div>
+        <div class="card"><h3>📈 Dashboards & Visualization</h3><p>Turn data into clear visuals and reporting outputs.</p></div>
+        <div class="card"><h3>⚙️ MEAL Systems</h3><p>Understand monitoring, evaluation, accountability, and learning systems.</p></div>
+        <div class="card"><h3>🧠 Leadership & Management</h3><p>Build teamwork, communication, and work organization skills.</p></div>
+        <div class="card"><h3>🤖 AI Basics for Work</h3><p>Use AI for writing, analysis, ideas, and productivity.</p></div>
       </div>
     </section>
 
-    <section class="section reveal" id="join">
+    <section class="section" id="journey">
       <div class="section-head">
         <div>
-          <h2>Join a Course</h2>
-          <p>Once the student registers, the system immediately sends them to the exam for the chosen course.</p>
+          <h2>Student journey</h2>
+          <p>This is how a learner moves through Ruya Academy from registration to opportunity.</p>
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="card"><h3>1 Register</h3><p>Choose a course and submit your details through the form.</p></div>
+        <div class="card"><h3>2 Learn</h3><p>Join the course, attend sessions, and complete exercises.</p></div>
+        <div class="card"><h3>3 Practice</h3><p>Do assignments, take tests, and build confidence.</p></div>
+        <div class="card"><h3>4 Grow</h3><p>Request a certificate and move toward project opportunities.</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="join">
+      <div class="section-head">
+        <div>
+          <h2>Register for a course</h2>
+          <p>After registration, the student goes straight to the exam page.</p>
         </div>
       </div>
 
       <div class="grid-2">
-        <div class="panel card">
-          <h3>Enrollment form</h3>
-          <form id="enrollForm">
-            <div class="form-grid" style="margin-top:14px;">
-              <div>
-                <label class="note">Full name</label>
-                <input id="enroll-name" placeholder="Student name" required />
-              </div>
-              <div>
-                <label class="note">Email</label>
-                <input id="enroll-email" type="email" placeholder="student@email.com" required />
-              </div>
-              <div>
-                <label class="note">Phone</label>
-                <input id="enroll-phone" placeholder="+249..." />
-              </div>
-              <div>
-                <label class="note">Course</label>
-                <select id="enroll-course" required>
-                  <option value="">Select course</option>
-                  <option>Data Collection with Kobo</option>
-                  <option>MEAL Foundations</option>
-                  <option>Excel for Reporting</option>
-                  <option>Field Operations</option>
-                </select>
-              </div>
-              <div class="full">
-                <label class="note">Notes</label>
-                <textarea id="enroll-note" placeholder="Why do you want to join this course?"></textarea>
-              </div>
-              <div class="full">
-                <button class="btn btn-primary" type="submit">Join Course</button>
-              </div>
+        <div class="panel" style="padding:22px;">
+          <h3 style="margin-top:0;">Join Ruya Academy</h3>
+          <p style="color:var(--muted);line-height:1.7;margin-top:0;">Fill in the form. The request is saved for admin review, and then the exam opens automatically.</p>
+
+          <form id="registerForm" class="form-grid" style="margin-top:14px;">
+            <div>
+              <label class="small" style="color:var(--muted)">Full name</label>
+              <input id="fullName" placeholder="Enter your name" required />
+            </div>
+            <div>
+              <label class="small" style="color:var(--muted)">Email</label>
+              <input id="email" type="email" placeholder="name@example.com" required />
+            </div>
+            <div class="full">
+              <label class="small" style="color:var(--muted)">Training topic</label>
+              <select id="course" required>
+                <option value="">Choose one course</option>
+                <option>Data Collection with Kobo</option>
+                <option>Excel for Data Analysis</option>
+                <option>Dashboards & Visualization</option>
+                <option>MEAL Systems</option>
+                <option>Leadership & Management</option>
+                <option>AI Basics for Work</option>
+              </select>
+            </div>
+            <div class="full">
+              <label class="small" style="color:var(--muted)">Why do you want to join?</label>
+              <textarea id="reason" placeholder="Tell us briefly..." required></textarea>
+            </div>
+            <div class="full" style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button class="btn btn-primary" type="submit">Register & Take Exam</button>
+              <a class="btn btn-ghost" href="student.html">Already approved? Log in</a>
             </div>
           </form>
-          <div class="status" id="enrollStatus"></div>
-          <div class="note">After submission, you will be taken directly to the exam for the selected course.</div>
+
+          <div class="status" id="registerStatus"></div>
         </div>
 
-        <div class="panel card" id="login">
-          <h3>Login</h3>
-          <p class="note">Approved students and admins can sign in here.</p>
-
-          <div class="form-grid" style="margin-top:14px;">
-            <div class="full">
-              <label class="note">Username or email</label>
-              <input id="login-identifier" placeholder="username or email" />
-            </div>
-            <div class="full">
-              <label class="note">Password</label>
-              <input id="login-password" type="password" placeholder="password" />
-            </div>
-            <div class="full">
-              <button class="btn btn-dark" type="button" onclick="handleLogin()">Sign In</button>
-            </div>
-          </div>
-          <div class="status" id="loginStatus"></div>
-
-          <div style="margin-top:18px;">
-            <span class="chip good">Admin review</span>
-            <span class="chip warn">Payment confirmation</span>
-            <span class="chip">Dashboard access</span>
-          </div>
+        <div class="panel" style="padding:22px;">
+          <h3 style="margin-top:0;">How it works</h3>
+          <div class="card" style="margin-bottom:12px;"><strong>Register → Join → Learn → Practice → Request certificate</strong></div>
+          <div class="card" style="margin-bottom:12px;"><strong>Certificates</strong><p>Issued after completion of the required tasks and tests.</p></div>
+          <div class="card" style="margin-bottom:12px;"><strong>Best learners</strong><p>May be invited to join Ruya project opportunities and real work.</p></div>
+          <div class="card"><strong>Growth roadmap</strong><p>Public academy, certificate checks, student tracking, and future project matching.</p></div>
         </div>
       </div>
     </section>
@@ -245,116 +159,36 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div>© 2026 Ruya Academy</div>
-      <div>Enroll → exam → review → payment → login → student dashboard</div>
+      <div>Public academy → exam → review → classroom</div>
     </div>
   </footer>
 
   <script>
-    const SUPABASE_URL = "https://xtlvhdtmocshycbunoki.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_mY1y5Sju44l-M4prPHvajQ_n_UznjaD";
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const { tryInsert, nowIso } = Ruya;
+    const form = document.getElementById("registerForm");
+    const statusEl = document.getElementById("registerStatus");
 
-    const enrollForm = document.getElementById('enrollForm');
-    const enrollStatus = document.getElementById('enrollStatus');
-    const loginStatus = document.getElementById('loginStatus');
-
-    function safeText(value) {
-      return String(value ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    }
-
-    enrollForm.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-
-      const name = document.getElementById('enroll-name').value.trim();
-      const email = document.getElementById('enroll-email').value.trim();
-      const phone = document.getElementById('enroll-phone').value.trim();
-      const course = document.getElementById('enroll-course').value.trim();
-      const note = document.getElementById('enroll-note').value.trim();
-
-      if (!name || !email || !course) {
-        enrollStatus.textContent = 'Please fill name, email, and course.';
-        return;
-      }
-
-      enrollStatus.textContent = 'Submitting enrollment...';
-
+      statusEl.textContent = "Saving your registration...";
       const payload = {
-        name,
-        email,
-        phone,
-        course,
-        note,
-        status: 'pending_review',
-        payment_status: 'pending',
+        name: document.getElementById("fullName").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        course: document.getElementById("course").value,
+        reason: document.getElementById("reason").value.trim(),
         approved: false,
-        exam_passed: false,
-        created_at: new Date().toISOString()
+        payment_status: "pending",
+        level: "beginner",
+        created_at: nowIso()
       };
-
-      const { error } = await client.from('enrollments').insert([payload]);
-
-      if (error) {
-        console.error(error);
-        enrollStatus.textContent = 'Enrollment failed.';
-        alert('❌ ' + error.message);
-        return;
+      try {
+        await tryInsert(["enrollments", "course_enrollments"], payload);
+      } catch (err) {
+        console.error(err);
       }
-
-      localStorage.setItem('ruya_exam_pending', JSON.stringify({ name, email, course }));
-
-      enrollStatus.textContent = 'Enrollment submitted. Opening exam...';
-      window.location.href = `exam.html?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&course=${encodeURIComponent(course)}`;
+      localStorage.setItem("ruya_pending_enrollment", JSON.stringify(payload));
+      window.location.href = `exam.html?name=${encodeURIComponent(payload.name)}&email=${encodeURIComponent(payload.email)}&course=${encodeURIComponent(payload.course)}`;
     });
-
-    async function handleLogin() {
-      const identifier = document.getElementById('login-identifier').value.trim();
-      const password = document.getElementById('login-password').value.trim();
-
-      if (!identifier || !password) {
-        loginStatus.textContent = 'Enter your username/email and password.';
-        return;
-      }
-
-      loginStatus.textContent = 'Checking credentials...';
-
-      const { data, error } = await client
-        .from('users')
-        .select('*')
-        .or(`email.eq.${identifier},username.eq.${identifier}`)
-        .eq('password', password)
-        .limit(1);
-
-      if (error) {
-        console.error(error);
-        loginStatus.textContent = 'Login failed.';
-        return;
-      }
-
-      if (!data || !data.length) {
-        loginStatus.textContent = 'Wrong credentials.';
-        return;
-      }
-
-      const user = data[0];
-
-      localStorage.setItem('ruya_user', JSON.stringify(user));
-
-      if (user.role === 'admin') {
-        loginStatus.textContent = 'Welcome admin. Redirecting...';
-        window.location.href = 'admin.html';
-        return;
-      }
-
-      if (!user.approved) {
-        loginStatus.textContent = 'Your account is not approved yet.';
-        alert('Your account is not approved yet.');
-        return;
-      }
-
-      loginStatus.textContent = 'Welcome. Redirecting to dashboard...';
-      window.location.href = 'student.html';
-    }
-    window.handleLogin = handleLogin;
   </script>
 </body>
 </html>
