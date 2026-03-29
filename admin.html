@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Ruya Academy admin control center for enrollments, users, certificates, and messages." />
+  <meta name="description" content="Ruya Academy admin control center for enrollments, exams, users, approvals, and exam builder." />
   <meta name="theme-color" content="#07111f" />
   <title>Ruya Academy | Admin Control Center</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,203 +11,47 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
-:root{
-  --bg:#06101d;
-  --bg2:#0b172b;
-  --text:#eef5ff;
-  --muted:#afbdd3;
-  --line:rgba(255,255,255,.12);
-  --accent:#42d6c0;
-  --accent2:#6ea8fe;
-  --accent3:#f5b971;
-  --good:#7df0c5;
-  --warn:#ffd27a;
-  --danger:#ff9b9b;
-  --shadow:0 20px 60px rgba(0,0,0,.35);
-  --radius:22px;
-  --radius-sm:14px;
-  --container:1180px;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  color:var(--text);
-  background:
-    radial-gradient(circle at top left, rgba(66,214,192,.16), transparent 30%),
-    radial-gradient(circle at top right, rgba(110,168,254,.14), transparent 35%),
-    linear-gradient(180deg,var(--bg),var(--bg2));
-  min-height:100vh;
-  line-height:1.5;
-  overflow-x:hidden;
-}
-a{color:inherit;text-decoration:none}
-img,video{max-width:100%;display:block}
-button,input,textarea,select{font:inherit}
-.container{width:min(var(--container), calc(100% - 32px)); margin:0 auto}
-.panel{
-  border:1px solid var(--line);
-  background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-}
-.btn{
-  border:0;
-  border-radius:999px;
-  padding:12px 18px;
-  font-weight:700;
-  cursor:pointer;
-  transition:transform .2s ease, opacity .2s ease, background .2s ease, box-shadow .2s ease;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  white-space:nowrap;
-}
-.btn:hover{transform:translateY(-1px)}
-.btn:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible{
-  outline:2px solid var(--accent2);
-  outline-offset:2px;
-}
-.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#03101d; box-shadow:0 14px 35px rgba(66,214,192,.18)}
-.btn-ghost{background:rgba(255,255,255,.08); color:var(--text); border:1px solid var(--line)}
-.btn-dark{background:rgba(255,255,255,.04); color:var(--text); border:1px solid var(--line)}
-.btn-danger{background:rgba(255,125,125,.14); color:#ffdede; border:1px solid rgba(255,125,125,.28)}
-input,textarea,select{
-  width:100%;
-  padding:14px 16px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:#0b172b;
-  color:var(--text);
-  outline:none;
-}
-input::placeholder,textarea::placeholder{color:#7f90aa}
-textarea{min-height:120px; resize:vertical}
-select{appearance:none; -webkit-appearance:none; -moz-appearance:none; background-color:#0b172b; color:#eef5ff}
-select option{background:#0b172b; color:#eef5ff}
-.section{
-  padding:28px 0;
-}
-.section-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:end;
-  gap:18px;
-  flex-wrap:wrap;
-  margin-bottom:18px;
-}
-.section-head h2{
-  margin:0;
-  font-size:32px;
-  letter-spacing:-.6px;
-}
-.section-head p{
-  margin:0;
-  color:var(--muted);
-  max-width:72ch;
-  line-height:1.7;
-}
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,.06);
-  border:1px solid var(--line);
-  color:var(--muted);
-  font-size:13px;
-}
-.small{font-size:13px}
-.muted{color:var(--muted)}
-.status{margin-top:12px; min-height:22px; color:var(--accent); font-size:14px}
-.table-wrap{overflow:auto; border-radius:18px; border:1px solid var(--line)}
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:980px;
-  background:rgba(255,255,255,.03);
-}
-th,td{
-  padding:12px 10px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  vertical-align:top;
-  text-align:left;
-  font-size:14px;
-}
-th{
-  position:sticky; top:0;
-  background:#0b172b;
-  color:var(--muted);
-  z-index:1;
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-}
-tr:hover td{background:rgba(255,255,255,.02)}
-.row-actions{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
-.inline-select{min-width:140px; padding:9px 10px; border-radius:12px}
-.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
-.grid-3{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
-.grid-4{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px}
-.card{
-  padding:20px;
-  border-radius:20px;
-  background:rgba(255,255,255,.06);
-  border:1px solid var(--line);
-}
-.card h3{margin:0 0 10px}
-.card p{margin:0; color:var(--muted); line-height:1.7}
-.icon{
-  width:46px; height:46px; border-radius:14px;
-  display:grid; place-items:center;
-  background:rgba(255,255,255,.08);
-  margin-bottom:14px;
-  font-size:20px;
-}
-@keyframes fadeUp { from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:translateY(0)} }
-.reveal{opacity:0; transform:translateY(18px); transition:.7s ease}
-.reveal.show{opacity:1; transform:translateY(0)}
-@media (max-width:1100px){
-  .grid-2,.grid-3,.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media (max-width:760px){
-  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
-  .section-head h2{font-size:26px}
-  .btn{width:100%}
-}
-
-    .topbar{position:sticky; top:0; z-index:50; backdrop-filter:blur(16px); background:rgba(7,17,31,.72); border-bottom:1px solid var(--line)}
-    .topbar-inner{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 0; flex-wrap:wrap}
-    .brand{display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px}
-    .mark{width:44px; height:44px; border-radius:14px; display:grid; place-items:center; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#03101d; font-weight:900; box-shadow:var(--shadow)}
-    .hero{padding:26px 0 12px; display:grid; grid-template-columns:1.08fr .92fr; gap:16px}
+    :root{--bg:#06101d;--bg2:#0b172b;--text:#eef5ff;--muted:#afbdd3;--line:rgba(255,255,255,.12);--accent:#42d6c0;--accent2:#6ea8fe;--accent3:#f5b971;--good:#7df0c5;--warn:#ffd27a;--danger:#ff9b9b;--shadow:0 20px 60px rgba(0,0,0,.35);--radius:22px;--container:1180px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at top left, rgba(66,214,192,.16), transparent 30%),radial-gradient(circle at top right, rgba(110,168,254,.14), transparent 35%),linear-gradient(180deg,var(--bg),var(--bg2));min-height:100vh;line-height:1.5;overflow-x:hidden}
+    a{color:inherit;text-decoration:none} button,input,textarea,select{font:inherit}
+    .container{width:min(var(--container), calc(100% - 32px)); margin:0 auto}
+    .panel{border:1px solid var(--line);background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));border-radius:var(--radius);box-shadow:var(--shadow)}
+    .btn{border:0;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+    .btn:hover{transform:translateY(-1px)} .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#03101d} .btn-ghost{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--line)} .btn-dark{background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--line)} .btn-danger{background:rgba(255,125,125,.14);color:#ffdede;border:1px solid rgba(255,125,125,.28)}
+    input,textarea,select{width:100%;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:#0b172b;color:var(--text);outline:none}
+    .topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);background:rgba(7,17,31,.72);border-bottom:1px solid var(--line)}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.3px}
+    .mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#03101d;font-weight:900;box-shadow:var(--shadow)}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{display:inline-flex;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--muted);font-size:12px}
+    .hero{padding:26px 0 12px;display:grid;grid-template-columns:1.08fr .92fr;gap:16px}
     .hero-card{padding:22px}
-    .headline{font-size:clamp(34px,5vw,54px); line-height:1; letter-spacing:-1.3px; margin:12px 0 10px}
-    .lead{margin:0; color:var(--muted); line-height:1.75; max-width:72ch}
-    .stats{margin-top:18px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px}
-    .stat{padding:16px; border-radius:18px; background:rgba(255,255,255,.06); border:1px solid var(--line)}
-    .stat strong{display:block; font-size:24px; margin-bottom:4px}
-    .stat span{color:var(--muted); font-size:13px}
+    .headline{font-size:clamp(34px,5vw,54px);line-height:1;letter-spacing:-1.3px;margin:12px 0 10px}
+    .lead{margin:0;color:var(--muted);line-height:1.75;max-width:72ch}
+    .stats{margin-top:18px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .stat{padding:16px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+    .stat strong{display:block;font-size:24px;margin-bottom:4px} .stat span{color:var(--muted);font-size:13px}
     .box{padding:18px}
-    .section{margin-top:18px; padding:18px}
-    .toolbar{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-    .search{min-width:min(420px,100%); flex:1}
-    .tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px}
-    .tab{padding:10px 14px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.05); color:var(--text); cursor:pointer; font-weight:700}
-    .tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#03101d}
-    .quick-form{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; margin-top:12px}
-    .quick-form .full{grid-column:1/-1}
-    .quick-form .span-2{grid-column:span 2}
-    .footer{margin:18px 0 34px; color:var(--muted); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; border-top:1px solid var(--line); padding-top:14px}
-    .chips{display:flex; gap:8px; flex-wrap:wrap}
-    .chip{display:inline-flex; padding:6px 10px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.05); color:var(--muted); font-size:12px}
-    .chip.good{color:var(--good)}
-    .chip.warn{color:var(--warn)}
-    .chip.bad{color:var(--danger)}
-    @media (max-width:1100px){.hero{grid-template-columns:1fr} .stats{grid-template-columns:repeat(2,minmax(0,1fr))} .quick-form{grid-template-columns:repeat(2,minmax(0,1fr))} .span-2{grid-column:span 1}}
+    .section{margin-top:18px;padding:18px} .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;flex-wrap:wrap;margin-bottom:18px}
+    .section-head h2{margin:0;font-size:32px;letter-spacing:-.6px} .section-head p{margin:0;color:var(--muted);max-width:72ch;line-height:1.7}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center} .search{min-width:min(420px,100%);flex:1}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px} .tab{padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);cursor:pointer;font-weight:700} .tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#03101d}
+    .quick-form{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:12px} .quick-form .full{grid-column:1/-1} .quick-form .span-2{grid-column:span 2} .quick-form .span-3{grid-column:span 3}
+    .footer{margin:18px 0 34px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:14px}
+    .table-wrap{overflow:auto;border-radius:18px;border:1px solid var(--line)}
+    table{width:100%;border-collapse:collapse;min-width:980px;background:rgba(255,255,255,.03)}
+    th,td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,.08);vertical-align:top;text-align:left;font-size:14px}
+    th{position:sticky;top:0;background:#0b172b;color:var(--muted);z-index:1;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+    .row-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .status{margin-top:12px;min-height:22px;color:var(--accent);font-size:14px}
+    .muted{color:var(--muted)}
+    .small{font-size:13px}
+    .inline-select{min-width:140px;padding:9px 10px;border-radius:12px}
+    .pill{display:inline-flex;padding:7px 11px;border-radius:999px;font-size:13px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--muted);margin-right:8px;margin-bottom:8px}
+    .pill.good{color:var(--good)} .pill.warn{color:var(--warn)} .pill.bad{color:var(--danger)}
+    @media (max-width:1100px){.hero{grid-template-columns:1fr} .stats{grid-template-columns:repeat(2,minmax(0,1fr))} .quick-form{grid-template-columns:repeat(2,minmax(0,1fr))} .span-2,.span-3{grid-column:span 1}}
     @media (max-width:760px){.stats,.quick-form{grid-template-columns:1fr} .search{min-width:100%} .btn{width:100%} .toolbar{width:100%}}
   </style>
 </head>
@@ -216,22 +60,19 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="container topbar-inner">
       <a class="brand" href="academy.html" aria-label="Back to academy">
         <div class="mark">R</div>
-        <div>
-          <div>Admin Control Center</div>
-          <small class="muted">Ruya Academy</small>
-        </div>
+        <div><div>Admin Control Center</div><small class="muted">Ruya Academy</small></div>
       </a>
 
       <div class="chips">
         <span class="chip">👥 Users</span>
         <span class="chip">📝 Enrollments</span>
-        <span class="chip">🎓 Certificates</span>
-        <span class="chip">💬 Messages</span>
+        <span class="chip">🧪 Exams</span>
+        <span class="chip">🎓 Results</span>
       </div>
 
       <div class="toolbar">
         <button class="btn btn-dark" onclick="refreshAll()">Refresh</button>
-        <button class="btn btn-primary" onclick="exportCurrent()">Export CSV</button>
+        <button class="btn btn-primary" onclick="setTab('builder')">Add Exam Question</button>
         <a class="btn btn-ghost" href="academy.html">Back to Academy</a>
       </div>
     </div>
@@ -240,61 +81,55 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <main class="container">
     <section class="hero">
       <div class="panel hero-card">
-        <span class="badge">🚀 Full control</span>
-        <h1 class="headline">Manage students, levels, payment, and certificate requests.</h1>
+        <span class="chip">🚀 Full control</span>
+        <h1 class="headline">Manage enrollments, exams, users, approval, and credentials.</h1>
         <p class="lead">
-          This page is protected by role check. Only accounts with role <strong>admin</strong> should use it.
-          From here you can review enrollments, create users, update status, and open any student page.
+          Only admin accounts should use this page. From here you review enrollments, create or edit exam questions, see exam results, assign levels, and approve students for login.
         </p>
 
         <div class="stats">
           <div class="stat"><strong id="countEnrollments">0</strong><span>Enrollments</span></div>
           <div class="stat"><strong id="countUsers">0</strong><span>Users</span></div>
-          <div class="stat"><strong id="countCerts">0</strong><span>Certificate requests</span></div>
-          <div class="stat"><strong id="countMessages">0</strong><span>Messages</span></div>
+          <div class="stat"><strong id="countResults">0</strong><span>Exam results</span></div>
+          <div class="stat"><strong id="countQuestions">0</strong><span>Exam questions</span></div>
         </div>
       </div>
 
       <div class="panel box">
-        <h2 style="margin:0 0 8px;">Create / update user</h2>
-        <p class="muted" style="margin:0 0 14px; line-height:1.7;">
-          Create students or more admins, then promote a learner after payment.
-        </p>
-
+        <h2 style="margin:0 0 8px;">Quick create user</h2>
+        <p class="muted" style="margin:0 0 14px; line-height:1.7;">Create or update student credentials after payment.</p>
         <div class="quick-form">
-          <div class="span-2">
+          <div class="span-3">
             <label class="small muted">Name</label>
             <input id="qcName" placeholder="Student name" />
           </div>
-          <div class="span-2">
+          <div class="span-3">
             <label class="small muted">Email</label>
             <input id="qcEmail" placeholder="student@email.com" />
           </div>
-          <div>
+          <div class="span-2">
+            <label class="small muted">Username</label>
+            <input id="qcUsername" placeholder="username" />
+          </div>
+          <div class="span-2">
             <label class="small muted">Password</label>
             <input id="qcPassword" placeholder="Set password" />
           </div>
           <div>
             <label class="small muted">Payment</label>
-            <select id="qcPayment">
-              <option value="pending">pending</option>
-              <option value="paid">paid</option>
-            </select>
+            <select id="qcPayment"><option value="pending">pending</option><option value="paid">paid</option></select>
           </div>
           <div>
             <label class="small muted">Level</label>
-            <select id="qcLevel">
-              <option value="beginner">beginner</option>
-              <option value="intermediate">intermediate</option>
-              <option value="advanced">advanced</option>
-            </select>
+            <select id="qcLevel"><option value="beginner">beginner</option><option value="intermediate">intermediate</option><option value="advanced">advanced</option></select>
           </div>
           <div>
             <label class="small muted">Role</label>
-            <select id="qcRole">
-              <option value="student">student</option>
-              <option value="admin">admin</option>
-            </select>
+            <select id="qcRole"><option value="student">student</option><option value="admin">admin</option></select>
+          </div>
+          <div>
+            <label class="small muted">Approved</label>
+            <select id="qcApproved"><option value="false">false</option><option value="true">true</option></select>
           </div>
           <div class="full">
             <button class="btn btn-primary" onclick="createQuickUser()">Save User</button>
@@ -308,7 +143,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="section-head">
         <div>
           <h2>Operations</h2>
-          <p>Switch between enrollments, users, certificate requests, and messages. Search works in every tab.</p>
+          <p>Switch between enrollments, exam results, users, and exam builder. Search works in every tab.</p>
         </div>
         <div class="toolbar">
           <input class="search" id="searchInput" placeholder="Search by name, email, course, status..." oninput="renderActiveTab()" />
@@ -317,9 +152,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <div class="tabs">
         <button class="tab active" data-tab="enrollments" onclick="setTab('enrollments')">Enrollments</button>
+        <button class="tab" data-tab="results" onclick="setTab('results')">Exam Results</button>
         <button class="tab" data-tab="users" onclick="setTab('users')">Users</button>
-        <button class="tab" data-tab="certificates" onclick="setTab('certificates')">Certificates</button>
-        <button class="tab" data-tab="messages" onclick="setTab('messages')">Messages</button>
+        <button class="tab" data-tab="builder" onclick="setTab('builder')">Exam Builder</button>
       </div>
 
       <div id="tableArea" class="table-wrap"></div>
@@ -328,7 +163,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
     <div class="footer">
       <div>Built for your current Supabase setup.</div>
-      <div>Next step later: secure auth and progress tracking.</div>
+      <div>Next step: secure auth and progress tracking.</div>
     </div>
   </main>
 
@@ -338,11 +173,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     function getSession() {
-      try {
-        return JSON.parse(localStorage.getItem('ruya_user') || 'null');
-      } catch {
-        return null;
-      }
+      try { return JSON.parse(localStorage.getItem('ruya_user') || 'null'); }
+      catch { return null; }
     }
 
     const session = getSession();
@@ -355,8 +187,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
       activeTab: 'enrollments',
       enrollments: [],
       users: [],
-      certificates: [],
-      messages: []
+      results: [],
+      exams: []
     };
 
     const els = {
@@ -365,22 +197,18 @@ tr:hover td{background:rgba(255,255,255,.02)}
       searchInput: document.getElementById('searchInput'),
       countEnrollments: document.getElementById('countEnrollments'),
       countUsers: document.getElementById('countUsers'),
-      countCerts: document.getElementById('countCerts'),
-      countMessages: document.getElementById('countMessages'),
+      countResults: document.getElementById('countResults'),
+      countQuestions: document.getElementById('countQuestions'),
       quickStatus: document.getElementById('quickStatus')
     };
 
     const esc = (str = '') => String(str)
-      .replaceAll('&','&amp;')
-      .replaceAll('<','&lt;')
-      .replaceAll('>','&gt;')
-      .replaceAll('"','&quot;')
-      .replaceAll("'",'&#039;');
-
+      .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+    const escAttr = (str = '') => String(str).replaceAll('"','&quot;').replaceAll("'",'&#039;');
     const fmtDate = (value) => {
       if (!value) return '';
       const d = new Date(value);
-      return Number.isNaN(d.getTime()) ? value : d.toLocaleString();
+      return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleString();
     };
 
     function setStatus(message, isError = false) {
@@ -389,36 +217,35 @@ tr:hover td{background:rgba(255,255,255,.02)}
     }
 
     async function fetchTable(table) {
-      try {
-        const { data, error } = await client.from(table).select('*').order('created_at', { ascending: false });
-        if (error) throw error;
-        return data || [];
-      } catch (err) {
-        console.error(`Failed loading ${table}`, err);
+      const { data, error } = await client.from(table).select('*').order('created_at', { ascending: false });
+      if (error) {
+        console.error(error);
         return [];
       }
+      return data || [];
     }
 
     async function refreshAll() {
       setStatus('Loading data...');
-      const [enrollments, users, certificates, messages] = await Promise.all([
+      const [enrollments, users, results, exams] = await Promise.all([
         fetchTable('enrollments'),
         fetchTable('users'),
-        fetchTable('certificate_requests'),
-        fetchTable('contact_messages')
+        fetchTable('exam_results'),
+        fetchTable('exams')
       ]);
+
       state.enrollments = enrollments;
       state.users = users;
-      state.certificates = certificates;
-      state.messages = messages;
+      state.results = results;
+      state.exams = exams;
 
       els.countEnrollments.textContent = enrollments.length;
       els.countUsers.textContent = users.length;
-      els.countCerts.textContent = certificates.length;
-      els.countMessages.textContent = messages.length;
+      els.countResults.textContent = results.length;
+      els.countQuestions.textContent = exams.length;
 
       renderActiveTab();
-      setStatus('Data loaded.');
+      setStatus('Ready.');
     }
 
     function setTab(tab) {
@@ -427,272 +254,314 @@ tr:hover td{background:rgba(255,255,255,.02)}
       renderActiveTab();
     }
 
-    function matchesSearch(row, fields) {
-      const q = (els.searchInput.value || '').trim().toLowerCase();
-      if (!q) return true;
-      return fields.some(f => String(f || '').toLowerCase().includes(q));
+    function filterRows(rows) {
+      const q = (els.searchInput.value || '').toLowerCase();
+      return rows.filter(row => {
+        return Object.values(row || {}).some(v => String(v ?? '').toLowerCase().includes(q));
+      });
     }
 
     function renderActiveTab() {
       if (state.activeTab === 'enrollments') return renderEnrollments();
+      if (state.activeTab === 'results') return renderResults();
       if (state.activeTab === 'users') return renderUsers();
-      if (state.activeTab === 'certificates') return renderCertificates();
-      if (state.activeTab === 'messages') return renderMessages();
+      if (state.activeTab === 'builder') return renderBuilder();
     }
 
     function renderEnrollments() {
-      const rows = state.enrollments.filter(r => matchesSearch(r, [r.name, r.email, r.course, r.status, r.note]));
+      const rows = filterRows(state.enrollments);
       els.tableArea.innerHTML = `
         <table>
           <thead>
             <tr>
-              <th>Name</th><th>Email</th><th>Course</th><th>Note</th><th>Status</th><th>Created</th><th>Actions</th>
+              <th>Name</th><th>Email</th><th>Course</th><th>Status</th><th>Payment</th><th>Approved</th><th>Created</th><th>Action</th>
             </tr>
           </thead>
           <tbody>
-            ${rows.length ? rows.map(row => `
-              <tr data-id="${row.id}">
-                <td>${esc(row.name || '')}</td>
-                <td>${esc(row.email || '')}</td>
-                <td>${esc(row.course || '')}</td>
-                <td style="max-width:280px; white-space:pre-wrap; color:var(--muted)">${esc(row.note || '')}</td>
-                <td>
-                  <select class="inline-select enrollment-status">
-                    ${['registered','tested','active','completed','rejected'].map(s => `<option value="${s}" ${row.status === s ? 'selected' : ''}>${s}</option>`).join('')}
-                  </select>
-                </td>
-                <td class="muted">${esc(fmtDate(row.created_at))}</td>
+            ${rows.map(r => `
+              <tr>
+                <td>${esc(r.name || '')}</td>
+                <td>${esc(r.email || '')}</td>
+                <td>${esc(r.course || '')}</td>
+                <td>${esc(r.status || '')}</td>
+                <td>${esc(r.payment_status || 'pending')}</td>
+                <td>${r.approved ? 'yes' : 'no'}</td>
+                <td>${fmtDate(r.created_at)}</td>
                 <td>
                   <div class="row-actions">
-                    <button class="btn btn-primary" onclick="saveEnrollmentStatus('${row.id}')">Save</button>
-                    <button class="btn btn-dark" onclick="viewStudent('${row.email}')">View student</button>
-                    <button class="btn btn-danger" onclick="deleteRow('enrollments','${row.id}','Enrollment')">Delete</button>
+                    <button class="btn btn-ghost" onclick="assignLevel('${escAttr(r.email)}','${escAttr(r.course)}')">Assign level</button>
+                    <button class="btn btn-primary" onclick="approveByEnrollment('${escAttr(r.email)}','${escAttr(r.course)}')">Approve</button>
                   </div>
                 </td>
               </tr>
-            `).join('') : `<tr><td colspan="7" class="muted">No enrollments found.</td></tr>`}
+            `).join('')}
           </tbody>
-        </table>`;
+        </table>
+      `;
+    }
+
+    function renderResults() {
+      const rows = filterRows(state.results);
+      els.tableArea.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Email</th><th>Course</th><th>Score</th><th>Passed</th><th>Status</th><th>Created</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => `
+              <tr>
+                <td>${esc(r.name || '')}</td>
+                <td>${esc(r.email || '')}</td>
+                <td>${esc(r.course || '')}</td>
+                <td>${esc(r.score ?? '')}%</td>
+                <td>${r.passed ? 'yes' : 'no'}</td>
+                <td>${esc(r.status || 'pending_review')}</td>
+                <td>${fmtDate(r.created_at)}</td>
+                <td>
+                  <div class="row-actions">
+                    <button class="btn btn-primary" onclick="approveFromResult('${escAttr(r.email)}','${escAttr(r.course)}')">Approve</button>
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
     }
 
     function renderUsers() {
-      const rows = state.users.filter(r => matchesSearch(r, [r.name, r.email, r.role, r.payment_status, r.level]));
+      const rows = filterRows(state.users);
       els.tableArea.innerHTML = `
         <table>
           <thead>
             <tr>
-              <th>Name</th><th>Email</th><th>Role</th><th>Payment</th><th>Level</th><th>Password</th><th>Created</th><th>Actions</th>
+              <th>Name</th><th>Email</th><th>Username</th><th>Role</th><th>Approved</th><th>Payment</th><th>Level</th><th>Action</th>
             </tr>
           </thead>
           <tbody>
-            ${rows.length ? rows.map(row => `
-              <tr data-id="${row.id}">
-                <td>${esc(row.name || '')}</td>
-                <td>${esc(row.email || '')}</td>
-                <td>
-                  <select class="inline-select user-role">
-                    ${['student','admin'].map(v => `<option value="${v}" ${row.role === v ? 'selected' : ''}>${v}</option>`).join('')}
-                  </select>
-                </td>
-                <td>
-                  <select class="inline-select user-payment">
-                    ${['pending','paid'].map(v => `<option value="${v}" ${row.payment_status === v ? 'selected' : ''}>${v}</option>`).join('')}
-                  </select>
-                </td>
-                <td>
-                  <select class="inline-select user-level">
-                    ${['beginner','intermediate','advanced'].map(v => `<option value="${v}" ${row.level === v ? 'selected' : ''}>${v}</option>`).join('')}
-                  </select>
-                </td>
-                <td class="muted">hidden</td>
-                <td class="muted">${esc(fmtDate(row.created_at))}</td>
+            ${rows.map(r => `
+              <tr>
+                <td>${esc(r.name || '')}</td>
+                <td>${esc(r.email || '')}</td>
+                <td>${esc(r.username || '')}</td>
+                <td>${esc(r.role || '')}</td>
+                <td>${r.approved ? 'yes' : 'no'}</td>
+                <td>${esc(r.payment_status || '')}</td>
+                <td>${esc(r.level || '')}</td>
                 <td>
                   <div class="row-actions">
-                    <button class="btn btn-primary" onclick="saveUser('${row.id}')">Save</button>
-                    <button class="btn btn-dark" onclick="viewStudent('${row.email}')">View student</button>
-                    <button class="btn btn-danger" onclick="resetPassword('${row.id}')">Reset Password</button>
+                    <button class="btn btn-ghost" onclick="openStudent('${escAttr(r.email)}')">Open student</button>
+                    <button class="btn btn-primary" onclick="forceApproveUser('${escAttr(r.email)}')">Approve</button>
                   </div>
                 </td>
               </tr>
-            `).join('') : `<tr><td colspan="8" class="muted">No users found.</td></tr>`}
+            `).join('')}
           </tbody>
-        </table>`;
+        </table>
+      `;
     }
 
-    function renderCertificates() {
-      const rows = state.certificates.filter(r => matchesSearch(r, [r.name, r.email, r.course, r.proof]));
+    function renderBuilder() {
+      const courseOptions = [...new Set([...state.enrollments.map(x => x.course), ...state.exams.map(x => x.course)].filter(Boolean))];
       els.tableArea.innerHTML = `
+        <div class="panel" style="padding:20px; margin-bottom:16px;">
+          <h3 style="margin-top:0;">Create exam question</h3>
+          <div class="quick-form">
+            <div class="span-2">
+              <label class="small muted">Course</label>
+              <input id="examCourse" list="courseList" placeholder="Course name" />
+              <datalist id="courseList">
+                ${courseOptions.map(c => `<option value="${escAttr(c)}"></option>`).join('')}
+              </datalist>
+            </div>
+            <div class="span-2">
+              <label class="small muted">Question</label>
+              <input id="examQuestion" placeholder="Write the question" />
+            </div>
+            <div class="span-2">
+              <label class="small muted">Options (comma separated)</label>
+              <input id="examOptions" placeholder="Option 1, Option 2, Option 3, Option 4" />
+            </div>
+            <div class="span-2">
+              <label class="small muted">Correct answer</label>
+              <input id="examCorrect" placeholder="Exact correct answer" />
+            </div>
+            <div class="full">
+              <button class="btn btn-primary" onclick="saveExamQuestion()">Save question</button>
+            </div>
+          </div>
+          <div class="status" id="builderStatus"></div>
+        </div>
+
         <table>
           <thead>
-            <tr><th>Name</th><th>Email</th><th>Course</th><th>Proof / Reason</th><th>Created</th><th>Actions</th></tr>
+            <tr><th>Course</th><th>Question</th><th>Correct answer</th><th>Created</th><th>Action</th></tr>
           </thead>
           <tbody>
-            ${rows.length ? rows.map(row => `
-              <tr data-id="${row.id}">
-                <td>${esc(row.name || '')}</td>
-                <td>${esc(row.email || '')}</td>
-                <td>${esc(row.course || '')}</td>
-                <td style="max-width:360px; white-space:pre-wrap; color:var(--muted)">${esc(row.proof || '')}</td>
-                <td class="muted">${esc(fmtDate(row.created_at))}</td>
-                <td>
-                  <div class="row-actions">
-                    <button class="btn btn-primary" onclick="markHandled('${row.id}')">Handled</button>
-                    <button class="btn btn-danger" onclick="deleteRow('certificate_requests','${row.id}','Certificate request')">Delete</button>
-                  </div>
-                </td>
+            ${filterRows(state.exams).map(r => `
+              <tr>
+                <td>${esc(r.course || '')}</td>
+                <td>${esc(r.question || '')}</td>
+                <td>${esc(r.correct_answer || '')}</td>
+                <td>${fmtDate(r.created_at)}</td>
+                <td><button class="btn btn-danger" onclick="deleteExam('${escAttr(r.id)}')">Delete</button></td>
               </tr>
-            `).join('') : `<tr><td colspan="6" class="muted">No certificate requests found.</td></tr>`}
+            `).join('')}
           </tbody>
-        </table>`;
+        </table>
+      `;
     }
 
-    function renderMessages() {
-      const rows = state.messages.filter(r => matchesSearch(r, [r.name, r.email, r.message]));
-      els.tableArea.innerHTML = `
-        <table>
-          <thead>
-            <tr><th>Name</th><th>Email</th><th>Message</th><th>Created</th><th>Actions</th></tr>
-          </thead>
-          <tbody>
-            ${rows.length ? rows.map(row => `
-              <tr data-id="${row.id}">
-                <td>${esc(row.name || '')}</td>
-                <td>${esc(row.email || '')}</td>
-                <td style="max-width:360px; white-space:pre-wrap; color:var(--muted)">${esc(row.message || '')}</td>
-                <td class="muted">${esc(fmtDate(row.created_at))}</td>
-                <td><div class="row-actions"><button class="btn btn-danger" onclick="deleteRow('contact_messages','${row.id}','Message')">Delete</button></div></td>
-              </tr>
-            `).join('') : `<tr><td colspan="5" class="muted">No messages found.</td></tr>`}
-          </tbody>
-        </table>`;
-    }
+    async function saveExamQuestion() {
+      const course = document.getElementById('examCourse').value.trim();
+      const question = document.getElementById('examQuestion').value.trim();
+      const optionsRaw = document.getElementById('examOptions').value.trim();
+      const correct_answer = document.getElementById('examCorrect').value.trim();
 
-    async function saveEnrollmentStatus(id) {
-      const row = document.querySelector(`tr[data-id="${id}"]`);
-      const status = row?.querySelector('.enrollment-status')?.value;
-      if (!status) return;
-      const { error } = await client.from('enrollments').update({ status }).eq('id', id);
+      const builderStatus = document.getElementById('builderStatus');
+      if (!course || !question || !optionsRaw || !correct_answer) {
+        builderStatus.textContent = 'Fill all exam fields.';
+        return;
+      }
+
+      const options = optionsRaw.split(',').map(x => x.trim()).filter(Boolean);
+      const { error } = await client.from('exams').insert([{
+        course, question, options, correct_answer, created_at: new Date().toISOString()
+      }]);
+
       if (error) {
         console.error(error);
+        builderStatus.textContent = 'Could not save question.';
         alert('❌ ' + error.message);
         return;
       }
-      alert('✅ Enrollment status updated');
+
+      builderStatus.textContent = 'Question saved.';
       await refreshAll();
     }
 
-    async function saveUser(id) {
-      const row = document.querySelector(`tr[data-id="${id}"]`);
-      const role = row?.querySelector('.user-role')?.value;
-      const payment_status = row?.querySelector('.user-payment')?.value;
-      const level = row?.querySelector('.user-level')?.value;
-      const { error } = await client.from('users').update({ role, payment_status, level }).eq('id', id);
+    async function deleteExam(id) {
+      if (!confirm('Delete this question?')) return;
+      const { error } = await client.from('exams').delete().eq('id', id);
       if (error) {
-        console.error(error);
         alert('❌ ' + error.message);
         return;
       }
-      alert('✅ User updated');
-      await refreshAll();
-    }
-
-    async function resetPassword(id) {
-      const newPassword = prompt('Enter new password:');
-      if (!newPassword) return;
-      const { error } = await client.from('users').update({ password: newPassword }).eq('id', id);
-      if (error) {
-        console.error(error);
-        alert('❌ ' + error.message);
-        return;
-      }
-      alert('✅ Password updated');
-      await refreshAll();
-    }
-
-    async function markHandled(id) {
-      const { error } = await client.from('certificate_requests').delete().eq('id', id);
-      if (error) {
-        console.error(error);
-        alert('❌ ' + error.message);
-        return;
-      }
-      alert('✅ Certificate request handled');
-      await refreshAll();
-    }
-
-    async function deleteRow(table, id, label) {
-      if (!confirm(`Delete this ${label.toLowerCase()}?`)) return;
-      const { error } = await client.from(table).delete().eq('id', id);
-      if (error) {
-        console.error(error);
-        alert('❌ ' + error.message);
-        return;
-      }
-      alert(`✅ ${label} deleted`);
       await refreshAll();
     }
 
     async function createQuickUser() {
-      const name = document.getElementById('qcName').value.trim();
-      const email = document.getElementById('qcEmail').value.trim();
-      const password = document.getElementById('qcPassword').value.trim();
-      const payment_status = document.getElementById('qcPayment').value;
-      const level = document.getElementById('qcLevel').value;
-      const role = document.getElementById('qcRole').value;
+      const payload = {
+        name: document.getElementById('qcName').value.trim(),
+        email: document.getElementById('qcEmail').value.trim(),
+        username: document.getElementById('qcUsername').value.trim(),
+        password: document.getElementById('qcPassword').value.trim(),
+        payment_status: document.getElementById('qcPayment').value,
+        level: document.getElementById('qcLevel').value,
+        role: document.getElementById('qcRole').value,
+        approved: document.getElementById('qcApproved').value === 'true',
+        created_at: new Date().toISOString()
+      };
 
-      if (!name || !email || !password) {
-        els.quickStatus.textContent = 'Please fill name, email, and password.';
-        els.quickStatus.style.color = 'var(--warn)';
+      if (!payload.name || !payload.email || !payload.username || !payload.password) {
+        els.quickStatus.textContent = 'Name, email, username, and password are required.';
         return;
       }
 
-      els.quickStatus.textContent = 'Saving user...';
-      els.quickStatus.style.color = 'var(--accent)';
-
-      const { error } = await client.from('users').upsert([{
-        name, email, password, role, payment_status, level, created_at: new Date().toISOString()
-      }], { onConflict: 'email' });
-
+      const { error } = await client.from('users').upsert([payload], { onConflict: 'email' });
       if (error) {
-        console.error(error);
         els.quickStatus.textContent = 'Could not save user.';
-        els.quickStatus.style.color = 'var(--danger)';
         alert('❌ ' + error.message);
         return;
       }
 
-      els.quickStatus.textContent = 'User saved successfully.';
-      document.getElementById('qcName').value = '';
-      document.getElementById('qcEmail').value = '';
-      document.getElementById('qcPassword').value = '';
+      els.quickStatus.textContent = 'User saved.';
       await refreshAll();
     }
 
-    function viewStudent(email) {
-      localStorage.setItem('ruya_view_student', email);
-      window.location.href = 'student.html?view=student';
-    }
+    async function assignLevel(email, course) {
+      const level = prompt('Set level for this student (beginner / intermediate / advanced):', 'beginner');
+      if (!level) return;
 
-    function exportCurrent() {
-      let rows = [];
-      if (state.activeTab === 'enrollments') rows = state.enrollments;
-      if (state.activeTab === 'users') rows = state.users;
-      if (state.activeTab === 'certificates') rows = state.certificates;
-      if (state.activeTab === 'messages') rows = state.messages;
-      if (!rows.length) {
-        alert('No rows to export.');
+      const { error } = await client
+        .from('users')
+        .update({ level, course, status: 'level_assigned' })
+        .eq('email', email);
+
+      if (error) {
+        alert('❌ ' + error.message);
         return;
       }
-      const keys = Object.keys(rows[0]);
-      const csv = [keys.join(','), ...rows.map(r => keys.map(k => `"${String(r[k] ?? '').replaceAll('"', '""')}"`).join(','))].join('\n');
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${state.activeTab}.csv`;
-      a.click();
-      URL.revokeObjectURL(url);
+
+      await client.from('enrollments').update({ level, status: 'level_assigned' }).eq('email', email).eq('course', course);
+      alert('Level assigned.');
+      await refreshAll();
     }
+
+    async function approveByEnrollment(email, course) {
+      const username = prompt('Username to give this student:', email.split('@')[0]);
+      if (username === null) return;
+      const password = prompt('Password to give this student:', 'ruya1234');
+      if (password === null) return;
+
+      const { error } = await client
+        .from('users')
+        .upsert([{ email, username, password, approved: true, payment_status: 'paid', role: 'student', login_enabled: true, updated_at: new Date().toISOString() }], { onConflict: 'email' });
+
+      if (error) {
+        alert('❌ ' + error.message);
+        return;
+      }
+
+      await client.from('enrollments').update({ approved: true, payment_status: 'paid', status: 'approved' }).eq('email', email).eq('course', course);
+      await client.from('exam_results').update({ status: 'approved' }).eq('email', email).eq('course', course);
+      alert('Student approved and credentials saved.');
+      await refreshAll();
+    }
+
+    async function approveFromResult(email, course) {
+      await approveByEnrollment(email, course);
+    }
+
+    async function forceApproveUser(email) {
+      const username = prompt('Username:', email.split('@')[0]);
+      if (username === null) return;
+      const password = prompt('Password:', 'ruya1234');
+      if (password === null) return;
+
+      const { error } = await client
+        .from('users')
+        .upsert([{ email, username, password, approved: true, payment_status: 'paid', role: 'student', login_enabled: true, updated_at: new Date().toISOString() }], { onConflict: 'email' });
+
+      if (error) {
+        alert('❌ ' + error.message);
+        return;
+      }
+
+      alert('User approved.');
+      await refreshAll();
+    }
+
+    function openStudent(email) {
+      const match = state.users.find(u => String(u.email || '') === String(email || ''));
+      if (match) {
+        localStorage.setItem('ruya_user', JSON.stringify(match));
+        window.location.href = 'student.html';
+      }
+    }
+
+    window.refreshAll = refreshAll;
+    window.setTab = setTab;
+    window.createQuickUser = createQuickUser;
+    window.assignLevel = assignLevel;
+    window.approveByEnrollment = approveByEnrollment;
+    window.approveFromResult = approveFromResult;
+    window.forceApproveUser = forceApproveUser;
+    window.saveExamQuestion = saveExamQuestion;
+    window.deleteExam = deleteExam;
+    window.openStudent = openStudent;
 
     refreshAll();
   </script>
