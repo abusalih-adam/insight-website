@@ -608,8 +608,18 @@ tr:hover td{background:rgba(255,255,255,.02)}
         status: 'registered',
         created_at: new Date().toISOString()
       };
+
       const ok = await saveToSupabase('enrollments', payload, 'enrollStatus', 'Enrollment submitted successfully');
-      if (ok) e.target.reset();
+
+      if (ok) {
+        localStorage.setItem('ruya_pending_exam', JSON.stringify(payload));
+        e.target.reset();
+        const statusEl = document.getElementById('enrollStatus');
+        statusEl.textContent = 'Enrollment saved. Taking you to your exam...';
+        setTimeout(() => {
+          window.location.href = 'exam.html';
+        }, 700);
+      }
     });
 
     document.getElementById('contactForm').addEventListener('submit', async (e) => {

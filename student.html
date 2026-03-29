@@ -3,652 +3,510 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Ruya Academy student dashboard for progress, performance, and certificate eligibility." />
-  <meta name="theme-color" content="#07111f" />
   <title>Ruya Academy | Student Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
-:root{
-  --bg:#06101d;
-  --bg2:#0b172b;
-  --text:#eef5ff;
-  --muted:#afbdd3;
-  --line:rgba(255,255,255,.12);
-  --accent:#42d6c0;
-  --accent2:#6ea8fe;
-  --accent3:#f5b971;
-  --good:#7df0c5;
-  --warn:#ffd27a;
-  --danger:#ff9b9b;
-  --shadow:0 20px 60px rgba(0,0,0,.35);
-  --radius:22px;
-  --radius-sm:14px;
-  --container:1180px;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  color:var(--text);
-  background:
-    radial-gradient(circle at top left, rgba(66,214,192,.16), transparent 30%),
-    radial-gradient(circle at top right, rgba(110,168,254,.14), transparent 35%),
-    linear-gradient(180deg,var(--bg),var(--bg2));
-  min-height:100vh;
-  line-height:1.5;
-  overflow-x:hidden;
-}
-a{color:inherit;text-decoration:none}
-img,video{max-width:100%;display:block}
-button,input,textarea,select{font:inherit}
-.container{width:min(var(--container), calc(100% - 32px)); margin:0 auto}
-.panel{
-  border:1px solid var(--line);
-  background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-}
-.btn{
-  border:0;
-  border-radius:999px;
-  padding:12px 18px;
-  font-weight:700;
-  cursor:pointer;
-  transition:transform .2s ease, opacity .2s ease, background .2s ease, box-shadow .2s ease;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  white-space:nowrap;
-}
-.btn:hover{transform:translateY(-1px)}
-.btn:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible{
-  outline:2px solid var(--accent2);
-  outline-offset:2px;
-}
-.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#03101d; box-shadow:0 14px 35px rgba(66,214,192,.18)}
-.btn-ghost{background:rgba(255,255,255,.08); color:var(--text); border:1px solid var(--line)}
-.btn-dark{background:rgba(255,255,255,.04); color:var(--text); border:1px solid var(--line)}
-.btn-danger{background:rgba(255,125,125,.14); color:#ffdede; border:1px solid rgba(255,125,125,.28)}
-input,textarea,select{
-  width:100%;
-  padding:14px 16px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:#0b172b;
-  color:var(--text);
-  outline:none;
-}
-input::placeholder,textarea::placeholder{color:#7f90aa}
-textarea{min-height:120px; resize:vertical}
-select{appearance:none; -webkit-appearance:none; -moz-appearance:none; background-color:#0b172b; color:#eef5ff}
-select option{background:#0b172b; color:#eef5ff}
-.section{
-  padding:28px 0;
-}
-.section-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:end;
-  gap:18px;
-  flex-wrap:wrap;
-  margin-bottom:18px;
-}
-.section-head h2{
-  margin:0;
-  font-size:32px;
-  letter-spacing:-.6px;
-}
-.section-head p{
-  margin:0;
-  color:var(--muted);
-  max-width:72ch;
-  line-height:1.7;
-}
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,.06);
-  border:1px solid var(--line);
-  color:var(--muted);
-  font-size:13px;
-}
-.small{font-size:13px}
-.muted{color:var(--muted)}
-.status{margin-top:12px; min-height:22px; color:var(--accent); font-size:14px}
-.table-wrap{overflow:auto; border-radius:18px; border:1px solid var(--line)}
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:980px;
-  background:rgba(255,255,255,.03);
-}
-th,td{
-  padding:12px 10px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  vertical-align:top;
-  text-align:left;
-  font-size:14px;
-}
-th{
-  position:sticky; top:0;
-  background:#0b172b;
-  color:var(--muted);
-  z-index:1;
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-}
-tr:hover td{background:rgba(255,255,255,.02)}
-.row-actions{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
-.inline-select{min-width:140px; padding:9px 10px; border-radius:12px}
-.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
-.grid-3{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
-.grid-4{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px}
-.card{
-  padding:20px;
-  border-radius:20px;
-  background:rgba(255,255,255,.06);
-  border:1px solid var(--line);
-}
-.card h3{margin:0 0 10px}
-.card p{margin:0; color:var(--muted); line-height:1.7}
-.icon{
-  width:46px; height:46px; border-radius:14px;
-  display:grid; place-items:center;
-  background:rgba(255,255,255,.08);
-  margin-bottom:14px;
-  font-size:20px;
-}
-@keyframes fadeUp { from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:translateY(0)} }
-.reveal{opacity:0; transform:translateY(18px); transition:.7s ease}
-.reveal.show{opacity:1; transform:translateY(0)}
-@media (max-width:1100px){
-  .grid-2,.grid-3,.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media (max-width:760px){
-  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
-  .section-head h2{font-size:26px}
-  .btn{width:100%}
-}
-
-    .topbar{position:sticky; top:0; z-index:50; backdrop-filter:blur(16px); background:rgba(7,17,31,.72); border-bottom:1px solid var(--line)}
-    .topbar-inner{display:flex; align-items:center; justify-content:space-between; gap:18px; padding:16px 0; flex-wrap:wrap}
-    .brand{display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px; min-width:220px}
-    .mark{width:44px; height:44px; border-radius:14px; display:grid; place-items:center; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#03101d; font-weight:900; box-shadow:var(--shadow)}
-    .hero{padding:34px 0 20px; display:grid; grid-template-columns:1.05fr .95fr; gap:16px; align-items:stretch}
-    .hero-card{padding:22px}
-    .headline{font-size:clamp(34px,5vw,56px); line-height:1; letter-spacing:-1.2px; margin:12px 0 12px}
-    .lead{color:var(--muted); line-height:1.75; max-width:70ch; margin:0}
-    .metrics{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:18px}
-    .metric{padding:16px; border-radius:18px; background:rgba(255,255,255,.06); border:1px solid var(--line)}
-    .metric strong{display:block; font-size:24px; margin-bottom:4px}
-    .metric span{color:var(--muted); font-size:13px}
-    .profile{padding:22px}
-    .profile-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px}
-    .box{padding:16px; border-radius:18px; background:rgba(255,255,255,.06); border:1px solid var(--line)}
-    .box h3{margin:0 0 8px; font-size:16px}
-    .box p{margin:0; color:var(--muted); line-height:1.7}
-    .section-title{display:flex; justify-content:space-between; align-items:end; gap:18px; flex-wrap:wrap; margin-bottom:18px; padding-top:18px}
-    .section-title h2{margin:0; font-size:30px}
-    .section-title p{margin:0; color:var(--muted); max-width:68ch; line-height:1.7}
-    .split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
-    .progress-wrap{margin-top:12px; width:100%; height:12px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; border:1px solid var(--line)}
-    .progress-bar{height:100%; width:0%; border-radius:inherit; background:linear-gradient(135deg,var(--accent),var(--accent2)); transition:width .35s ease}
-    .pill{display:inline-flex; padding:7px 11px; border-radius:999px; font-size:13px; background:rgba(255,255,255,.08); border:1px solid var(--line); color:var(--muted); margin-right:8px; margin-bottom:8px}
-    .pill.good{color:var(--good)}
-    .pill.warn{color:var(--warn)}
-    .pill.bad{color:var(--danger)}
-    .footer{padding:34px 0 50px; color:var(--muted); border-top:1px solid var(--line); margin-top:30px}
-    .footer-inner{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap}
-    .alert{padding:14px 16px; border-radius:16px; border:1px solid var(--line); background:rgba(255,255,255,.05); color:var(--muted)}
+    :root{
+      --bg:#06101d;
+      --bg2:#0b172b;
+      --panel:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.12);
+      --text:#eef5ff;
+      --muted:#aebdd3;
+      --accent:#42d6c0;
+      --accent2:#6ea8fe;
+      --good:#7df0c5;
+      --warn:#ffd27a;
+      --danger:#ff9b9b;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(66,214,192,.16), transparent 30%),
+        radial-gradient(circle at top right, rgba(110,168,254,.14), transparent 35%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      min-height:100vh;
+    }
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    .container{width:min(1200px, calc(100% - 32px)); margin:0 auto}
+    .topbar{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter:blur(16px);
+      background:rgba(7,17,31,.78);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar-inner{
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+      padding:16px 0; flex-wrap:wrap;
+    }
+    .brand{display:flex; align-items:center; gap:12px; font-weight:800}
+    .mark{
+      width:44px; height:44px; border-radius:14px;
+      display:grid; place-items:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#03101d; font-weight:900; box-shadow:var(--shadow)
+    }
+    .btn{
+      border:0; border-radius:999px; padding:12px 16px; font-weight:700;
+      cursor:pointer; transition:.2s ease; white-space:nowrap;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#03101d}
+    .btn-dark{background:rgba(255,255,255,.06); color:var(--text); border:1px solid var(--line)}
+    .btn-ghost{background:rgba(255,255,255,.04); color:var(--text); border:1px solid var(--line)}
+    .hero{
+      padding:24px 0 12px;
+      display:grid; grid-template-columns:1.15fr .85fr; gap:16px;
+    }
+    .panel{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .box{padding:22px}
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 12px; border-radius:999px;
+      border:1px solid var(--line); background:rgba(255,255,255,.05);
+      color:var(--muted); font-size:13px;
+    }
+    h1{margin:12px 0 10px; font-size:clamp(34px,5vw,54px); line-height:1; letter-spacing:-1.3px}
+    .lead{margin:0; color:var(--muted); line-height:1.75; max-width:70ch}
+    .grid{
+      margin-top:16px;
+      display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px;
+    }
+    .stat{
+      padding:16px; border-radius:18px;
+      background:rgba(255,255,255,.06); border:1px solid var(--line);
+    }
+    .stat strong{display:block; font-size:24px; margin-bottom:4px}
+    .stat span{color:var(--muted); font-size:13px}
+    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+    .chip{
+      display:inline-flex; padding:7px 11px; border-radius:999px;
+      border:1px solid var(--line); background:rgba(255,255,255,.05);
+      color:var(--muted); font-size:12px;
+    }
+    .chip.good{color:var(--good)}
+    .chip.warn{color:var(--warn)}
+    .chip.bad{color:var(--danger)}
+    .section{
+      margin-top:18px;
+      padding:18px;
+    }
+    .section-head{
+      display:flex; justify-content:space-between; align-items:end; gap:12px;
+      margin-bottom:14px; flex-wrap:wrap;
+    }
+    .section-head h2{margin:0; font-size:26px}
+    .section-head p{margin:0; color:var(--muted); line-height:1.7}
+    .course-list{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+    .course-card{
+      padding:16px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+    }
+    .course-card h3{margin:0 0 8px}
+    .course-card p{margin:0; color:var(--muted); line-height:1.7}
+    .progress-wrap{
+      margin-top:12px; width:100%; height:12px;
+      border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden;
+      border:1px solid var(--line);
+    }
+    .progress-bar{
+      height:100%; width:0%;
+      border-radius:inherit;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      transition:width .35s ease;
+    }
+    .info-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:14px;
+    }
+    .info-box{
+      padding:16px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+    }
+    .info-box strong{display:block; margin-bottom:6px}
+    .info-box p{margin:0; color:var(--muted); line-height:1.7}
+    .enrollments{
+      margin-top:14px;
+      display:grid;
+      gap:10px;
+    }
+    .enrollment-item{
+      padding:14px 16px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+    }
+    .enrollment-item strong{display:block; margin-bottom:4px}
+    .enrollment-item span{color:var(--muted); font-size:13px}
+    .footer{
+      margin:18px 0 34px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      border-top:1px solid var(--line);
+      padding-top:14px;
+    }
+    .status{margin-top:10px; color:var(--accent); min-height:20px}
+    .muted{color:var(--muted)}
     .hidden{display:none !important}
-    .status{margin-top:12px; min-height:22px; color:var(--accent); font-size:14px}
-    .modal{position:fixed; inset:0; display:none; place-items:center; background:rgba(2,7,16,.72); backdrop-filter:blur(8px); padding:18px; z-index:100}
-    .modal.open{display:grid}
-    .modal-card{width:min(620px, 100%); border-radius:24px; background:linear-gradient(180deg, rgba(14,24,43,.98), rgba(8,17,32,.98)); border:1px solid var(--line); box-shadow:var(--shadow); padding:22px}
-    .modal-head{display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:12px}
-    .close{border:0; width:40px; height:40px; border-radius:12px; background:rgba(255,255,255,.08); color:var(--text); cursor:pointer; font-size:18px}
-    .certificate-box{margin-top:16px; padding:18px; border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,.05)}
-    @media (max-width:980px){.hero,.split{grid-template-columns:1fr} .topbar-inner{flex-direction:column; align-items:flex-start}}
-    @media (max-width:760px){.metrics,.profile-grid{grid-template-columns:1fr 1fr} .btn{width:100%} .nav-links{justify-content:flex-start} .metrics,.profile-grid{grid-template-columns:1fr}}
+
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr}
+    }
+    @media (max-width: 760px){
+      .grid,.course-list,.info-grid{grid-template-columns:1fr}
+      .btn{width:100%}
+    }
   </style>
 </head>
 <body>
   <header class="topbar">
     <div class="container topbar-inner">
-      <a class="brand" href="academy.html" aria-label="Ruya Academy">
+      <div class="brand">
         <div class="mark">R</div>
         <div>
-          <div>Student Dashboard</div>
-          <small class="muted">Ruya Academy</small>
+          <div>Ruya Academy</div>
+          <small class="muted">Student Dashboard</small>
         </div>
-      </a>
+      </div>
 
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="#dashboard">Dashboard</a>
-        <a href="#progress">Progress</a>
-        <a href="#certificate">Certificate</a>
-        <a href="admin.html" id="adminLink" class="hidden">Admin panel</a>
-      </nav>
-
-      <div class="nav-actions">
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-ghost" id="backAdminBtn" onclick="backToAdmin()" style="display:none;">Back to Admin</button>
         <button class="btn btn-dark" onclick="logout()">Logout</button>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <section class="hero" id="dashboard">
-      <div class="panel hero-card">
-        <span class="badge">👤 Student view</span>
-        <h1 class="headline" id="studentTitle">Welcome</h1>
-        <p class="lead" id="studentIntro">
-          Loading your profile and enrollment data...
+    <section class="hero">
+      <div class="panel box">
+        <span class="eyebrow">🎓 Student dashboard</span>
+        <h1 id="studentName">Loading...</h1>
+        <p class="lead" id="studentLead">
+          Your profile, course progress, and certificate eligibility will appear here.
         </p>
 
-        <div class="metrics">
-          <div class="metric">
-            <strong id="mStatus">—</strong>
-            <span>Enrollment status</span>
-          </div>
-          <div class="metric">
-            <strong id="mLevel">—</strong>
-            <span>Level</span>
-          </div>
-          <div class="metric">
-            <strong id="mPay">—</strong>
+        <div class="grid">
+          <div class="stat">
+            <strong id="statPayment">—</strong>
             <span>Payment</span>
           </div>
-          <div class="metric">
-            <strong id="mCert">—</strong>
+          <div class="stat">
+            <strong id="statLevel">—</strong>
+            <span>Level</span>
+          </div>
+          <div class="stat">
+            <strong id="statStatus">—</strong>
+            <span>Enrollment status</span>
+          </div>
+          <div class="stat">
+            <strong id="statCertificate">—</strong>
             <span>Certificate</span>
           </div>
         </div>
-      </div>
 
-      <div class="panel profile">
-        <h2 style="margin-top:0;">Profile</h2>
-        <div id="profileArea" class="profile-grid"></div>
-        <div class="status" id="studentStatus"></div>
-      </div>
-    </section>
+        <div class="chips" id="statusChips"></div>
 
-    <section class="section reveal" id="progress">
-      <div class="section-title">
-        <div>
-          <h2>Progress and performance</h2>
-          <p>This dashboard uses your current record to show a simple performance view. Later you can connect quizzes and exam scores here.</p>
+        <div class="progress-wrap" aria-label="Progress">
+          <div id="progressBar" class="progress-bar"></div>
         </div>
+
+        <p class="muted" id="progressText" style="margin:10px 0 0;">
+          Progress is based on your current level and enrollment status. Quiz and exam scoring can be added later.
+        </p>
       </div>
 
-      <div class="split">
-        <div class="panel" style="padding:22px;">
-          <h3 style="margin-top:0;">Current progress</h3>
-          <div class="progress-wrap" aria-label="Student progress">
-            <div id="progressBar" class="progress-bar"></div>
+      <div class="panel box">
+        <h2 style="margin:0 0 8px;">Current course</h2>
+        <p class="muted" id="currentCourse">Loading current course...</p>
+
+        <div class="info-grid">
+          <div class="info-box">
+            <strong>Username / Email</strong>
+            <p id="studentEmail">—</p>
           </div>
-          <p class="muted" id="progressText" style="margin-bottom:0; line-height:1.7; margin-top:12px;"></p>
-        </div>
-
-        <div class="panel" style="padding:22px;">
-          <h3 style="margin-top:0;">Courses</h3>
-          <div id="courseList" class="muted" style="line-height:1.9;"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section reveal" id="certificate">
-      <div class="section-title">
-        <div>
-          <h2>Certificate</h2>
-          <p>Request certificate only when the system says you are qualified.</p>
-        </div>
-      </div>
-
-      <div class="panel" style="padding:22px;">
-        <div class="alert" id="certAlert">Checking your eligibility...</div>
-
-        <div class="certificate-box">
-          <p style="margin-top:0; color:var(--muted); line-height:1.7;">
-            Certificate eligibility is based on <strong>payment_status</strong> and <strong>level</strong>.
-            Later you can connect quiz averages and exam results here.
-          </p>
-
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
-            <button class="btn btn-primary" id="certBtn" onclick="requestCertificate()">Request Certificate</button>
-            <button class="btn btn-ghost" onclick="openLoginCheck()">Switch / Recheck Login</button>
+          <div class="info-box">
+            <strong>Role</strong>
+            <p id="studentRole">—</p>
           </div>
+          <div class="info-box">
+            <strong>Joined</strong>
+            <p id="studentJoined">—</p>
+          </div>
+          <div class="info-box">
+            <strong>Latest activity</strong>
+            <p id="studentActivity">—</p>
+          </div>
+        </div>
 
-          <div class="status" id="certStatus"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
+          <button class="btn btn-primary" id="certBtn" onclick="requestCertificate()">Request Certificate</button>
+          <button class="btn btn-dark" onclick="refreshDashboard()">Refresh</button>
+        </div>
+
+        <div class="status" id="actionStatus" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <div class="section-head">
+        <div>
+          <h2>Course history</h2>
+          <p>All enrollments linked to this account appear here.</p>
+        </div>
+      </div>
+      <div class="course-list" id="courseList"></div>
+    </section>
+
+    <section class="panel section">
+      <div class="section-head">
+        <div>
+          <h2>Performance view</h2>
+          <p>This shows the current certificate readiness based on payment and level.</p>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <strong>Certificate readiness</strong>
+          <p id="readinessText">Loading...</p>
+        </div>
+        <div class="info-box">
+          <strong>What is checked now</strong>
+          <p>Payment status + level + enrollment status. Later you can connect quiz scores and exams.</p>
         </div>
       </div>
     </section>
+
+    <div class="footer">
+      <div>© 2026 Ruya Academy</div>
+      <div>Student view powered by Supabase</div>
+    </div>
   </main>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div>© 2026 Ruya Academy. Student dashboard.</div>
-      <div>View mode for admins and normal mode for students.</div>
-    </div>
-  </footer>
-
-  <div class="modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-    <div class="modal-card">
-      <div class="modal-head">
-        <div>
-          <h2 id="loginTitle" style="margin:0;">Sign In</h2>
-          <p style="margin:6px 0 0; color:var(--muted);">Use your username/email and password.</p>
-        </div>
-        <button class="close" type="button" onclick="closeLogin()" aria-label="Close">×</button>
-      </div>
-
-      <label for="modal-login-identifier" class="small muted">Username or email</label>
-      <input id="modal-login-identifier" placeholder="username or name@example.com" />
-
-      <label for="modal-login-password" class="small muted">Password</label>
-      <input id="modal-login-password" type="password" placeholder="••••••••" />
-
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
-        <button class="btn btn-primary" type="button" onclick="loginFromModal()">Sign in</button>
-        <button class="btn btn-ghost" type="button" onclick="closeLogin()">Cancel</button>
-      </div>
-
-      <div class="status" id="modalLoginStatus" aria-live="polite"></div>
-    </div>
-  </div>
 
   <script>
     const SUPABASE_URL = "https://xtlvhdtmocshycbunoki.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_mY1y5Sju44l-M4prPHvajQ_n_UznjaD";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const loginModal = document.getElementById('loginModal');
-    const query = new URLSearchParams(window.location.search);
-    const viewMode = query.get('view') || 'self';
+    const session = JSON.parse(localStorage.getItem('ruya_user') || 'null');
+    const viewEmail = localStorage.getItem('ruya_view_email') || '';
+    const isAdminSession = session && String(session.role || '').toLowerCase() === 'admin';
 
-    function getSession() {
-      try {
-        return JSON.parse(localStorage.getItem('ruya_user') || 'null');
-      } catch {
-        return null;
-      }
+    if (!session) {
+      window.location.href = 'index.html';
     }
 
-    function clearViewMode() {
-      localStorage.removeItem('ruya_view_student');
+    const state = {
+      user: session,
+      targetEmail: viewEmail && isAdminSession ? viewEmail : session.email,
+      enrollments: []
+    };
+
+    if (viewEmail && isAdminSession) {
+      document.getElementById('backAdminBtn').style.display = 'inline-flex';
     }
 
-    function openLoginCheck() {
-      loginModal.classList.add('open');
-    }
-    function closeLogin() {
-      loginModal.classList.remove('open');
-    }
+    const escapeHtml = (str = "") =>
+      String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    const fmtDate = (value) => {
+      if (!value) return "";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return value;
+      return d.toLocaleString();
+    };
+
     function logout() {
       localStorage.removeItem('ruya_user');
-      clearViewMode();
-      window.location.href = 'academy.html';
-    }
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeLogin();
-    });
-    loginModal.addEventListener('click', (e) => {
-      if (e.target === loginModal) closeLogin();
-    });
-
-    async function findUser(identifier) {
-      const value = identifier.trim();
-
-      let res = await client.from('users')
-        .select('id, name, email, password, role, payment_status, level, created_at')
-        .eq('email', value)
-        .limit(1);
-      if (!res.error && res.data && res.data.length) return res.data[0];
-
-      res = await client.from('users')
-        .select('id, name, email, password, role, payment_status, level, created_at')
-        .eq('name', value)
-        .limit(1);
-      if (!res.error && res.data && res.data.length) return res.data[0];
-
-      return null;
+      localStorage.removeItem('ruya_view_email');
+      window.location.href = 'index.html';
     }
 
-    async function getUserFromSession() {
-      const sessionUser = getSession();
-      const viewEmail = localStorage.getItem('ruya_view_student');
-      if (viewEmail) {
-        const view = await client.from('users')
-          .select('id, name, email, password, role, payment_status, level, created_at')
-          .eq('email', viewEmail)
-          .limit(1);
-        if (view.data && view.data.length) return view.data[0];
-      }
-      return sessionUser;
+    function backToAdmin() {
+      localStorage.removeItem('ruya_view_email');
+      window.location.href = 'admin.html';
     }
 
-    function setCertEligibility(user) {
-      const paymentOk = ['paid','confirmed','complete','completed'].includes((user.payment_status || '').toLowerCase());
-      const level = (user.level || '').toLowerCase();
-      const levelOk = ['intermediate','advanced'].includes(level);
-      const eligible = paymentOk && levelOk;
-
-      const certAlert = document.getElementById('certAlert');
-      const certBtn = document.getElementById('certBtn');
-
-      if (eligible) {
-        certAlert.textContent = 'You are qualified for certificate request.';
-        certAlert.style.color = 'var(--good)';
-        certBtn.disabled = false;
-        certBtn.style.opacity = '1';
-        certBtn.style.cursor = 'pointer';
-      } else {
-        certAlert.textContent = 'You are not qualified yet. Payment and performance must improve first.';
-        certAlert.style.color = 'var(--warn)';
-        certBtn.disabled = true;
-        certBtn.style.opacity = '.5';
-        certBtn.style.cursor = 'not-allowed';
-      }
-
-      return eligible;
+    function levelScore(level) {
+      const map = { beginner: 25, intermediate: 65, advanced: 90 };
+      return map[String(level || '').toLowerCase()] || 10;
     }
 
-    async function loadEnrollmentForEmail(email) {
-      const { data, error } = await client.from('enrollments')
-        .select('course, status, note, created_at')
-        .eq('email', email)
-        .order('created_at', { ascending:false })
-        .limit(5);
-
-      if (error) {
-        console.error(error);
-        return [];
-      }
-      return data || [];
+    function statusScore(status) {
+      const map = { registered: 20, tested: 45, active: 75, completed: 100, rejected: 0 };
+      return map[String(status || '').toLowerCase()] ?? 20;
     }
 
-    function scoreFromLevel(level) {
-      const map = {
-        beginner: 25,
-        intermediate: 65,
-        advanced: 90
-      };
-      return map[(level || '').toLowerCase()] || 10;
+    function eligible(user, latestEnrollment) {
+      const paymentOk = String(user?.payment_status || '').toLowerCase() === 'paid';
+      const levelOk = ['intermediate', 'advanced'].includes(String(user?.level || '').toLowerCase());
+      const completionOk = ['active', 'completed'].includes(String(latestEnrollment?.status || '').toLowerCase());
+      return paymentOk && levelOk && completionOk;
     }
 
-    function badgeClassByText(text) {
-      const t = (text || '').toLowerCase();
-      if (t.includes('paid') || t.includes('qualified') || t.includes('advanced') || t.includes('intermediate')) return 'good';
-      if (t.includes('pending') || t.includes('not yet') || t.includes('beginner')) return 'warn';
-      return 'bad';
-    }
+    async function loadDashboard() {
+      const { data: userData, error: userError } = await client
+        .from('users')
+        .select('id, name, email, role, payment_status, level, created_at')
+        .eq('email', state.targetEmail)
+        .maybeSingle();
 
-    function formatDate(value) {
-      if (!value) return '';
-      const d = new Date(value);
-      return Number.isNaN(d.getTime()) ? value : d.toLocaleString();
-    }
-
-    async function renderDashboard() {
-      const studentStatus = document.getElementById('studentStatus');
-      studentStatus.textContent = 'Loading profile...';
-
-      let user = await getUserFromSession();
-      if (!user) {
-        openLoginCheck();
-        studentStatus.textContent = 'Please sign in first.';
+      if (userError || !userData) {
+        console.error(userError);
+        document.getElementById('actionStatus').textContent = 'Could not load the student profile.';
         return;
       }
 
-      const isAdminView = !!localStorage.getItem('ruya_view_student') && (getSession()?.role === 'admin');
+      state.user = userData;
 
-      document.getElementById('studentTitle').textContent = `Welcome, ${user.name || 'Student'}`;
-      document.getElementById('studentIntro').textContent = isAdminView
-        ? 'You are viewing this student from the admin panel.'
-        : 'This is your personal dashboard, profile, progress, and certificate area.';
+      const { data: enrollData, error: enrollError } = await client
+        .from('enrollments')
+        .select('id, name, email, course, note, status, created_at')
+        .eq('email', state.targetEmail)
+        .order('created_at', { ascending: false });
 
-      const enrollments = await loadEnrollmentForEmail(user.email);
-      const latest = enrollments[0] || null;
-      const progress = scoreFromLevel(user.level) + ((user.payment_status || '').toLowerCase() === 'paid' ? 10 : 0);
-      const progressPct = Math.min(100, progress);
-
-      document.getElementById('mStatus').textContent = latest?.status || '—';
-      document.getElementById('mLevel').textContent = user.level || '—';
-      document.getElementById('mPay').textContent = user.payment_status || '—';
-      document.getElementById('mCert').textContent = setCertEligibility(user) ? 'Allowed' : 'Locked';
-
-      document.getElementById('progressBar').style.width = `${progressPct}%`;
-      document.getElementById('progressText').textContent = `Estimated progress: ${progressPct}%. The value is currently based on level and payment status.`;
-      document.getElementById('studentStatus').textContent = `Loaded ${
-        isAdminView ? 'in admin view mode' : 'for your account'
-      }.`;
-
-      const profileArea = document.getElementById('profileArea');
-      profileArea.innerHTML = `
-        <div class="box">
-          <h3>Name</h3>
-          <p>${user.name || ''}</p>
-        </div>
-        <div class="box">
-          <h3>Email</h3>
-          <p>${user.email || ''}</p>
-        </div>
-        <div class="box">
-          <h3>Role</h3>
-          <p>${user.role || 'student'}</p>
-        </div>
-        <div class="box">
-          <h3>Payment</h3>
-          <p>${user.payment_status || 'pending'}</p>
-        </div>
-      `;
-
-      const courseList = document.getElementById('courseList');
-      if (enrollments.length) {
-        courseList.innerHTML = enrollments.map((r, i) => `
-          <div style="padding:12px 0; border-bottom:${i === enrollments.length - 1 ? 'none' : '1px solid rgba(255,255,255,.08)'}">
-            <strong style="display:block; margin-bottom:4px;">${r.course || 'Course'}</strong>
-            <span class="muted">Status: ${r.status || 'registered'}</span><br />
-            <span class="muted">${r.note ? 'Note: ' + r.note : ''}</span><br />
-            <span class="muted">${formatDate(r.created_at)}</span>
-          </div>
-        `).join('');
-      } else {
-        courseList.innerHTML = '<span class="muted">No enrollment found yet.</span>';
+      if (enrollError) {
+        console.error(enrollError);
       }
 
-      clearViewMode();
+      state.enrollments = enrollData || [];
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      const user = state.user;
+      const latestEnrollment = state.enrollments[0] || null;
+
+      document.getElementById('studentName').textContent = user?.name || 'Student';
+      document.getElementById('studentLead').textContent =
+        isAdminSession && state.targetEmail !== session.email
+          ? 'You are viewing this student as an admin.'
+          : 'Your profile, course progress, and certificate eligibility are shown below.';
+
+      document.getElementById('studentEmail').textContent = user?.email || '—';
+      document.getElementById('studentRole').textContent = user?.role || 'student';
+      document.getElementById('studentJoined').textContent = fmtDate(user?.created_at || '');
+      document.getElementById('studentActivity').textContent = fmtDate(latestEnrollment?.created_at || user?.created_at || '');
+
+      document.getElementById('statPayment').textContent = user?.payment_status || 'pending';
+      document.getElementById('statLevel').textContent = user?.level || 'not set';
+      document.getElementById('statStatus').textContent = latestEnrollment?.status || 'registered';
+      document.getElementById('statCertificate').textContent = eligible(user, latestEnrollment) ? 'Qualified' : 'Not yet';
+
+      const chips = [];
+      chips.push(`<span class="chip ${String(user?.payment_status || '').toLowerCase() === 'paid' ? 'good' : 'warn'}">Payment: ${escapeHtml(user?.payment_status || 'pending')}</span>`);
+      chips.push(`<span class="chip ${['intermediate','advanced'].includes(String(user?.level || '').toLowerCase()) ? 'good' : 'warn'}">Level: ${escapeHtml(user?.level || 'not set')}</span>`);
+      chips.push(`<span class="chip ${['active','completed'].includes(String(latestEnrollment?.status || '').toLowerCase()) ? 'good' : 'warn'}">Status: ${escapeHtml(latestEnrollment?.status || 'registered')}</span>`);
+      chips.push(`<span class="chip ${eligible(user, latestEnrollment) ? 'good' : 'bad'}">Certificate: ${eligible(user, latestEnrollment) ? 'qualified' : 'not qualified'}</span>`);
+      document.getElementById('statusChips').innerHTML = chips.join('');
+
+      const p = Math.max(levelScore(user?.level), statusScore(latestEnrollment?.status));
+      document.getElementById('progressBar').style.width = `${p}%`;
+      document.getElementById('progressText').textContent =
+        `Current progress estimate: ${p}%. This is based on level and enrollment status.`;
+
+      document.getElementById('readinessText').textContent = eligible(user, latestEnrollment)
+        ? 'This student is currently qualified to request a certificate.'
+        : 'This student is not yet qualified. Payment and stronger performance are still required.';
+
+      const certBtn = document.getElementById('certBtn');
+      certBtn.disabled = isAdminSession && state.targetEmail !== session.email;
+      certBtn.style.opacity = certBtn.disabled ? '0.45' : '1';
+      certBtn.style.cursor = certBtn.disabled ? 'not-allowed' : 'pointer';
+
+      const courseList = document.getElementById('courseList');
+      if (!state.enrollments.length) {
+        courseList.innerHTML = `<div class="course-card"><h3>No enrollments found</h3><p>This account has no course history yet.</p></div>`;
+      } else {
+        courseList.innerHTML = state.enrollments.map(row => `
+          <div class="course-card">
+            <h3>${escapeHtml(row.course || 'Course')}</h3>
+            <p><strong>Status:</strong> ${escapeHtml(row.status || 'registered')}</p>
+            <p><strong>Note:</strong> ${escapeHtml(row.note || '—')}</p>
+            <p class="muted"><strong>Created:</strong> ${escapeHtml(fmtDate(row.created_at))}</p>
+          </div>
+        `).join('');
+      }
+    }
+
+    async function refreshDashboard() {
+      document.getElementById('actionStatus').textContent = 'Refreshing...';
+      await loadDashboard();
+      document.getElementById('actionStatus').textContent = 'Dashboard updated.';
     }
 
     async function requestCertificate() {
-      const certStatus = document.getElementById('certStatus');
-      let user = await getUserFromSession();
-      if (!user) {
-        openLoginCheck();
-        certStatus.textContent = 'Please sign in first.';
+      const actionStatus = document.getElementById('actionStatus');
+      const user = state.user;
+      const latestEnrollment = state.enrollments[0] || null;
+
+      if (isAdminSession && state.targetEmail !== session.email) {
+        actionStatus.textContent = 'Admin view mode is read-only.';
         return;
       }
 
-      const eligible = setCertEligibility(user);
-      if (!eligible) {
-        certStatus.textContent = 'You are not qualified yet.';
+      if (!eligible(user, latestEnrollment)) {
+        actionStatus.textContent = 'Not qualified for certificate yet.';
         return;
       }
 
-      const latest = (await loadEnrollmentForEmail(user.email))[0] || null;
+      actionStatus.textContent = 'Sending certificate request...';
+
       const payload = {
-        name: user.name || '',
-        email: user.email || '',
-        course: latest?.course || 'Not specified',
-        proof: 'Certificate requested from student dashboard',
+        name: user?.name || '',
+        email: user?.email || '',
+        course: latestEnrollment?.course || 'Not specified',
+        proof: 'Requested from student dashboard',
         created_at: new Date().toISOString()
       };
 
-      certStatus.textContent = 'Submitting request...';
       const { error } = await client.from('certificate_requests').insert([payload]);
+
       if (error) {
         console.error(error);
-        certStatus.textContent = 'Could not submit the request.';
+        actionStatus.textContent = 'Could not submit certificate request.';
         alert('❌ ' + error.message);
         return;
       }
-      certStatus.textContent = 'Certificate request submitted successfully.';
+
+      actionStatus.textContent = 'Certificate request submitted successfully.';
       alert('✅ Certificate request submitted successfully.');
     }
 
-    async function loginFromModal() {
-      const status = document.getElementById('modalLoginStatus');
-      const identifier = document.getElementById('modal-login-identifier').value.trim();
-      const password = document.getElementById('modal-login-password').value.trim();
-
-      if (!identifier || !password) {
-        status.textContent = 'Please enter your username/email and password.';
-        return;
-      }
-
-      status.textContent = 'Signing in...';
-      const user = await findUser(identifier);
-      if (!user) {
-        status.textContent = 'No account found.';
-        return;
-      }
-      if ((user.password || '') !== password) {
-        status.textContent = 'Wrong password.';
-        return;
-      }
-
-      localStorage.setItem('ruya_user', JSON.stringify(user));
-      closeLogin();
-
-      if (user.role === 'admin') {
-        window.location.href = 'admin.html';
-      } else {
-        window.location.href = 'student.html';
-      }
-    }
-
-    document.querySelectorAll('.reveal').forEach((el) => {
-      const obs = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('show');
-        });
-      }, { threshold: 0.12 });
-      obs.observe(el);
-    });
-
-    renderDashboard();
-
-    async function openLogin() {
-      loginModal.classList.add('open');
-    }
+    loadDashboard();
   </script>
 </body>
 </html>
